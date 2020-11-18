@@ -1,25 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
+using System.Linq;
+using WebSocketMockServer.Configuration;
 using WebSocketMockServer.Templates;
 
 namespace WebSocketMockServer.Storage
 {
-    public class PredefinedMockTemplateStorage : IMockTemplateStorage
+    public class MockTemplateStorage : IMockTemplateStorage
     {
-        public PredefinedMockTemplateStorage()
+        public MockTemplateStorage(IOptions<MockTemplatesConfiguration> config)
         {
+            var configData = config.Value!;
+
             _templates = new Dictionary<string, MockTemplate>();
-            AddTemplate(new MockTemplate("RequestA", new[]
+
+            foreach (var template in configData.Templates!)
             {
-                 new Response("RequestA-Response1"),
-                 new Response("RequestA-Response2")
-            }));
-            AddTemplate(new MockTemplate("RequestB", new[]
-{
-                 new Response("RequestB-Response1"),
-                 new Response("RequestB-Response2")
-            }));
+                AddTemplate(new MockTemplate(template.Key, template.Value.Select(x => new Response(x))));
+            }
         }
 
         public void AddTemplate(MockTemplate template)
