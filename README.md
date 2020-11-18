@@ -17,3 +17,7 @@ First version with simple request/response data from appsettings.
 ### Example
 
 ![example](Example1.PNG)
+
+### Plan to add
+* Delayed notifications
+* Move Request/Response in separate json files
