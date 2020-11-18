@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+using WebSocketMockServer.Middleware;
+using WebSocketMockServer.Storage;
 
 namespace WebSocketMockServer
 {
@@ -16,6 +16,8 @@ namespace WebSocketMockServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
+            services.AddSingleton<IMockTemplateStorage, PredefinedMockTemplateStorage>(); // Only for initial test version
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,13 +30,15 @@ namespace WebSocketMockServer
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
+            app.UseHealthChecks("/hc");
+
+            app.UseWebSockets(new WebSocketOptions
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                KeepAliveInterval = TimeSpan.FromSeconds(30),
+                ReceiveBufferSize = 1
             });
+
+            app.UseMiddleware<WebSocketMiddleware>();
         }
     }
 }
