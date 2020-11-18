@@ -14,4 +14,4 @@ App config contains section to add default mock request/responses.
       ]
     }
 ```
-![example](Example.PNG)
+![example](Example1.PNG)
