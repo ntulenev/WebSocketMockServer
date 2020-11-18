@@ -1,6 +1,6 @@
 # WebSocketMockServer
 
-### Service that helps frontend team to test web socket integration when backend is not ready with predefined request/responses.
+### Service that helps frontend team test web socket integration when backend is not ready.
 
 First version with simple request/response data from appsettings.
 
