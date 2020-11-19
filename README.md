@@ -1,3 +1,4 @@
+![WebSocketMockServer](logo.PNG)
 # WebSocketMockServer
 
 ### Service that helps frontend team test web socket integration when backend is not ready.
