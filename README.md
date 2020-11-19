@@ -1,9 +1,8 @@
 # WebSocketMockServer
-Service that helps frontend team to test web socket integration when backend is not ready with predefined request/responses.
 
-First version simple request/response data from appsettings.
+### Service that helps frontend team test web socket integration when backend is not ready.
 
-App config contains section to add default mock request/responses.
+First version with simple request/response data from appsettings.
 
 ```
 "MockTemplatesConfiguration": {
@@ -14,4 +13,11 @@ App config contains section to add default mock request/responses.
       ]
     }
 ```
-![example](Example.PNG)
+
+### Example
+
+![example](Example1.PNG)
+
+### Plan to add
+* Delayed notifications
+* Move Request/Response in separate json files
