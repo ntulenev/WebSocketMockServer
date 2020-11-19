@@ -21,7 +21,7 @@ Supports delayed notifications.
 
 ### Example
 
-![example](Example1.PNG)
+![example](Example.PNG)
 
 ### Plan to add
 * Move Request/Response in separate json files
