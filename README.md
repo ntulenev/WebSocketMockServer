@@ -48,7 +48,7 @@ Supports delayed notifications.
 
 ### Example
 
-![example](Example.PNG)
+![example image](ExampleImage.PNG)
 
 ### Plan to add
 * Refactor files logic
