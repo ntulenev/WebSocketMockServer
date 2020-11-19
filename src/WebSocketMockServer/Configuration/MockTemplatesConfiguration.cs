@@ -7,6 +7,13 @@ namespace WebSocketMockServer.Configuration
 {
     public class MockTemplatesConfiguration
     {
-        public Dictionary<string, IEnumerable<string>>? Templates { get; set; }
+        public class ResponseTemplate
+        {
+            public string? Text { get; set; }
+
+            public int? Delay { get; set; }
+        }
+
+        public Dictionary<string, IEnumerable<ResponseTemplate>>? Templates { get; set; }
     }
 }

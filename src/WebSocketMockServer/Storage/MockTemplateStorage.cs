@@ -17,7 +17,7 @@ namespace WebSocketMockServer.Storage
 
             foreach (var template in configData.Templates!)
             {
-                AddTemplate(new MockTemplate(template.Key, template.Value.Select(x => new Response(x))));
+                AddTemplate(new MockTemplate(template.Key, template.Value.Select(x => x.Delay is null ? new Response(x.Text!) : new Response(x.Text!, x.Delay.Value))));
             }
         }
 
