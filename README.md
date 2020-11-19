@@ -7,21 +7,49 @@ Supports delayed notifications.
 
 ```
 "MockTemplatesConfiguration": {
-  "Templates": {
-    "RequestA": [
-      { "Text": "RequestA-Response1" },
-      {
-        "Text": "RequestA-Response2",
-        "Delay": "5000"
-      }
-    ]
-  }
+  "Templates": [
+    {
+      "File": "RequestA.json",
+      "Responses": [
+        { "File": "Response1.json" },
+        {
+          "File": "Response2.json",
+          "Delay": "5000"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### RequestA.json
+
+```
+{
+  "Request": "A"
+}
+```
+
+### Response1.json
+
+```
+{
+  "Response": "A"
+}
+```
+
+### Response2.json
+
+```
+{
+  "Response": "B"
 }
 ```
 
 ### Example
 
-
+![example](Example.PNG)
 
 ### Plan to add
-* Move Request/Response in separate json files
+* Refactor files logic
+* Add unit tests
