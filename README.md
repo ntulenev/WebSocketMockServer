@@ -2,8 +2,7 @@
 
 ### Service that helps frontend team test web socket integration when backend is not ready.
 
-First version with simple request/response data from appsettings.
-Supports delayed notifications.
+Project allows to add multiple responses for one request with delay for every of them.
 
 ```
 "MockTemplatesConfiguration": {
