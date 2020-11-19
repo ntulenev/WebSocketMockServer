@@ -3,7 +3,7 @@
 
 ### Tool that helps frontend team test web socket integration when backend is not ready.
 
-Project allows to add multiple responses for one request with delay for every of them.
+Project allows to add multiple responses for one request (with delay if needed).
 
 ```
 "MockTemplatesConfiguration": {
