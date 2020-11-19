@@ -15,4 +15,16 @@
     <PackageReference Include="Nito.AsyncEx" Version="5.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="RequestA.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Response1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Response2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
