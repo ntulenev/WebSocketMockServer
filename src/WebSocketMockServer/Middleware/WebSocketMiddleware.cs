@@ -69,7 +69,7 @@ namespace WebSocketMockServer.Middleware
                                     {
                                         if (response.IsNotification)
                                         {
-                                            //TODO Add continuation check
+                                            //TODO Add continuation fail check
                                             _ = Task.Run(async () =>
                                             {
                                                 await Task.Delay(response.Delay).ConfigureAwait(false);
