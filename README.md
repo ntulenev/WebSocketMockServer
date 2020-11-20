@@ -49,7 +49,7 @@ Project allows to add multiple responses for one request (with delay if needed).
 
 ### Example
 
-![example image](ExampleImage.PNG)
+![example](Example.png)
 
 ### Plan to add
 * Refactor files logic
