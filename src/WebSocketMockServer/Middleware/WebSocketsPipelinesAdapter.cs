@@ -7,7 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Nito.AsyncEx;
-namespace SimpleWsApp
+
+namespace WebSocketMockServer.Middleware
 {
     public class WebSocketsPipelinesAdapter
     {

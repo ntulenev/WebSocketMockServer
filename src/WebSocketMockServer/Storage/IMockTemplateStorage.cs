@@ -7,7 +7,5 @@ namespace WebSocketMockServer.Storage
     public interface IMockTemplateStorage
     {
         public bool TryGetTemplate(string key, [NotNullWhen(true)] out MockTemplate? result);
-
-        public void AddTemplate(MockTemplate template);
     }
 }
