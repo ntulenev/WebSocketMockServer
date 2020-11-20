@@ -16,13 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="RequestA.json">
+    <Content Update="Files\RequestA.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Response1.json">
+    <Content Update="Files\Response1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Response2.json">
+    <Content Update="Files\Response2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -23,17 +23,20 @@ namespace WebSocketMockServer.Storage
             if (configData == null)
                 throw new ArgumentException("Value of the config is not set.", nameof(config));
 
+            if (string.IsNullOrEmpty(configData.Folder))
+                throw new ArgumentException("Json folder is not set.", nameof(config));
+
             _templates = new Dictionary<string, MockTemplate>();
 
-            if (configData.Templates == null)
+            if (configData.Mapping == null)
                 throw new ArgumentException("Templates of the config are not set.", nameof(config));
 
-            foreach (var template in configData.Templates!)
+            foreach (var template in configData.Mapping!)
             {
                 if (string.IsNullOrWhiteSpace(template.File))
                     throw new ArgumentException("Template file path not set.", nameof(config));
 
-                var keyFileName = Path.Combine(_hostingEnvironment.ContentRootPath, template.File);
+                var keyFileName = Path.Combine(_hostingEnvironment.ContentRootPath, configData.Folder, template.File);
 
                 var keyText = File.ReadAllText(keyFileName);
 
@@ -47,7 +50,7 @@ namespace WebSocketMockServer.Storage
                     if (string.IsNullOrWhiteSpace(res.File))
                         throw new ArgumentException($"Template {template.File} response file path not set.", nameof(config));
 
-                    var keyResFileName = Path.Combine(_hostingEnvironment.ContentRootPath, res.File);
+                    var keyResFileName = Path.Combine(_hostingEnvironment.ContentRootPath, configData.Folder, res.File);
 
                     var resText = File.ReadAllText(keyResFileName);
 

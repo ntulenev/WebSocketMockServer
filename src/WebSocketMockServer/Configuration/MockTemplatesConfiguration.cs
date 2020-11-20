@@ -21,6 +21,8 @@ namespace WebSocketMockServer.Configuration
             public int? Delay { get; set; }
         }
 
-        public IEnumerable<Template>? Templates { get; set; }
+        public IEnumerable<Template>? Mapping { get; set; }
+
+        public string? Folder { get; set; }
     }
 }
