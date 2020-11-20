@@ -6,20 +6,21 @@
 Project allows to add multiple responses for one request (with delay if needed).
 
 ```
-"MockTemplatesConfiguration": {
-  "Templates": [
-    {
-      "File": "RequestA.json",
-      "Responses": [
-        { "File": "Response1.json" },
-        {
-          "File": "Response2.json",
-          "Delay": "5000"
-        }
-      ]
-    }
-  ]
-}
+  "MockTemplatesConfiguration": {
+    "Folder": "Files",
+    "Mapping": [
+      {
+        "File": "RequestA.json",
+        "Responses": [
+          { "File": "Response1.json" },
+          {
+            "File": "Response2.json",
+            "Delay": "5000"
+          }
+        ]
+      }
+    ]
+  }
 ```
 
 ### RequestA.json
