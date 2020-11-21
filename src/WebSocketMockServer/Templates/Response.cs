@@ -24,7 +24,7 @@ namespace WebSocketMockServer.Templates
                 throw new ArgumentNullException(nameof(result));
 
             if (delay <= 0)
-                throw new ArgumentException("deley should be positive", nameof(delay));
+                throw new ArgumentException("Deley should be positive", nameof(delay));
 
             Result = result;
             _delay = delay;
