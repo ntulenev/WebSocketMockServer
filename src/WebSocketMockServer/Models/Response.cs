@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebSocketMockServer.Templates
+namespace WebSocketMockServer.Models
 {
     public class Response
     {

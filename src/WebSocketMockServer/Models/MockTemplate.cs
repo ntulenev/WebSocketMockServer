@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WebSocketMockServer.Templates
+namespace WebSocketMockServer.Models
 {
     public class MockTemplate
     {

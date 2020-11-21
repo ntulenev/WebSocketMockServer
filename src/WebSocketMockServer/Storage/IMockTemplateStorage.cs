@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using WebSocketMockServer.Templates;
+using WebSocketMockServer.Models;
 
 namespace WebSocketMockServer.Storage
 {

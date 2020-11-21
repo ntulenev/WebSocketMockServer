@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 using WebSocketMockServer.Loader;
-using WebSocketMockServer.Templates;
+using WebSocketMockServer.Models;
 
 namespace WebSocketMockServer.Storage
 {

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using WebSocketMockServer.Configuration;
-using WebSocketMockServer.Templates;
+using WebSocketMockServer.Models;
 
 namespace WebSocketMockServer.Loader
 {

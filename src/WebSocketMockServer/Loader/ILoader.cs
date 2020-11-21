@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using WebSocketMockServer.Templates;
+using WebSocketMockServer.Models;
 
 namespace WebSocketMockServer.Loader
 {
