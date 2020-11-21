@@ -47,74 +47,83 @@ namespace WebSocketMockServer.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
+
             if (httpContext.Request.Path == "/ws")
             {
                 if (httpContext.WebSockets.IsWebSocketRequest)
                 {
-                    using WebSocket webSocket = await httpContext.WebSockets.AcceptWebSocketAsync();
-
-                    //Add adapter with minimumBufferSize
-                    var adapter = new WebSocketsPipelinesAdapter(webSocket, _socketReadGuard, 512, _hostApplicationLifetime.ApplicationStopping);
-
-                    //Method for processing data
-                    async Task ReadDataAsync()
+                    try
                     {
-                        try
+                        using WebSocket webSocket = await httpContext.WebSockets.AcceptWebSocketAsync();
+
+                        //Add adapter with minimumBufferSize
+                        var adapter = new WebSocketsPipelinesAdapter(webSocket, _socketReadGuard, 512, _hostApplicationLifetime.ApplicationStopping);
+
+                        //Method for processing data
+                        async Task ReadDataAsync()
                         {
-                            await foreach (var bytes in adapter.ReadDataAsync())
+                            try
                             {
-                                var requst = Encoding.UTF8.GetString(bytes);
-
-                                _logger?.LogInformation("Get from client - {requst}", requst);
-
-                                if (_storage.TryGetTemplate(requst, out var mockTemplate))
+                                await foreach (var bytes in adapter.ReadDataAsync())
                                 {
-                                    foreach (var response in mockTemplate.Responses)
-                                    {
-                                        if (response.IsNotification)
-                                        {
-                                            //TODO Add continuation fail check
-                                            _ = Task.Run(async () =>
-                                            {
-                                                await Task.Delay(response.Delay).ConfigureAwait(false);
-                                                await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
-                                            });
+                                    var requst = Encoding.UTF8.GetString(bytes);
 
-                                        }
-                                        else
+                                    _logger?.LogInformation("Get from client - {requst}", requst);
+
+                                    if (_storage.TryGetTemplate(requst, out var mockTemplate))
+                                    {
+                                        foreach (var response in mockTemplate.Responses)
                                         {
-                                            await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                                            if (response.IsNotification)
+                                            {
+                                                //TODO Add continuation fail check
+                                                _ = Task.Run(async () =>
+                                                {
+                                                    await Task.Delay(response.Delay).ConfigureAwait(false);
+                                                    await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                                                });
+
+                                            }
+                                            else
+                                            {
+                                                await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                                            }
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    _logger?.LogWarning("No predefiened response");
-
-                                    using (await _socketSendGuard.LockAsync())
+                                    else
                                     {
-                                        using (await _socketReadGuard.LockAsync())
+                                        _logger?.LogWarning("No predefiened response - closing socket");
+
+                                        using (await _socketSendGuard.LockAsync())
                                         {
-                                            try
+                                            using (await _socketReadGuard.LockAsync())
                                             {
-                                                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "No predefiened response", _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Console.WriteLine(ex);
+                                                try
+                                                {
+                                                    if (webSocket.State == WebSocketState.Open)
+                                                        await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "No predefiened response", _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    _logger.LogError(ex, "Error on closing socket");
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                            catch (OperationCanceledException)
+                            {
+                                // Skip
+                            }
                         }
-                        catch (OperationCanceledException)
-                        {
-                            // Skip
-                        }
-                    }
 
-                    await Task.WhenAll(adapter.StartAsync(), ReadDataAsync());
+                        await Task.WhenAll(adapter.StartAsync(), ReadDataAsync());
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error on process ws");
+                    }
                 }
                 else
                 {
