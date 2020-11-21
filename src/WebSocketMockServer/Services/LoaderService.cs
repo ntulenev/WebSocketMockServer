@@ -25,7 +25,7 @@ namespace WebSocketMockServer.Services
         {
             try
             {
-                await _loader.LoadAsync(cancellationToken);
+                await _loader.LoadAsync(cancellationToken);  
             }
             catch (Exception ex)
             {
