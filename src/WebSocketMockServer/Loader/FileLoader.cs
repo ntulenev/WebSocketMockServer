@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using WebSocketMockServer.Configuration;
@@ -12,7 +13,7 @@ namespace WebSocketMockServer.Loader
 {
     public class FileLoader : ILoader
     {
-        public FileLoader(IOptions<FileLoaderConfiguration> config, IWebHostEnvironment hostingEnvironment)
+        public FileLoader(IOptions<FileLoaderConfiguration> config, ILogger<FileLoader>? logger, IWebHostEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
 
@@ -27,6 +28,8 @@ namespace WebSocketMockServer.Loader
             configData.Validate();
 
             _config = configData;
+
+            _logger = logger;
         }
 
         public IReadOnlyDictionary<string, MockTemplate> Load()
@@ -35,6 +38,8 @@ namespace WebSocketMockServer.Loader
 
             foreach (var template in _config.Mapping!)
             {
+
+                _logger?.LogInformation("Reading request from {filename}", template.File);
 
                 var keyFileName = Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, template.File!);
 
@@ -45,6 +50,8 @@ namespace WebSocketMockServer.Loader
 
                 foreach (var res in template.Responses!)
                 {
+
+                    _logger?.LogInformation("Reading response from {response} with delay {delay} ms", res.File, res.Delay);
 
                     var keyResFileName = Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, res.File!);
 
@@ -69,5 +76,7 @@ namespace WebSocketMockServer.Loader
         private readonly FileLoaderConfiguration _config;
 
         private readonly IWebHostEnvironment _hostingEnvironment;
+
+        private readonly ILogger<FileLoader>? _logger;
     }
 }

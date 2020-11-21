@@ -6,21 +6,23 @@ using System.Threading;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 using WebSocketMockServer.Storage;
 
 using Nito.AsyncEx;
 
-
 namespace WebSocketMockServer.Middleware
 {
     public class WebSocketMiddleware
     {
-        public WebSocketMiddleware(RequestDelegate next, IHostApplicationLifetime hostApplicationLifetime, IMockTemplateStorage storage)
+        public WebSocketMiddleware(RequestDelegate next, ILogger<WebSocketMiddleware>? logger, IHostApplicationLifetime hostApplicationLifetime, IMockTemplateStorage storage)
         {
             _next = next;
             _hostApplicationLifetime = hostApplicationLifetime;
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+
+            _logger = logger;
         }
 
         private async Task SendMessage(WebSocket webSocket, string msg, CancellationToken ct)
@@ -32,12 +34,13 @@ namespace WebSocketMockServer.Middleware
             {
                 if (webSocket.State == WebSocketState.Open)
                 {
-                    Console.WriteLine($"{DateTime.UtcNow} Send to client - {msg}");
+                    _logger?.LogInformation("{Date} Send to client - {msg}", DateTime.UtcNow, msg);
+
                     await webSocket.SendAsync(data.AsMemory(), WebSocketMessageType.Text, true, ct);
                 }
                 else
                 {
-                    Console.WriteLine($"{DateTime.UtcNow} Unable to send - {msg}. Socket is closed.");
+                    _logger?.LogWarning("{Date} Unable to send - {msg}. Socket is closed.", DateTime.UtcNow, msg);
                 }
             }
         }
@@ -61,7 +64,8 @@ namespace WebSocketMockServer.Middleware
                             await foreach (var bytes in adapter.ReadDataAsync())
                             {
                                 var requst = Encoding.UTF8.GetString(bytes);
-                                Console.WriteLine($"Get from client - {requst}");
+
+                                _logger?.LogInformation("Get from client - {requst}", requst);
 
                                 if (_storage.TryGetTemplate(requst, out var mockTemplate))
                                 {
@@ -75,6 +79,7 @@ namespace WebSocketMockServer.Middleware
                                                 await Task.Delay(response.Delay).ConfigureAwait(false);
                                                 await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
                                             });
+
                                         }
                                         else
                                         {
@@ -84,7 +89,8 @@ namespace WebSocketMockServer.Middleware
                                 }
                                 else
                                 {
-                                    Console.WriteLine("No predefiened response");
+                                    _logger?.LogWarning("No predefiened response");
+
                                     using (await _socketSendGuard.LockAsync())
                                     {
                                         using (await _socketReadGuard.LockAsync())
@@ -124,6 +130,8 @@ namespace WebSocketMockServer.Middleware
         private readonly RequestDelegate _next;
         private readonly IMockTemplateStorage _storage;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
+
+        private readonly ILogger<WebSocketMiddleware>? _logger;
 
         private readonly AsyncLock _socketSendGuard = new AsyncLock();
         private readonly AsyncLock _socketReadGuard = new AsyncLock();
