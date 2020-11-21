@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
@@ -32,7 +34,11 @@ namespace WebSocketMockServer.Loader
             _logger = logger;
         }
 
-        public IReadOnlyDictionary<string, MockTemplate> Load()
+
+
+        public IReadOnlyDictionary<string, MockTemplate> GetLoadedData() => _data ?? throw new InvalidOperationException("Data not loaded");
+
+        public async Task LoadAsync(CancellationToken ct)
         {
             var templates = new Dictionary<string, MockTemplate>();
 
@@ -43,7 +49,7 @@ namespace WebSocketMockServer.Loader
 
                 var keyFileName = Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, template.File!);
 
-                var keyText = File.ReadAllText(keyFileName);
+                var keyText = await File.ReadAllTextAsync(keyFileName, ct);
 
                 var responses = new List<Response>();
 
@@ -55,7 +61,7 @@ namespace WebSocketMockServer.Loader
 
                     var keyResFileName = Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, res.File!);
 
-                    var resText = File.ReadAllText(keyResFileName);
+                    var resText = await File.ReadAllTextAsync(keyResFileName, ct);
 
                     if (res.Delay.HasValue)
                     {
@@ -70,7 +76,7 @@ namespace WebSocketMockServer.Loader
                 templates.Add(keyText, new MockTemplate(keyText, responses));
             }
 
-            return templates;
+            _data = templates;
         }
 
         private readonly FileLoaderConfiguration _config;
@@ -78,5 +84,7 @@ namespace WebSocketMockServer.Loader
         private readonly IWebHostEnvironment _hostingEnvironment;
 
         private readonly ILogger<FileLoader>? _logger;
+
+        private IReadOnlyDictionary<string, MockTemplate> _data = null!;
     }
 }

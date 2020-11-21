@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using WebSocketMockServer.Configuration;
 using WebSocketMockServer.Loader;
 using WebSocketMockServer.Middleware;
+using WebSocketMockServer.Services;
 using WebSocketMockServer.Storage;
 
 namespace WebSocketMockServer
@@ -30,6 +31,7 @@ namespace WebSocketMockServer
             services.AddSingleton<IMockTemplateStorage, MockTemplateStorage>();
             services.Configure<FileLoaderConfiguration>(Configuration.GetSection(nameof(FileLoaderConfiguration)));
             services.AddSingleton<ILoader, FileLoader>();
+            services.AddHostedService<LoaderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+using Microsoft.Extensions.Logging;
+
 using WebSocketMockServer.Loader;
 using WebSocketMockServer.Templates;
 
@@ -9,15 +11,22 @@ namespace WebSocketMockServer.Storage
 {
     public class MockTemplateStorage : IMockTemplateStorage
     {
-        public MockTemplateStorage(ILoader loader)
+        public MockTemplateStorage(ILoader loader, ILogger<MockTemplateStorage>? logger)
         {
 
             if (loader == null)
                 throw new ArgumentNullException(nameof(loader));
 
-            _templates = loader.Load();
+            try
+            {
+                _templates = loader.GetLoadedData();
+            }
+            catch (InvalidOperationException ex)
+            {
+                logger?.LogWarning(ex, "No templates load in storage");
+                _templates = new Dictionary<string, MockTemplate>();
+            }
         }
-
 
         public bool TryGetTemplate(string key, [NotNullWhen(true)] out MockTemplate? result)
         {
