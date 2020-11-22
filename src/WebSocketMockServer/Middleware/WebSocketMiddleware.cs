@@ -57,7 +57,7 @@ namespace WebSocketMockServer.Middleware
                         using WebSocket webSocket = await httpContext.WebSockets.AcceptWebSocketAsync();
 
                         //Add adapter with minimumBufferSize
-                        var adapter = new WebSocketsPipelinesAdapter(webSocket, _socketReadGuard, 512, _hostApplicationLifetime.ApplicationStopping);
+                        var adapter = new WebSocketsPipelinesAdapter(webSocket, _socketReadGuard, _hostApplicationLifetime.ApplicationStopping);
 
                         //Method for processing data
                         async Task ReadDataAsync()

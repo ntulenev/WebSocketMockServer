@@ -18,7 +18,10 @@ namespace WebSocketMockServer.Middleware
             _socketGuard = socketGuard ?? throw new ArgumentNullException(nameof(socketGuard));
         }
 
-        private const int DEFAULT_PIPE_BUFFER_SIZE = 512;
+        public WebSocketsPipelinesAdapter(WebSocket webSocket, AsyncLock socketGuard, CancellationToken ct = default)
+            : this(webSocket, socketGuard, DEFAULT_PIPE_BUFFER_SIZE, ct)
+        {
+        }
 
         public WebSocketsPipelinesAdapter(WebSocket webSocket, CancellationToken ct = default)
             : this(webSocket, DEFAULT_PIPE_BUFFER_SIZE, ct)
@@ -118,5 +121,7 @@ namespace WebSocketMockServer.Middleware
         private readonly AsyncLock? _socketGuard;
 
         private readonly CancellationToken _ct;
+
+        private const int DEFAULT_PIPE_BUFFER_SIZE = 512;
     }
 }
