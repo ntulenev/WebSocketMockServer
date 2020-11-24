@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using WebSocketMockServer.Configuration;
+using WebSocketMockServer.Helpers;
 using WebSocketMockServer.Models;
 
 namespace WebSocketMockServer.Loader
@@ -51,8 +52,9 @@ namespace WebSocketMockServer.Loader
 
                 var keyText = await File.ReadAllTextAsync(keyFileName, ct);
 
-                var responses = new List<Response>();
+                keyText = keyText.ReconvertWithJson();
 
+                var responses = new List<Response>();
 
                 foreach (var res in template.Responses!)
                 {
@@ -62,6 +64,8 @@ namespace WebSocketMockServer.Loader
                     var keyResFileName = Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, res.File!);
 
                     var resText = await File.ReadAllTextAsync(keyResFileName, ct);
+
+                    resText = resText.ReconvertWithJson();
 
                     if (res.Delay.HasValue)
                     {

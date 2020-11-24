@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 using WebSocketMockServer.Storage;
+using WebSocketMockServer.Helpers;
 
 using Nito.AsyncEx;
 
@@ -66,11 +67,23 @@ namespace WebSocketMockServer.Middleware
                             {
                                 await foreach (var bytes in adapter.ReadDataAsync())
                                 {
-                                    var requst = Encoding.UTF8.GetString(bytes);
+                                    var request = Encoding.UTF8.GetString(bytes);
 
-                                    _logger?.LogInformation("Get from client - {requst}", requst);
+                                    if (!string.IsNullOrWhiteSpace(request))
+                                    {
+                                        try
+                                        {
+                                            request = request.ReconvertWithJson();
+                                        }
+                                        catch
+                                        {
+                                            // Unable to parse - just get original text  
+                                        }
+                                    }
 
-                                    if (_storage.TryGetTemplate(requst, out var mockTemplate))
+                                    _logger?.LogInformation("Get from client - {request}", request);
+
+                                    if (_storage.TryGetTemplate(request, out var mockTemplate))
                                     {
                                         foreach (var response in mockTemplate.Responses)
                                         {
