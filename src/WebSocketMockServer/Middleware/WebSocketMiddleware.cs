@@ -76,7 +76,6 @@ namespace WebSocketMockServer.Middleware
                                         {
                                             if (response.IsNotification)
                                             {
-                                                //TODO Add continuation fail check
                                                 _ = Task.Run(async () =>
                                                 {
                                                     try
