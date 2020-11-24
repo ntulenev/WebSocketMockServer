@@ -79,8 +79,16 @@ namespace WebSocketMockServer.Middleware
                                                 //TODO Add continuation fail check
                                                 _ = Task.Run(async () =>
                                                 {
-                                                    await Task.Delay(response.Delay).ConfigureAwait(false);
-                                                    await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                                                    try
+                                                    {
+                                                        await Task.Delay(response.Delay).ConfigureAwait(false);
+                                                        await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        _logger.LogError(ex, $"Error on process delayed message {response.Result}");
+                                                    }
+
                                                 });
 
                                             }
