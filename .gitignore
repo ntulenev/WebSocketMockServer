@@ -1,3 +1,4 @@
 /src/.vs
 /src/WebSocketMockServer/bin
 /src/WebSocketMockServer/obj
+/src/WebSocketMockServer/WebSocketMockServer.csproj.user
