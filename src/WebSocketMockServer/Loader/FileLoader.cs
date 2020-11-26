@@ -58,8 +58,10 @@ namespace WebSocketMockServer.Loader
 
                 foreach (var res in template.Responses!)
                 {
-
-                    _logger?.LogInformation("Reading response from {response} with delay {delay} ms", res.File, res.Delay);
+                    if (res.Delay.HasValue)
+                        _logger?.LogInformation("Reading response from {response} with delay {delay} ms", res.File, res.Delay);
+                    else
+                        _logger?.LogInformation("Reading response from {response}", res.File, res.Delay);
 
                     var keyResFileName = Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, res.File!);
 
