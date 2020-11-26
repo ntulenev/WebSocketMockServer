@@ -10,24 +10,51 @@ using Nito.AsyncEx;
 
 namespace WebSocketMockServer.Middleware
 {
+    /// <summary>
+    /// Pipelines adapter for web sockets
+    /// </summary>
     public class WebSocketsPipelinesAdapter
     {
+        /// <summary>
+        /// Creates web sockets pipeline adapter
+        /// </summary>
+        /// <param name="webSocket">Web socket that will provide data for pipeline</param>
+        /// <param name="socketGuard"><see cref="AsyncLock"/> that could lock ReceiveAsync to sync with some other operations. CloseAsync for insance.</param>
+        /// <param name="minimumBufferSize">Initial memory buffer size for reading from socket</param>
+        /// <param name="ct">Token for cancellation</param>
         public WebSocketsPipelinesAdapter(WebSocket webSocket, AsyncLock socketGuard, int minimumBufferSize, CancellationToken ct = default)
             : this(webSocket, minimumBufferSize, ct)
         {
             _socketGuard = socketGuard ?? throw new ArgumentNullException(nameof(socketGuard));
         }
 
+        /// <summary>
+        /// Creates web sockets pipeline adapter
+        /// </summary>
+        /// <param name="webSocket">Web socket that will provide data for pipeline</param>
+        /// <param name="socketGuard"><see cref="AsyncLock"/> that could lock ReceiveAsync to sync with some other operations. CloseAsync for insance.</param>
+        /// <param name="ct">Token for cancellation</param>
         public WebSocketsPipelinesAdapter(WebSocket webSocket, AsyncLock socketGuard, CancellationToken ct = default)
             : this(webSocket, socketGuard, DEFAULT_PIPE_BUFFER_SIZE, ct)
         {
         }
 
+        /// <summary>
+        /// Creates web sockets pipeline adapter
+        /// </summary>
+        /// <param name="webSocket">Web socket that will provide data for pipeline</param>
+        /// <param name="ct">Token for cancellation</param>
         public WebSocketsPipelinesAdapter(WebSocket webSocket, CancellationToken ct = default)
             : this(webSocket, DEFAULT_PIPE_BUFFER_SIZE, ct)
         {
         }
 
+        /// <summary>
+        /// Creates web sockets pipeline adapter
+        /// </summary>
+        /// <param name="webSocket">Web socket that will provide data for pipeline</param>
+        /// <param name="minimumBufferSize">Initial memory buffer size for reading from socket</param>
+        /// <param name="ct">Token for cancellation</param>
         public WebSocketsPipelinesAdapter(WebSocket webSocket, int minimumBufferSize, CancellationToken ct = default)
         {
             _webSocket = webSocket ?? throw new ArgumentNullException(nameof(webSocket));
@@ -40,6 +67,10 @@ namespace WebSocketMockServer.Middleware
             _pipe = new Pipe();
         }
 
+        /// <summary>
+        /// Returns async iterator for reading data from socket.
+        /// </summary>
+        /// <returns></returns>
         public async IAsyncEnumerable<byte[]> ReadDataAsync()
         {
             while (!_ct.IsCancellationRequested)
@@ -61,6 +92,9 @@ namespace WebSocketMockServer.Middleware
             }
         }
 
+        /// <summary>
+        /// Asynchronously start reading data from socket.
+        /// </summary>
         public async Task StartAsync()
         {
             while (_webSocket.State == WebSocketState.Open)

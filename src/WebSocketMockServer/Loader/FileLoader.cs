@@ -14,8 +14,17 @@ using WebSocketMockServer.Models;
 
 namespace WebSocketMockServer.Loader
 {
+    /// <summary>
+    /// Implementation of <see cref="ILoader"/> that loads files from disk.
+    /// </summary>
     public class FileLoader : ILoader
     {
+        /// <summary>
+        /// Creates <see cref="FileLoader"/>.
+        /// </summary>
+        /// <param name="config">Loader configuration.</param>
+        /// <param name="logger">Logger.</param>
+        /// <param name="hostingEnvironment">Hosting environment.</param>
         public FileLoader(IOptions<FileLoaderConfiguration> config, ILogger<FileLoader>? logger, IWebHostEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
@@ -36,9 +45,10 @@ namespace WebSocketMockServer.Loader
         }
 
 
-
+        ///<inheritdoc/>
         public IReadOnlyDictionary<string, MockTemplate> GetLoadedData() => _data ?? throw new InvalidOperationException("Data not loaded");
 
+        ///<inheritdoc/>
         public async Task LoadAsync(CancellationToken ct)
         {
             var templates = new Dictionary<string, MockTemplate>();

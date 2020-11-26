@@ -15,8 +15,14 @@ using Nito.AsyncEx;
 
 namespace WebSocketMockServer.Middleware
 {
+    /// <summary>
+    /// Custom middleware that provides web sockets operations
+    /// </summary>
     public class WebSocketMiddleware
     {
+        /// <summary>
+        /// Creates web sockets middleware
+        /// </summary>
         public WebSocketMiddleware(RequestDelegate next, ILogger<WebSocketMiddleware>? logger, IHostApplicationLifetime hostApplicationLifetime, IMockTemplateStorage storage)
         {
             _next = next;
@@ -46,6 +52,9 @@ namespace WebSocketMockServer.Middleware
             }
         }
 
+        /// <summary>
+        /// Handles user request
+        /// </summary>
         public async Task Invoke(HttpContext httpContext)
         {
 
