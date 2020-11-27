@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using WebSocketMockServer.Loader;
-
 namespace WebSocketMockServer.Services
 {
+    /// <summary>
+    /// Hosted service that loads templates before web service starts.
+    /// </summary>
     public class LoaderService : IHostedService
     {
         public LoaderService(ILogger<LoaderService>? logger,

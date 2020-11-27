@@ -9,8 +9,16 @@ using WebSocketMockServer.Models;
 
 namespace WebSocketMockServer.Storage
 {
+    /// <summary>
+    /// Storage for request/response templates.
+    /// </summary>
     public class MockTemplateStorage : IMockTemplateStorage
     {
+        /// <summary>
+        /// Creates <see cref="MockTemplateStorage"/>
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thows if loader is not set.</exception>
+        /// <exception cref="InvalidOperationException">Thows if loader has no templates.</exception>
         public MockTemplateStorage(ILoader loader, ILogger<MockTemplateStorage>? logger)
         {
 
@@ -28,6 +36,7 @@ namespace WebSocketMockServer.Storage
             }
         }
 
+        ///<inheritdoc/>
         public bool TryGetTemplate(string key, [NotNullWhen(true)] out MockTemplate? result)
         {
             result = null;
