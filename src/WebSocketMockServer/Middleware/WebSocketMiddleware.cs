@@ -53,7 +53,7 @@ namespace WebSocketMockServer.Middleware
             }
         }
 
-        private async Task ProcessResponse(MockTemplate mockTemplate, WebSocket webSocket)
+        private async Task ProcessRequestAsync(MockTemplate mockTemplate, WebSocket webSocket)
         {
             foreach (var response in mockTemplate.Responses)
             {
@@ -85,15 +85,12 @@ namespace WebSocketMockServer.Middleware
                             await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
                             break;
                         }
-                    default: throw new InvalidOperationException("Unsopported request type");
                 }
             }
         }
 
-        private async Task CloseSocket(WebSocket webSocket)
+        private async Task CloseSocketAsync(WebSocket webSocket)
         {
-            _logger?.LogWarning("No predefiened response - closing socket");
-
             using (await _socketWriteGuard.LockAsync())
             {
                 using (await _socketReadGuard.LockAsync())
@@ -163,11 +160,12 @@ namespace WebSocketMockServer.Middleware
 
                                     if (_storage.TryGetTemplate(request, out var mockTemplate))
                                     {
-                                        await ProcessResponse(mockTemplate, webSocket);
+                                        await ProcessRequestAsync(mockTemplate, webSocket);
                                     }
                                     else
                                     {
-                                        await CloseSocket(webSocket);
+                                        _logger?.LogWarning("No predefiened response - closing socket");
+                                        await CloseSocketAsync(webSocket);
                                     }
                                 }
                             }

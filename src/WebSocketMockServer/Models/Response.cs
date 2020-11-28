@@ -11,7 +11,7 @@ namespace WebSocketMockServer.Models
         /// Response text.
         /// </summary>
         public string Result { get; }
-               
+
         /// <summary>
         /// Creates response.
         /// </summary>
