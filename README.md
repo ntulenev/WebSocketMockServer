@@ -7,6 +7,7 @@ Project allows to add multiple responses for one request (with delay if needed).
 
 Current version supports only JSON communication.
 
+### Configuration with request-response mapping
 ```yaml
 "FileLoaderConfiguration": {
   "Folder": "Files",
