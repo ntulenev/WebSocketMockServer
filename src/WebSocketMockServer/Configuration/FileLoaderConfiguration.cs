@@ -43,6 +43,9 @@ namespace WebSocketMockServer.Configuration
                 if (template.Responses == null)
                     throw new ConfigurationErrorsException($"Template {template.File} responses not set.");
 
+                if (!template.Responses.Any())
+                    throw new ConfigurationErrorsException("There is no any responses in configuration.");
+
                 foreach (var res in template.Responses)
                 {
                     if (string.IsNullOrWhiteSpace(res.File))
