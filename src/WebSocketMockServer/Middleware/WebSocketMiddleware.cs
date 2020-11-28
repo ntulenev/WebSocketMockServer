@@ -37,7 +37,7 @@ namespace WebSocketMockServer.Middleware
 
             var data = Encoding.UTF8.GetBytes(msg);
 
-            using (await _socketSendGuard.LockAsync())
+            using (await _socketWriteGuard.LockAsync())
             {
                 if (webSocket.State == WebSocketState.Open)
                 {
@@ -123,7 +123,7 @@ namespace WebSocketMockServer.Middleware
                                     {
                                         _logger?.LogWarning("No predefiened response - closing socket");
 
-                                        using (await _socketSendGuard.LockAsync())
+                                        using (await _socketWriteGuard.LockAsync())
                                         {
                                             using (await _socketReadGuard.LockAsync())
                                             {
@@ -171,7 +171,7 @@ namespace WebSocketMockServer.Middleware
 
         private readonly ILogger<WebSocketMiddleware>? _logger;
 
-        private readonly AsyncLock _socketSendGuard = new AsyncLock();
+        private readonly AsyncLock _socketWriteGuard = new AsyncLock();
         private readonly AsyncLock _socketReadGuard = new AsyncLock();
     }
 }
