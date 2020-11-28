@@ -48,8 +48,7 @@ namespace WebSocketMockServer
 
             app.UseWebSockets(new WebSocketOptions
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(30),
-                ReceiveBufferSize = 1
+                KeepAliveInterval = TimeSpan.FromSeconds(30)
             });
 
             app.UseMiddleware<WebSocketMiddleware>();
