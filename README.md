@@ -7,14 +7,16 @@ Project allows to add multiple responses for one request (with delay if needed).
 
 Current version supports only JSON communication.
 
-```
+```yaml
 "FileLoaderConfiguration": {
   "Folder": "Files",
   "Mapping": [
     {
       "File": "RequestA.json",
       "Responses": [
-        { "File": "Response1.json" },
+        { 
+          "File": "Response1.json" 
+        },
         {
           "File": "Response2.json",
           "Delay": "5000"
