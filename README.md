@@ -1,7 +1,7 @@
 ![WebSocketMockServer](logo.PNG)
 # WebSocketMockServer
 
-### Tool that helps frontend team test web socket integration when backend is not ready.
+### Tool that helps frontend team to test web socket integration when backend is not ready.
 
 Project allows to add multiple responses for one request (with delay if needed).
 
