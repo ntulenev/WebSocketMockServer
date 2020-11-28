@@ -2,3 +2,5 @@
 /src/WebSocketMockServer/bin
 /src/WebSocketMockServer/obj
 /src/WebSocketMockServer/WebSocketMockServer.csproj.user
+/src/WebSocketMockServer.Tests/obj
+/src/WebSocketMockServer.Tests/bin
