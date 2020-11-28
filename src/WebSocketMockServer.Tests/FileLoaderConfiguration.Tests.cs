@@ -1,12 +1,11 @@
 ﻿using System.Linq;
+using System.Configuration;
 
 using FluentAssertions;
 
 using Xunit;
 
-using WebSocketMockServer.Models;
 using WebSocketMockServer.Configuration;
-using System.Configuration;
 
 namespace WebSocketMockServer.Tests
 {
