@@ -20,7 +20,7 @@ namespace WebSocketMockServer.Helpers
         /// <exception cref="InvalidOperationException">Throws if string has incorrect format.</exception>
         public static string ReconvertWithJson(this string str)
         {
-            if (String.IsNullOrEmpty(str))
+            if (str is null)
             {
                 throw new ArgumentNullException(nameof(str));
             }
@@ -42,6 +42,6 @@ namespace WebSocketMockServer.Helpers
             }
 
             return jObj.ToString(Formatting.Indented);
-        } 
+        }
     }
 }
