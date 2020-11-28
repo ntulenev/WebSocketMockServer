@@ -81,7 +81,7 @@ namespace WebSocketMockServer.Loader
 
                     if (res.Delay.HasValue)
                     {
-                        responses.Add(new Response(resText, res.Delay.Value));
+                        responses.Add(new Notification(resText, res.Delay.Value));
                     }
                     else
                     {

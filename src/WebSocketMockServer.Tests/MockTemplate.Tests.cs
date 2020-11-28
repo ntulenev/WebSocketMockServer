@@ -82,7 +82,7 @@ namespace WebSocketMockServer.Tests
             IEnumerable<Response> resps = new[]
             {
                 new Response("A"),
-                new Response("B",1000)
+                new Notification("B",1000)
             };
 
             // Act

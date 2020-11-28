@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -7,9 +7,9 @@ using Newtonsoft.Json.Linq;
 namespace WebSocketMockServer.Helpers
 {
     /// <summary>
-    /// Helper class for JSON operations
+    /// Helper class for String / JSON operations
     /// </summary>
-    public static class JObjectHelpers
+    public static class StringHelpers
     {
         /// <summary>
         /// Helper method that gets string and convert to JSON Indented-formatted srting. 
@@ -27,7 +27,7 @@ namespace WebSocketMockServer.Helpers
 
             if (string.IsNullOrWhiteSpace(str))
             {
-                throw new ArgumentException("Value is not set properly", nameof(str));
+                throw new ArgumentException("Value is not set properly.", nameof(str));
             }
 
             JObject jObj;
@@ -38,10 +38,10 @@ namespace WebSocketMockServer.Helpers
             }
             catch (JsonReaderException ex)
             {
-                throw new InvalidOperationException("Incorrect formatting", ex);
+                throw new InvalidOperationException("Incorrect formatting.", ex);
             }
 
             return jObj.ToString(Formatting.Indented);
-        }
+        } 
     }
 }

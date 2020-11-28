@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 using WebSocketMockServer.Storage;
 using WebSocketMockServer.Helpers;
+using WebSocketMockServer.Models;
 
 using Nito.AsyncEx;
 
@@ -52,6 +53,87 @@ namespace WebSocketMockServer.Middleware
             }
         }
 
+        private async Task ProcessResponse(MockTemplate mockTemplate, WebSocket webSocket)
+        {
+            foreach (var response in mockTemplate.Responses)
+            {
+                switch (response)
+                {
+                    case Notification notification:
+                        {
+                            _ = Task.Run(async () =>
+                            {
+                                try
+                                {
+                                    await Task.Delay(notification.Delay).ConfigureAwait(false);
+                                    await SendMessage(webSocket, notification.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                                }
+                                catch (OperationCanceledException)
+                                {
+                                    // Skip
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.LogError(ex, $"Error on process delayed message {notification.Result}");
+                                }
+
+                            });
+                            break;
+                        }
+                    case Response:
+                        {
+                            await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                            break;
+                        }
+                    default: throw new InvalidOperationException("Unsopported request type");
+                }
+            }
+        }
+
+        private async Task CloseSocket(WebSocket webSocket)
+        {
+            _logger?.LogWarning("No predefiened response - closing socket");
+
+            using (await _socketWriteGuard.LockAsync())
+            {
+                using (await _socketReadGuard.LockAsync())
+                {
+                    try
+                    {
+                        if (webSocket.State == WebSocketState.Open)
+                            await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "No predefiened response", _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // Skip
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error on closing socket");
+                    }
+                }
+            }
+        }
+
+        private string ConvertBytesAsJsonString(byte[] bytes)
+        {
+            var request = Encoding.UTF8.GetString(bytes);
+
+            if (!string.IsNullOrWhiteSpace(request))
+            {
+                try
+                {
+                    request = request.ReconvertWithJson();
+                }
+                catch
+                {
+                    // Unable to parse - just get original text  
+                }
+            }
+
+            return request;
+        }
+
         /// <summary>
         /// Handles user request
         /// </summary>
@@ -66,7 +148,6 @@ namespace WebSocketMockServer.Middleware
                     {
                         using WebSocket webSocket = await httpContext.WebSockets.AcceptWebSocketAsync();
 
-                        //Add adapter with minimumBufferSize
                         var adapter = new WebSocketsPipelinesAdapter(webSocket, _socketReadGuard, _hostApplicationLifetime.ApplicationStopping);
 
                         //Method for processing data
@@ -76,68 +157,17 @@ namespace WebSocketMockServer.Middleware
                             {
                                 await foreach (var bytes in adapter.ReadDataAsync())
                                 {
-                                    var request = Encoding.UTF8.GetString(bytes);
-
-                                    if (!string.IsNullOrWhiteSpace(request))
-                                    {
-                                        try
-                                        {
-                                            request = request.ReconvertWithJson();
-                                        }
-                                        catch
-                                        {
-                                            // Unable to parse - just get original text  
-                                        }
-                                    }
+                                    var request = ConvertBytesAsJsonString(bytes);
 
                                     _logger?.LogInformation("Get from client - {request}", request);
 
                                     if (_storage.TryGetTemplate(request, out var mockTemplate))
                                     {
-                                        foreach (var response in mockTemplate.Responses)
-                                        {
-                                            if (response.IsNotification)
-                                            {
-                                                _ = Task.Run(async () =>
-                                                {
-                                                    try
-                                                    {
-                                                        await Task.Delay(response.Delay).ConfigureAwait(false);
-                                                        await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
-                                                    }
-                                                    catch (Exception ex)
-                                                    {
-                                                        _logger.LogError(ex, $"Error on process delayed message {response.Result}");
-                                                    }
-
-                                                });
-
-                                            }
-                                            else
-                                            {
-                                                await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
-                                            }
-                                        }
+                                        await ProcessResponse(mockTemplate, webSocket);
                                     }
                                     else
                                     {
-                                        _logger?.LogWarning("No predefiened response - closing socket");
-
-                                        using (await _socketWriteGuard.LockAsync())
-                                        {
-                                            using (await _socketReadGuard.LockAsync())
-                                            {
-                                                try
-                                                {
-                                                    if (webSocket.State == WebSocketState.Open)
-                                                        await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "No predefiened response", _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    _logger.LogError(ex, "Error on closing socket");
-                                                }
-                                            }
-                                        }
+                                        await CloseSocket(webSocket);
                                     }
                                 }
                             }
@@ -148,6 +178,10 @@ namespace WebSocketMockServer.Middleware
                         }
 
                         await Task.WhenAll(adapter.StartAsync(), ReadDataAsync());
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // Skip
                     }
                     catch (Exception ex)
                     {

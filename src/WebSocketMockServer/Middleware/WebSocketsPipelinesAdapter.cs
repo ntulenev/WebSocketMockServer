@@ -97,16 +97,16 @@ namespace WebSocketMockServer.Middleware
         /// </summary>
         public async Task StartAsync()
         {
-            while (_webSocket.State == WebSocketState.Open)
+            try
             {
-                Memory<byte> memory = _pipe.Writer.GetMemory(_minimumBufferSize);
-
-                _ct.ThrowIfCancellationRequested();
-
-                ValueWebSocketReceiveResult receiveResult;
-
-                try
+                while (_webSocket.State == WebSocketState.Open)
                 {
+                    Memory<byte> memory = _pipe.Writer.GetMemory(_minimumBufferSize);
+
+                    _ct.ThrowIfCancellationRequested();
+
+                    ValueWebSocketReceiveResult receiveResult;
+
                     if (_socketGuard != null)
                     {
                         using (await _socketGuard.LockAsync())
@@ -137,13 +137,13 @@ namespace WebSocketMockServer.Middleware
                         }
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
-            }
 
-            await _pipe.Writer.CompleteAsync().ConfigureAwait(false);
+                await _pipe.Writer.CompleteAsync().ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // Skip
+            }
         }
 
         private readonly WebSocket _webSocket;
