@@ -27,7 +27,7 @@ Current version supports only JSON communication.
 
 ### RequestA.json
 
-```
+```yaml
 {
   "Request": "A"
 }
@@ -35,7 +35,7 @@ Current version supports only JSON communication.
 
 ### Response1.json
 
-```
+```yaml
 {
   "Response": "A"
 }
@@ -43,7 +43,7 @@ Current version supports only JSON communication.
 
 ### Response2.json
 
-```
+```yaml
 {
   "Response": "B"
 }
