@@ -10,12 +10,24 @@ using Nito.AsyncEx;
 
 namespace WebSocketMockServer.WebSockets
 {
+    /// <summary>
+    /// Wrapper that gives abstraction of <see cref="WebSocket"/> for other layers.
+    /// </summary>
     public class WebSocketProxy : IWebSocketProxy
     {
-        public static WebSocketProxy Create(WebSocket ws, ILoggerFactory? factory)
+        /// <summary>
+        /// Creates <see cref="WebSocketProxy"/>.
+        /// </summary>
+        public static IWebSocketProxy Create(WebSocket ws, ILoggerFactory? factory)
         {
             return new WebSocketProxy(ws, factory?.CreateLogger<WebSocketProxy>());
         }
+
+        /// <summary>
+        ///  Creates <see cref="WebSocketProxy"/>.
+        /// </summary>
+        /// <param name="ws"></param>
+        /// <param name="logger"></param>
         private WebSocketProxy(WebSocket ws, ILogger<WebSocketProxy>? logger)
         {
             if (ws is null)
@@ -25,8 +37,10 @@ namespace WebSocketMockServer.WebSockets
             _logger = logger;
         }
 
+        /// <inheritdoc/>
         public WebSocketState State => _webSocket.State;
 
+        /// <inheritdoc/>
         public async Task CloseAsync(CancellationToken ct)
         {
             using (await _socketWriteGuard.LockAsync())
@@ -50,9 +64,11 @@ namespace WebSocketMockServer.WebSockets
             }
         }
 
+        /// <inheritdoc/>
         public ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(Memory<byte> buffer, CancellationToken cancellationToken)
         => _webSocket.ReceiveAsync(buffer, cancellationToken);
 
+        /// <inheritdoc/>
         public async Task SendMessageAsync(string msg, CancellationToken ct)
         {
             var data = Encoding.UTF8.GetBytes(msg);
@@ -84,10 +100,8 @@ namespace WebSocketMockServer.WebSockets
         }
 
         private readonly WebSocket _webSocket;
-
         private readonly AsyncLock _socketWriteGuard = new AsyncLock();
         private readonly AsyncLock _socketReadGuard = new AsyncLock();
-
         private readonly ILogger<WebSocketProxy>? _logger;
     }
 }

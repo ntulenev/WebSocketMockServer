@@ -112,13 +112,9 @@ namespace WebSocketMockServer.WebSockets
         }
 
         private readonly IWebSocketProxy _webSocket;
-
         private readonly int _minimumBufferSize;
-
         private readonly Pipe _pipe;
-
         private readonly CancellationToken _ct;
-
         private const int DEFAULT_PIPE_BUFFER_SIZE = 512;
     }
 }

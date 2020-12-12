@@ -96,11 +96,8 @@ namespace WebSocketMockServer.Loader
         }
 
         private readonly FileLoaderConfiguration _config;
-
         private readonly IWebHostEnvironment _hostingEnvironment;
-
         private readonly ILogger<FileLoader>? _logger;
-
         private IReadOnlyDictionary<string, MockTemplate> _data = null!;
     }
 }

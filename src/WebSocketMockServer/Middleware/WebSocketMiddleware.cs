@@ -135,7 +135,6 @@ namespace WebSocketMockServer.Middleware
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
         private readonly ILogger<WebSocketMiddleware>? _logger;
         private readonly ILoggerFactory? _loggerFactory;
-
         private const string DEFAULT_PATH = "/ws";
     }
 }

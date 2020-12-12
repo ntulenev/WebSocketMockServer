@@ -38,9 +38,7 @@ namespace WebSocketMockServer.Services
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
         private readonly ILogger<LoaderService>? _logger;
-
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
-
         private readonly Loader.ILoader _loader;
     }
 }
