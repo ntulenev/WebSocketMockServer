@@ -1,12 +1,14 @@
 ﻿using System;
-
+using System.Threading;
+using System.Threading.Tasks;
+using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer.Models
 {
     /// <summary>
     /// Response with delay
     /// </summary>
-    public class Notification : Response
+    public class Notification : Reaction
     {
         /// <summary>
         /// Response delay in ms.
@@ -22,10 +24,22 @@ namespace WebSocketMockServer.Models
         {
             if (delay <= 0)
             {
-                throw new ArgumentException("Deley should be positive", nameof(delay));
+                throw new ArgumentException("Delay should be positive", nameof(delay));
             }
 
             Delay = delay;
+        }
+
+        public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct)
+        {
+            //TODO Add track task to handle all not sended notifications.
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(Delay).ConfigureAwait(false);
+                await webSocket.SendMessageAsync(Result, ct).ConfigureAwait(false);
+            });
+
+            return Task.CompletedTask;
         }
     }
 }

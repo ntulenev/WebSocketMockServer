@@ -56,7 +56,7 @@ namespace WebSocketMockServer.Tests
             var loader = new Mock<ILoader>();
 
             var testDictionary = new Dictionary<string, MockTemplate>();
-            var template = new MockTemplate("aaa", new[] { new Response("bbb") });
+            var template = new MockTemplate("aaa", new[] { Reaction.Create("bbb") });
             testDictionary.Add(template.Request, template);
 
             loader.Setup(x => x.GetLoadedData()).Returns(testDictionary);

@@ -2,7 +2,6 @@
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +11,7 @@ using WebSocketMockServer.Storage;
 using WebSocketMockServer.Helpers;
 using WebSocketMockServer.Models;
 
-using Nito.AsyncEx;
+using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer.Middleware
 {
@@ -24,91 +23,24 @@ namespace WebSocketMockServer.Middleware
         /// <summary>
         /// Creates web sockets middleware
         /// </summary>
-        public WebSocketMiddleware(RequestDelegate next, ILogger<WebSocketMiddleware>? logger, IHostApplicationLifetime hostApplicationLifetime, IMockTemplateStorage storage)
+        public WebSocketMiddleware(RequestDelegate next,
+                                   ILogger<WebSocketMiddleware>? logger,
+                                   IHostApplicationLifetime hostApplicationLifetime,
+                                   IMockTemplateStorage storage,
+                                   ILoggerFactory? loggerFactory)
         {
             _next = next;
             _hostApplicationLifetime = hostApplicationLifetime;
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
-
+            _loggerFactory = loggerFactory;
             _logger = logger;
         }
 
-        private async Task SendMessage(WebSocket webSocket, string msg, CancellationToken ct)
+        private async Task ProcessRequestAsync(MockTemplate mockTemplate, IWebSocketProxy webSocket)
         {
-
-            var data = Encoding.UTF8.GetBytes(msg);
-
-            using (await _socketWriteGuard.LockAsync())
+            foreach (var reaction in mockTemplate.Reactions)
             {
-                if (webSocket.State == WebSocketState.Open)
-                {
-                    _logger?.LogInformation("{Date} Send to client - {msg}", DateTime.UtcNow, msg);
-
-                    await webSocket.SendAsync(data.AsMemory(), WebSocketMessageType.Text, true, ct);
-                }
-                else
-                {
-                    _logger?.LogWarning("{Date} Unable to send - {msg}. Socket is closed.", DateTime.UtcNow, msg);
-                }
-            }
-        }
-
-        private async Task ProcessRequestAsync(MockTemplate mockTemplate, WebSocket webSocket)
-        {
-            foreach (var response in mockTemplate.Responses)
-            {
-                switch (response)
-                {
-                    case Notification notification:
-                        {
-                            _ = Task.Run(async () =>
-                            {
-                                try
-                                {
-                                    await Task.Delay(notification.Delay).ConfigureAwait(false);
-                                    await SendMessage(webSocket, notification.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
-                                }
-                                catch (OperationCanceledException)
-                                {
-                                    // Skip
-                                }
-                                catch (Exception ex)
-                                {
-                                    _logger.LogError(ex, $"Error on process delayed message {notification.Result}");
-                                }
-
-                            });
-                            break;
-                        }
-                    case Response:
-                        {
-                            await SendMessage(webSocket, response.Result, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
-                            break;
-                        }
-                }
-            }
-        }
-
-        private async Task CloseSocketAsync(WebSocket webSocket)
-        {
-            using (await _socketWriteGuard.LockAsync())
-            {
-                using (await _socketReadGuard.LockAsync())
-                {
-                    try
-                    {
-                        if (webSocket.State == WebSocketState.Open)
-                            await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "No predefiened response", _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        // Skip
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "Error on closing socket");
-                    }
-                }
+                await reaction.SendMessage(webSocket, _hostApplicationLifetime.ApplicationStopping);
             }
         }
 
@@ -137,15 +69,16 @@ namespace WebSocketMockServer.Middleware
         public async Task Invoke(HttpContext httpContext)
         {
 
-            if (httpContext.Request.Path == "/ws")
+            if (httpContext.Request.Path == DEFAULT_PATH)
             {
                 if (httpContext.WebSockets.IsWebSocketRequest)
                 {
                     try
                     {
                         using WebSocket webSocket = await httpContext.WebSockets.AcceptWebSocketAsync();
+                        var wsProxy = WebSocketProxy.Create(webSocket, _loggerFactory);
 
-                        var adapter = new WebSocketsPipelinesAdapter(webSocket, _socketReadGuard, _hostApplicationLifetime.ApplicationStopping);
+                        var adapter = new WebSocketsPipelinesAdapter(wsProxy, _hostApplicationLifetime.ApplicationStopping);
 
                         //Method for processing data
                         async Task ReadDataAsync()
@@ -160,12 +93,12 @@ namespace WebSocketMockServer.Middleware
 
                                     if (_storage.TryGetTemplate(request, out var mockTemplate))
                                     {
-                                        await ProcessRequestAsync(mockTemplate, webSocket);
+                                        await ProcessRequestAsync(mockTemplate, wsProxy).ConfigureAwait(false);
                                     }
                                     else
                                     {
                                         _logger?.LogWarning("No predefiened response - closing socket");
-                                        await CloseSocketAsync(webSocket);
+                                        await wsProxy.CloseAsync(_hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
                                     }
                                 }
                             }
@@ -200,10 +133,9 @@ namespace WebSocketMockServer.Middleware
         private readonly RequestDelegate _next;
         private readonly IMockTemplateStorage _storage;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
-
         private readonly ILogger<WebSocketMiddleware>? _logger;
+        private readonly ILoggerFactory? _loggerFactory;
 
-        private readonly AsyncLock _socketWriteGuard = new AsyncLock();
-        private readonly AsyncLock _socketReadGuard = new AsyncLock();
+        private const string DEFAULT_PATH = "/ws"
     }
 }

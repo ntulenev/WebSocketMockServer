@@ -17,16 +17,16 @@ namespace WebSocketMockServer.Models
         /// <summary>
         /// Responses for request.
         /// </summary>
-        public IEnumerable<Response> Responses { get; }
+        public IEnumerable<Reaction> Reactions { get; }
 
         /// <summary>
         /// Creates <see cref="MockTemplate"/>.
         /// </summary>
         /// <param name="request">Request text</param>
-        /// <param name="responses">Responses</param>
+        /// <param name="reactions">Responses</param>
         /// <exception cref="ArgumentNullException">Throws if request data or responses is null.</exception>
         /// <exception cref="ArgumentException">Throws if request data or responses is empty.</exception>
-        public MockTemplate(string request, IEnumerable<Response> responses)
+        public MockTemplate(string request, IEnumerable<Reaction> reactions)
         {
             if (request is null)
             {
@@ -40,16 +40,16 @@ namespace WebSocketMockServer.Models
 
             Request = request;
 
-            if (responses == null)
+            if (reactions == null)
             {
-                throw new ArgumentNullException(nameof(responses));
+                throw new ArgumentNullException(nameof(reactions));
             }
 
-            Responses = responses.ToList(); // Materialize
+            Reactions = reactions.ToList(); // Materialize
 
-            if (!Responses.Any())
+            if (!Reactions.Any())
             {
-                throw new ArgumentException("Responses is empty", nameof(responses));
+                throw new ArgumentException("Responses is empty", nameof(reactions));
             }
         }
     }

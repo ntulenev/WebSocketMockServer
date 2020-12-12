@@ -6,45 +6,20 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Nito.AsyncEx;
-
-namespace WebSocketMockServer.Middleware
+namespace WebSocketMockServer.WebSockets
 {
     /// <summary>
     /// Pipelines adapter for web sockets
     /// </summary>
     public class WebSocketsPipelinesAdapter
     {
-        /// <summary>
-        /// Creates web sockets pipeline adapter
-        /// </summary>
-        /// <param name="webSocket">Web socket that will provide data for pipeline</param>
-        /// <param name="socketGuard"><see cref="AsyncLock"/> that could lock ReceiveAsync to sync with some other operations. CloseAsync for insance.</param>
-        /// <param name="minimumBufferSize">Initial memory buffer size for reading from socket</param>
-        /// <param name="ct">Token for cancellation</param>
-        public WebSocketsPipelinesAdapter(WebSocket webSocket, AsyncLock socketGuard, int minimumBufferSize, CancellationToken ct = default)
-            : this(webSocket, minimumBufferSize, ct)
-        {
-            _socketGuard = socketGuard ?? throw new ArgumentNullException(nameof(socketGuard));
-        }
-
-        /// <summary>
-        /// Creates web sockets pipeline adapter
-        /// </summary>
-        /// <param name="webSocket">Web socket that will provide data for pipeline</param>
-        /// <param name="socketGuard"><see cref="AsyncLock"/> that could lock ReceiveAsync to sync with some other operations. CloseAsync for insance.</param>
-        /// <param name="ct">Token for cancellation</param>
-        public WebSocketsPipelinesAdapter(WebSocket webSocket, AsyncLock socketGuard, CancellationToken ct = default)
-            : this(webSocket, socketGuard, DEFAULT_PIPE_BUFFER_SIZE, ct)
-        {
-        }
 
         /// <summary>
         /// Creates web sockets pipeline adapter
         /// </summary>
         /// <param name="webSocket">Web socket that will provide data for pipeline</param>
         /// <param name="ct">Token for cancellation</param>
-        public WebSocketsPipelinesAdapter(WebSocket webSocket, CancellationToken ct = default)
+        public WebSocketsPipelinesAdapter(IWebSocketProxy webSocket, CancellationToken ct = default)
             : this(webSocket, DEFAULT_PIPE_BUFFER_SIZE, ct)
         {
         }
@@ -55,7 +30,7 @@ namespace WebSocketMockServer.Middleware
         /// <param name="webSocket">Web socket that will provide data for pipeline</param>
         /// <param name="minimumBufferSize">Initial memory buffer size for reading from socket</param>
         /// <param name="ct">Token for cancellation</param>
-        public WebSocketsPipelinesAdapter(WebSocket webSocket, int minimumBufferSize, CancellationToken ct = default)
+        public WebSocketsPipelinesAdapter(IWebSocketProxy webSocket, int minimumBufferSize, CancellationToken ct = default)
         {
             _webSocket = webSocket ?? throw new ArgumentNullException(nameof(webSocket));
 
@@ -107,17 +82,7 @@ namespace WebSocketMockServer.Middleware
 
                     ValueWebSocketReceiveResult receiveResult;
 
-                    if (_socketGuard != null)
-                    {
-                        using (await _socketGuard.LockAsync())
-                        {
-                            receiveResult = await _webSocket.ReceiveAsync(memory, _ct).ConfigureAwait(false);
-                        }
-                    }
-                    else
-                    {
-                        receiveResult = await _webSocket.ReceiveAsync(memory, _ct).ConfigureAwait(false);
-                    }
+                    receiveResult = await _webSocket.ReceiveAsync(memory, _ct).ConfigureAwait(false);
 
                     if (receiveResult.MessageType == WebSocketMessageType.Close)
                     {
@@ -146,13 +111,11 @@ namespace WebSocketMockServer.Middleware
             }
         }
 
-        private readonly WebSocket _webSocket;
+        private readonly IWebSocketProxy _webSocket;
 
         private readonly int _minimumBufferSize;
 
         private readonly Pipe _pipe;
-
-        private readonly AsyncLock? _socketGuard;
 
         private readonly CancellationToken _ct;
 

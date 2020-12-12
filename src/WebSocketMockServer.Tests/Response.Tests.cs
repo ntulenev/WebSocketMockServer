@@ -19,7 +19,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Response(msg));
+                () => Reaction.Create(msg));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -33,7 +33,7 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => new Response(msg));
+                () => Reaction.Create(msg));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -48,7 +48,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Response(msg));
+                () => Reaction.Create(msg));
 
             // Assert
             exception.Should().BeNull();

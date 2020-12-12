@@ -47,7 +47,7 @@ namespace WebSocketMockServer.Tests
         {
             //Arrange
             string request = "aaa";
-            IEnumerable<Response> resps = null!;
+            IEnumerable<Reaction> resps = null!;
 
             // Act
             var exception = Record.Exception(
@@ -63,7 +63,7 @@ namespace WebSocketMockServer.Tests
         {
             //Arrange
             string request = "aaa";
-            IEnumerable<Response> resps = Enumerable.Empty<Response>();
+            IEnumerable<Reaction> resps = Enumerable.Empty<Reaction>();
 
             // Act
             var exception = Record.Exception(
@@ -79,9 +79,9 @@ namespace WebSocketMockServer.Tests
         {
             //Arrange
             string request = "aaa";
-            IEnumerable<Response> resps = new[]
+            IEnumerable<Reaction> resps = new[]
             {
-                new Response("A"),
+                Reaction.Create("A"),
                 new Notification("B",1000)
             };
 

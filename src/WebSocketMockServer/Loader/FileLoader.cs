@@ -64,7 +64,7 @@ namespace WebSocketMockServer.Loader
 
                 keyText = keyText.ReconvertWithJson();
 
-                var responses = new List<Response>();
+                var reactions = new List<Reaction>();
 
                 foreach (var res in template.Responses!)
                 {
@@ -81,15 +81,15 @@ namespace WebSocketMockServer.Loader
 
                     if (res.Delay.HasValue)
                     {
-                        responses.Add(new Notification(resText, res.Delay.Value));
+                        reactions.Add(Reaction.Create(resText, res.Delay.Value));
                     }
                     else
                     {
-                        responses.Add(new Response(resText));
+                        reactions.Add(Reaction.Create(resText));
                     }
                 }
 
-                templates.Add(keyText, new MockTemplate(keyText, responses));
+                templates.Add(keyText, new MockTemplate(keyText, reactions));
             }
 
             _data = templates;

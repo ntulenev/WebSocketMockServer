@@ -1,35 +1,30 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer.Models
 {
     /// <summary>
     /// Response model.
     /// </summary>
-    public class Response
+    public class Response : Reaction
     {
-        /// <summary>
-        /// Response text.
-        /// </summary>
-        public string Result { get; }
-
         /// <summary>
         /// Creates response.
         /// </summary>
         /// <exception cref="ArgumentNullException">Throws if result is null.</exception>
         /// <exception cref="ArgumentException">Throws if result is not set.</exception>
-        public Response(string result)
+        public Response(string result) : base(result)
         {
-            if (result is null)
-            {
-                throw new ArgumentNullException(nameof(result));
-            }
+        }
 
-            if (String.IsNullOrWhiteSpace(result))
-            {
-                throw new ArgumentException("Result not set", nameof(result));
-            }
+        public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct)
+        {
+            if (webSocket is null)
+                throw new ArgumentNullException(nameof(webSocket));
 
-            Result = result;
+            return webSocket.SendMessageAsync(Result, ct);
         }
     }
 }
