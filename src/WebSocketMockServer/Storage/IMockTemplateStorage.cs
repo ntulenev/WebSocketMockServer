@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using WebSocketMockServer.Models;
-
 namespace WebSocketMockServer.Storage
 {
     /// <summary>

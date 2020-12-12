@@ -7,6 +7,7 @@ using FluentAssertions;
 using Xunit;
 
 using WebSocketMockServer.Models;
+using WebSocketMockServer.Storage;
 
 namespace WebSocketMockServer.Tests
 {

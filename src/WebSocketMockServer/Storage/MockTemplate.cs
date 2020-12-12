@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WebSocketMockServer.Models
+using WebSocketMockServer.Models;
+
+namespace WebSocketMockServer.Storage
 {
     /// <summary>
     /// Mock template model.
