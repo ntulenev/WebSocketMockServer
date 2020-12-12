@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer.Models
@@ -19,6 +20,7 @@ namespace WebSocketMockServer.Models
         {
         }
 
+        /// <inheritdoc/>
         public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct)
         {
             if (webSocket is null)

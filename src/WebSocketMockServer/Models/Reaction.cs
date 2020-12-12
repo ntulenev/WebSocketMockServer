@@ -17,6 +17,12 @@ namespace WebSocketMockServer.Models
         /// </summary>
         public string Result { get; }
 
+        /// <summary>
+        /// Sends message to WebSocket.
+        /// </summary>
+        /// <param name="ws">web socket for sending.</param>
+        /// <param name="ct">Cancellatin token.</param>
+        /// <returns></returns>
         public abstract Task SendMessage(IWebSocketProxy ws, CancellationToken ct);
 
         /// <summary>

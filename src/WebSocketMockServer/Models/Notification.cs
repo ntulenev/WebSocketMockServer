@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer.Models
@@ -30,6 +31,7 @@ namespace WebSocketMockServer.Models
             Delay = delay;
         }
 
+        /// <inheritdoc/>
         public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct)
         {
             //TODO Add track task to handle all not sended notifications.
