@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using WebSocketMockServer.Storage;
 using WebSocketMockServer.Helpers;
 using WebSocketMockServer.Models;
-
 using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer.Middleware
