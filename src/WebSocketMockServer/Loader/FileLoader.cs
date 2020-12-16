@@ -70,7 +70,7 @@ namespace WebSocketMockServer.Loader
                 foreach (var res in template.Reactions!)
                 {
                     if (res.Delay.HasValue)
-                        _logger?.LogInformation("Reading response from {response} with delay {delay} ms", res.File, res.Delay);
+                        _logger?.LogInformation("Reading notification from {response} with delay {delay} ms", res.File, res.Delay);
                     else
                         _logger?.LogInformation("Reading response from {response}", res.File, res.Delay);
 
