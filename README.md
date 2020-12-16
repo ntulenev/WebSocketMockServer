@@ -14,8 +14,11 @@ Current version supports only JSON communication.
   "Mapping": [
     {
       "File": "RequestA.json",
-      "Reactions": [
-        { "File": "Reaction1.json" },
+      "Reactions": 
+      [
+        { 
+          "File": "Reaction1.json" 
+        },
         {
           "File": "Reaction2.json",
           "Delay": "5000"
