@@ -17,7 +17,7 @@ namespace WebSocketMockServer.Storage
         public string Request { get; }
 
         /// <summary>
-        /// Responses for request.
+        /// Reactions for request.
         /// </summary>
         public IEnumerable<Reaction> Reactions { get; }
 
@@ -25,9 +25,9 @@ namespace WebSocketMockServer.Storage
         /// Creates <see cref="MockTemplate"/>.
         /// </summary>
         /// <param name="request">Request text</param>
-        /// <param name="reactions">Responses</param>
-        /// <exception cref="ArgumentNullException">Throws if request data or responses is null.</exception>
-        /// <exception cref="ArgumentException">Throws if request data or responses is empty.</exception>
+        /// <param name="reactions">Reactions on request</param>
+        /// <exception cref="ArgumentNullException">Throws if request data or reactions is null.</exception>
+        /// <exception cref="ArgumentException">Throws if request data or reactions is empty.</exception>
         public MockTemplate(string request, IEnumerable<Reaction> reactions)
         {
             if (request is null)
@@ -35,7 +35,7 @@ namespace WebSocketMockServer.Storage
                 throw new ArgumentNullException(nameof(request));
             }
 
-            if (String.IsNullOrWhiteSpace(request))
+            if (string.IsNullOrWhiteSpace(request))
             {
                 throw new ArgumentException("Request not set", nameof(request));
             }
@@ -51,7 +51,7 @@ namespace WebSocketMockServer.Storage
 
             if (!Reactions.Any())
             {
-                throw new ArgumentException("Responses is empty", nameof(reactions));
+                throw new ArgumentException("Reactions not set", nameof(reactions));
             }
         }
     }

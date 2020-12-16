@@ -11,6 +11,7 @@ using WebSocketMockServer.Loader;
 using WebSocketMockServer.Middleware;
 using WebSocketMockServer.Services;
 using WebSocketMockServer.Storage;
+using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer
 {
@@ -29,6 +30,7 @@ namespace WebSocketMockServer
         {
             services.AddHealthChecks();
             services.AddSingleton<IMockTemplateStorage, MockTemplateStorage>();
+            services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
             services.Configure<FileLoaderConfiguration>(Configuration.GetSection(nameof(FileLoaderConfiguration)));
             services.AddSingleton<ILoader, FileLoader>();
             services.AddHostedService<LoaderService>();

@@ -9,7 +9,7 @@ using WebSocketMockServer.Loader;
 namespace WebSocketMockServer.Storage
 {
     /// <summary>
-    /// Storage for request/response templates.
+    /// Storage for request/reactions templates.
     /// </summary>
     public class MockTemplateStorage : IMockTemplateStorage
     {
