@@ -13,8 +13,8 @@ namespace WebSocketMockServer.Configuration
         public string? File { get; set; }
 
         /// <summary>
-        /// Responses for request
+        /// Reactions for request
         /// </summary>
-        public IEnumerable<ResponseMappingTemplate>? Responses { get; set; }
+        public IEnumerable<ReactionMappingTemplate>? Reactions { get; set; }
     }
 }

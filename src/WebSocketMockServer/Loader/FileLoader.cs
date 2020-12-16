@@ -67,7 +67,7 @@ namespace WebSocketMockServer.Loader
 
                 var reactions = new List<Reaction>();
 
-                foreach (var res in template.Responses!)
+                foreach (var res in template.Reactions!)
                 {
                     if (res.Delay.HasValue)
                         _logger?.LogInformation("Reading response from {response} with delay {delay} ms", res.File, res.Delay);

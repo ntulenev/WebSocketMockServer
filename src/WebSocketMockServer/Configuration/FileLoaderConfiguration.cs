@@ -11,7 +11,7 @@ namespace WebSocketMockServer.Configuration
     public class FileLoaderConfiguration
     {
         /// <summary>
-        /// Request/Response data.
+        /// Request/Reactions data.
         /// </summary>
         public IEnumerable<RequestMappingTemplate>? Mapping { get; set; }
 
@@ -40,16 +40,16 @@ namespace WebSocketMockServer.Configuration
                 if (string.IsNullOrWhiteSpace(template.File))
                     throw new ConfigurationErrorsException("Template file path not set.");
 
-                if (template.Responses == null)
-                    throw new ConfigurationErrorsException($"Template {template.File} responses not set.");
+                if (template.Reactions == null)
+                    throw new ConfigurationErrorsException($"Template {template.File} reactions not set.");
 
-                if (!template.Responses.Any())
-                    throw new ConfigurationErrorsException("There is no any responses in configuration.");
+                if (!template.Reactions.Any())
+                    throw new ConfigurationErrorsException("There is no any reactions in configuration.");
 
-                foreach (var res in template.Responses)
+                foreach (var res in template.Reactions)
                 {
                     if (string.IsNullOrWhiteSpace(res.File))
-                        throw new ConfigurationErrorsException($"Template {template.File} response file path not set.");
+                        throw new ConfigurationErrorsException($"Template {template.File} reactions file path not set.");
                 }
             }
         }

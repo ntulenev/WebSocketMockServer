@@ -21,10 +21,10 @@
     <Content Update="Files\RequestA.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Files\Response1.json">
+    <Content Update="Files\Reaction1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Files\Response2.json">
+    <Content Update="Files\Reaction2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

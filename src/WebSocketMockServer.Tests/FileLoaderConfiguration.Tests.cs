@@ -24,9 +24,9 @@ namespace WebSocketMockServer.Tests
                       new RequestMappingTemplate
                       {
                            File = "B",
-                            Responses = new[]
+                            Reactions = new[]
                             {
-                                new ResponseMappingTemplate
+                                new ReactionMappingTemplate
                                 {
                                      Delay = 1,
                                      File = "C"
@@ -57,9 +57,9 @@ namespace WebSocketMockServer.Tests
                       new RequestMappingTemplate
                       {
                             File = "B",
-                            Responses = new[]
+                            Reactions = new[]
                             {
-                                new ResponseMappingTemplate
+                                new ReactionMappingTemplate
                                 {
                                      Delay = 1,
                                      File = "C"
@@ -134,9 +134,9 @@ namespace WebSocketMockServer.Tests
                       new RequestMappingTemplate
                       {
                             File = name,
-                            Responses = new[]
+                            Reactions = new[]
                             {
-                                new ResponseMappingTemplate
+                                new ReactionMappingTemplate
                                 {
                                      Delay = 1,
                                      File = "C"
@@ -167,7 +167,7 @@ namespace WebSocketMockServer.Tests
                       new RequestMappingTemplate
                       {
                             File = "B",
-                            Responses = null
+                            Reactions = null
                       }
                   }
             };
@@ -193,7 +193,7 @@ namespace WebSocketMockServer.Tests
                       new RequestMappingTemplate
                       {
                             File = "B",
-                            Responses = Enumerable.Empty<ResponseMappingTemplate>()
+                            Reactions = Enumerable.Empty<ReactionMappingTemplate>()
                       }
                   }
             };
@@ -223,9 +223,9 @@ namespace WebSocketMockServer.Tests
                       new RequestMappingTemplate
                       {
                             File = name,
-                            Responses = new[]
+                            Reactions = new[]
                             {
-                                new ResponseMappingTemplate
+                                new ReactionMappingTemplate
                                 {
                                      Delay = 1,
                                      File = string.Empty

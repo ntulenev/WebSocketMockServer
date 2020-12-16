@@ -84,9 +84,9 @@ namespace WebSocketMockServer.Tests
                       new RequestMappingTemplate
                       {
                            File = "B",
-                            Responses = new[]
+                            Reactions = new[]
                             {
-                                new ResponseMappingTemplate
+                                new ReactionMappingTemplate
                                 {
                                      Delay = 1,
                                      File = "C"
