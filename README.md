@@ -3,7 +3,7 @@
 
 ### Tool that helps frontend team to test web socket integration when backend is not ready.
 
-Project allows to add multiple responses for one request (with delay if needed).
+Project allows to add multiple reactions on one request (responses or delayed notifications).
 
 Current version supports only JSON communication.
 
@@ -14,12 +14,10 @@ Current version supports only JSON communication.
   "Mapping": [
     {
       "File": "RequestA.json",
-      "Responses": [
-        { 
-          "File": "Response1.json" 
-        },
+      "Reactions": [
+        { "File": "Reaction1.json" },
         {
-          "File": "Response2.json",
+          "File": "Reaction2.json",
           "Delay": "5000"
         }
       ]
@@ -36,7 +34,7 @@ Current version supports only JSON communication.
 }
 ```
 
-### Response1.json
+### Reaction1.json
 
 ```yaml
 {
@@ -44,11 +42,11 @@ Current version supports only JSON communication.
 }
 ```
 
-### Response2.json
+### Reaction2.json
 
 ```yaml
 {
-  "Response": "B"
+  "Notification": "B"
 }
 ```
 
