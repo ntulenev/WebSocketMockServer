@@ -46,6 +46,15 @@ namespace WebSocketMockServer.Loader
         }
 
 
+        private string GetFilePath(string name)
+            => Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, name);
+
+        private async Task<string> GetFileContentAsync(string fileName, CancellationToken ct)
+        {
+            var requestText = await File.ReadAllTextAsync(GetFilePath(fileName), ct);
+            return requestText.ReconvertWithJson();
+        }
+
         ///<inheritdoc/>
         public IReadOnlyDictionary<string, MockTemplate> GetLoadedData() => _data ?? throw new InvalidOperationException("Data not loaded");
 
@@ -59,38 +68,27 @@ namespace WebSocketMockServer.Loader
 
                 _logger?.LogInformation("Reading request from {filename}", template.File);
 
-                var keyFileName = Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, template.File!);
-
-                var keyText = await File.ReadAllTextAsync(keyFileName, ct);
-
-                keyText = keyText.ReconvertWithJson();
+                var requestText = await GetFileContentAsync(template.File!, ct);
 
                 var reactions = new List<Reaction>();
 
                 foreach (var res in template.Reactions!)
                 {
                     if (res.Delay.HasValue)
-                        _logger?.LogInformation("Reading notification from {response} with delay {delay} ms", res.File, res.Delay);
-                    else
-                        _logger?.LogInformation("Reading response from {response}", res.File, res.Delay);
-
-                    var keyResFileName = Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, res.File!);
-
-                    var resText = await File.ReadAllTextAsync(keyResFileName, ct);
-
-                    resText = resText.ReconvertWithJson();
-
-                    if (res.Delay.HasValue)
                     {
-                        reactions.Add(Reaction.Create(resText, res.Delay.Value));
+                        _logger?.LogInformation("Reading notification from {response} with delay {delay} ms", res.File, res.Delay);
+                        var reactionText = await GetFileContentAsync(res.File!, ct);
+                        reactions.Add(Reaction.Create(reactionText, res.Delay.Value));
                     }
                     else
                     {
-                        reactions.Add(Reaction.Create(resText));
+                        _logger?.LogInformation("Reading response from {response}", res.File, res.Delay);
+                        var reactionText = await GetFileContentAsync(res.File!, ct);
+                        reactions.Add(Reaction.Create(reactionText));
                     }
                 }
 
-                templates.Add(keyText, new MockTemplate(keyText, reactions));
+                templates.Add(requestText, new MockTemplate(requestText, reactions));
             }
 
             _data = templates;
