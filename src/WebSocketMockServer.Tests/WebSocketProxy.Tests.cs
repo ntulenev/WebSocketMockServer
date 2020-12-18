@@ -10,6 +10,8 @@ using Xunit;
 using Moq;
 
 using WebSocketMockServer.WebSockets;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WebSocketMockServer.Tests
 {
@@ -99,14 +101,26 @@ namespace WebSocketMockServer.Tests
             ws.Verify(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()), Times.Once);
         }
 
-        [Fact(DisplayName = "WebSocket proxy runs SendMessageAsync properly for closed status.")]
+        private static TheoryData<WebSocketState> WebSocketsStatusGenerator()
+        {
+            var td = new TheoryData<WebSocketState>();
+            foreach (var status in Enum.GetValues(typeof(WebSocketState)).Cast<WebSocketState>())
+            {
+                if (status != WebSocketState.Open)
+                    td.Add(status);
+            }
+            return td;
+        }
+
+        [Theory(DisplayName = "WebSocket proxy runs SendMessageAsync properly for not open status.")]
+        [MemberData(nameof(WebSocketsStatusGenerator))]
         [Trait("Category", "Unit")]
-        public void SendMessageAsyncSkipsProperly()
+        public void SendMessageAsyncSkipsProperly(WebSocketState testState)
         {
             //Arrange
             var ws = new Mock<WebSocket>();
             ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>())).Returns(new ValueTask(Task.CompletedTask));
-            ws.Setup(x => x.State).Returns(WebSocketState.Closed);
+            ws.Setup(x => x.State).Returns(testState);
             var proxy = WebSocketProxy.Create(ws.Object, null!);
 
             // Act
