@@ -2,6 +2,7 @@
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 using FluentAssertions;
 
@@ -10,8 +11,6 @@ using Xunit;
 using Moq;
 
 using WebSocketMockServer.WebSockets;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace WebSocketMockServer.Tests
 {

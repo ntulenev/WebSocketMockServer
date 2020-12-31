@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Threading;
 
 using FluentAssertions;
 
 using Xunit;
 
+using Moq;
+
 using WebSocketMockServer.Models;
 using WebSocketMockServer.WebSockets;
-using System.Threading.Tasks;
-using System.Threading;
-using Moq;
 
 namespace WebSocketMockServer.Tests
 {
