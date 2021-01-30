@@ -175,11 +175,10 @@ namespace WebSocketMockServer.Tests
             run2.IsCompleted.Should().BeTrue();
         }
 
-        //ADD ReceiveAsync with guard checks
-        //ADD CloseAsync with guard chechs
+        //TODO
 
-        //ADD WebSocketsHandler tests  - public validation
-        //ADD WebSocketsPipelinesAdapter tests = public validation
-        //ADD Integration tests - single optimistic test
+        //ADD SendMessage with close
+
+        //ADD ReceiveAsync with close
     }
 }
