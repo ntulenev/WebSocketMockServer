@@ -67,8 +67,11 @@ namespace WebSocketMockServer.WebSockets
         }
 
         /// <inheritdoc/>
-        public ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(Memory<byte> buffer, CancellationToken cancellationToken)
-        => _webSocket.ReceiveAsync(buffer, cancellationToken);
+        public async ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(Memory<byte> buffer, CancellationToken ct)
+        {
+            using var _ = await _socketReadGuard.LockAsync(ct);
+            return await _webSocket.ReceiveAsync(buffer, ct);
+        }
 
         /// <inheritdoc/>
         public async Task SendMessageAsync(string msg, CancellationToken ct)
