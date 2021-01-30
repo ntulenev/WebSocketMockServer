@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 using FluentAssertions;
 
+using Microsoft.AspNetCore.Mvc.Testing;
+
 using Xunit;
 
 namespace WebSocketMockServer.Tests
 {
-    public class ServiceTests : IClassFixture<ServiceWebAppFactory>
+    public class ServiceTests : IClassFixture<WebApplicationFactory<Startup>>
     {
-        public ServiceTests(ServiceWebAppFactory factory)
+        public ServiceTests(WebApplicationFactory<Startup> factory)
         {
             _factory = factory;
         }
@@ -81,6 +83,6 @@ namespace WebSocketMockServer.Tests
             return Encoding.UTF8.GetString(bufferList.ToArray());
         }
 
-        private readonly ServiceWebAppFactory _factory;
+        private readonly WebApplicationFactory<Startup> _factory;
     }
 }
