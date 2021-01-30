@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using FluentAssertions;
 
@@ -47,7 +47,7 @@ namespace WebSocketMockServer.Tests
         public void CantConvertNotJsonString()
         {
             //Arrange
-            string request = "AAA";
+            var request = "AAA";
 
             var exception = Record.Exception(
                () => request.ReconvertWithJson());
@@ -61,13 +61,13 @@ namespace WebSocketMockServer.Tests
         public void ReconvertWithJsonProcessJsonString()
         {
             //Arrange
-            string request = "{   \"A\": \"1\" }";
+            var request = "{   \"A\": \"1\" }";
 
             // Act
             var request2 = request.ReconvertWithJson();
 
             // Assert
-            string formatted = JObject.Parse(request).ToString(Formatting.Indented);
+            var formatted = JObject.Parse(request).ToString(Formatting.Indented);
             request2.Should().BeEquivalentTo(formatted);
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using FluentAssertions;
 
@@ -40,7 +40,7 @@ namespace WebSocketMockServer.Tests
         public void CantCreateFileLoaderWithNullConfig()
         {
             //Arrange
-            IWebHostEnvironment hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
+            var hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
             IOptions<FileLoaderConfiguration> config = null!;
             ILogger<FileLoader>? logger = null!;
 
@@ -57,8 +57,8 @@ namespace WebSocketMockServer.Tests
         public void CantCreateFileLoaderWithNullConfigData()
         {
             //Arrange
-            IWebHostEnvironment hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
-            IOptions<FileLoaderConfiguration> config = (new Mock<IOptions<FileLoaderConfiguration>>()).Object;
+            var hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
+            var config = (new Mock<IOptions<FileLoaderConfiguration>>()).Object;
             ILogger<FileLoader>? logger = null!;
 
             // Act
@@ -74,7 +74,7 @@ namespace WebSocketMockServer.Tests
         public void CanCreateFileLoaderWithCorrectData()
         {
             //Arrange
-            IWebHostEnvironment hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
+            var hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
             var configMock = new Mock<IOptions<FileLoaderConfiguration>>();
             configMock.Setup(x => x.Value).Returns(new FileLoaderConfiguration
             {

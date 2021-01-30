@@ -132,6 +132,9 @@ namespace WebSocketMockServer.Tests
             ws.Verify(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()), Times.Never);
         }
 
-        //ADD  ReceiveAsync SendMessageAsync CloseAsync with guard checks
+        //ADD ReceiveAsync SendMessageAsync CloseAsync with guard checks
+        //ADD WebSocketsHandler tests
+        //ADD WebSocketsPipelinesAdapter tests
+        //ADD Integration tests
     }
 }
