@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -22,7 +22,9 @@ namespace WebSocketMockServer.Storage
         {
 
             if (loader == null)
+            {
                 throw new ArgumentNullException(nameof(loader));
+            }
 
             try
             {

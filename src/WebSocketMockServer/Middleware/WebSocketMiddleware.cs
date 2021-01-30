@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 
@@ -35,7 +35,7 @@ namespace WebSocketMockServer.Middleware
         /// <summary>
         /// Handles user request
         /// </summary>
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext httpContext)
         {
             if (httpContext.Request.Path == DEFAULT_PATH)
             {
@@ -43,7 +43,7 @@ namespace WebSocketMockServer.Middleware
                 {
                     try
                     {
-                        using WebSocket webSocket = await httpContext.WebSockets.AcceptWebSocketAsync();
+                        using var webSocket = await httpContext.WebSockets.AcceptWebSocketAsync();
                         var wsProxy = WebSocketProxy.Create(webSocket, _loggerFactory);
                         await _handler.HandleAsync(wsProxy, _hostApplicationLifetime.ApplicationStopping);
                     }

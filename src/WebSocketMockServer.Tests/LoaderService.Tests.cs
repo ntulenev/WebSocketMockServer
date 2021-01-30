@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -92,7 +92,7 @@ namespace WebSocketMockServer.Tests
 
         [Fact(DisplayName = "LoaderService loads data on start.")]
         [Trait("Category", "Unit")]
-        public async Task LoaderServiceLoadsDataOnStart()
+        public async Task LoaderServiceLoadsDataOnStartAsync()
         {
             //Arrange
             ILogger<LoaderService>? logger = null!;
@@ -109,7 +109,7 @@ namespace WebSocketMockServer.Tests
 
         [Fact(DisplayName = "LoaderService should stop app on error.")]
         [Trait("Category", "Unit")]
-        public async Task LoaderServiceShouldStopAppOnError()
+        public async Task LoaderServiceShouldStopAppOnErrorAsync()
         {
             //Arrange
             ILogger<LoaderService>? logger = null!;

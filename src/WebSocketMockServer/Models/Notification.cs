@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,14 +35,16 @@ namespace WebSocketMockServer.Models
         public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct)
         {
             if (webSocket is null)
+            {
                 throw new ArgumentNullException(nameof(webSocket));
+            }
 
             //TODO Add track task to handle all not sended notifications.
             _ = Task.Run(async () =>
             {
                 await Task.Delay(Delay).ConfigureAwait(false);
                 await webSocket.SendMessageAsync(Result, ct).ConfigureAwait(false);
-            });
+            }, ct);
 
             return Task.CompletedTask;
         }

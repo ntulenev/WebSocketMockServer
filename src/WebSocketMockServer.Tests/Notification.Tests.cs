@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +21,7 @@ namespace WebSocketMockServer.Tests
         {
             //Arrange
             string msg = null!;
-            int delay = 1;
+            var delay = 1;
 
             // Act
             var exception = Record.Exception(
@@ -38,7 +38,7 @@ namespace WebSocketMockServer.Tests
         public void CantCreatResponseWithEmptyMessage(string msg)
         {
             //Arrange
-            int delay = 1;
+            var delay = 1;
 
             // Act
             var exception = Record.Exception(
@@ -53,8 +53,8 @@ namespace WebSocketMockServer.Tests
         public void CantCreatResponseWithBadDelay()
         {
             //Arrange
-            string msg = "aaa";
-            int delay = 0;
+            var msg = "aaa";
+            var delay = 0;
 
             // Act
             var exception = Record.Exception(
@@ -69,8 +69,8 @@ namespace WebSocketMockServer.Tests
         public void ResponseCanBeCreated()
         {
             //Arrange
-            string msg = "aaa";
-            int delay = 1;
+            var msg = "aaa";
+            var delay = 1;
 
             // Act
             var exception = Record.Exception(
@@ -83,7 +83,7 @@ namespace WebSocketMockServer.Tests
 
         [Fact(DisplayName = "Notofication can not be sended with empty socket.")]
         [Trait("Category", "Unit")]
-        public async Task CantSendWithEmptyProxy()
+        public async Task CantSendWithEmptyProxyAsync()
         {
             //Arrange
             var msg = "Test";
@@ -101,7 +101,7 @@ namespace WebSocketMockServer.Tests
 
         [Fact(DisplayName = "Response could be sended.")]
         [Trait("Category", "Unit")]
-        public async Task CouldSendReaction()
+        public async Task CouldSendReactionAsync()
         {
             //Arrange
             var msg = "Test";

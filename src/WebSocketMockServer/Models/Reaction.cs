@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,7 +36,7 @@ namespace WebSocketMockServer.Models
                 throw new ArgumentNullException(nameof(result));
             }
 
-            if (String.IsNullOrWhiteSpace(result))
+            if (string.IsNullOrWhiteSpace(result))
             {
                 throw new ArgumentException("Result not set", nameof(result));
             }
@@ -48,10 +48,7 @@ namespace WebSocketMockServer.Models
         /// Creates <see cref="Response"/>.
         /// </summary>
         /// <param name="data">Response message</param>
-        public static Reaction Create(string data)
-        {
-            return new Response(data);
-        }
+        public static Reaction Create(string data) => new Response(data);
 
         /// <summary>
         /// Creates <see cref="Notification"/>.
@@ -59,9 +56,6 @@ namespace WebSocketMockServer.Models
         /// <param name="data">Notification message.</param>
         /// <param name="delay">Delay in ms.</param>
         /// <returns></returns>
-        public static Reaction Create(string data, int delay)
-        {
-            return new Notification(data, delay);
-        }
+        public static Reaction Create(string data, int delay) => new Notification(data, delay);
     }
 }

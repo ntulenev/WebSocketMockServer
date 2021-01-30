@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -31,12 +31,16 @@ namespace WebSocketMockServer.Loader
             _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
 
             if (config == null)
+            {
                 throw new ArgumentNullException(nameof(config));
+            }
 
             var configData = config.Value;
 
             if (configData == null)
+            {
                 throw new ArgumentException("Value of the config is not set.", nameof(config));
+            }
 
             configData.Validate();
 

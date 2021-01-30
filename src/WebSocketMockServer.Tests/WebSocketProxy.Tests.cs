@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,7 +65,7 @@ namespace WebSocketMockServer.Tests
 
         [Fact(DisplayName = "WebSocket proxy runs ReceiveAsync properly.")]
         [Trait("Category", "Unit")]
-        public async Task ReceiveAsyncShouldWorkProperly()
+        public async Task ReceiveAsyncShouldWorkProperlyAsync()
         {
             //Arrange
             var ws = new Mock<WebSocket>();
@@ -106,7 +106,9 @@ namespace WebSocketMockServer.Tests
             foreach (var status in Enum.GetValues(typeof(WebSocketState)).Cast<WebSocketState>())
             {
                 if (status != WebSocketState.Open)
+                {
                     td.Add(status);
+                }
             }
             return td;
         }

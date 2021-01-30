@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,12 +21,7 @@ namespace WebSocketMockServer.Models
         }
 
         /// <inheritdoc/>
-        public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct)
-        {
-            if (webSocket is null)
-                throw new ArgumentNullException(nameof(webSocket));
-
-            return webSocket.SendMessageAsync(Result, ct);
-        }
+        public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct) =>
+            webSocket is null ? throw new ArgumentNullException(nameof(webSocket)) : webSocket.SendMessageAsync(Result, ct);
     }
 }

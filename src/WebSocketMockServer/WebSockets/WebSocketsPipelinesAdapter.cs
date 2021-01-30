@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO.Pipelines;
@@ -35,7 +35,9 @@ namespace WebSocketMockServer.WebSockets
             _webSocket = webSocket ?? throw new ArgumentNullException(nameof(webSocket));
 
             if (minimumBufferSize <= 0)
+            {
                 throw new ArgumentException("Buffer size <= 0.");
+            }
 
             _minimumBufferSize = minimumBufferSize;
             _ct = ct;
@@ -50,9 +52,9 @@ namespace WebSocketMockServer.WebSockets
         {
             while (!_ct.IsCancellationRequested)
             {
-                ReadResult result = await _pipe.Reader.ReadAsync(_ct).ConfigureAwait(false);
+                var result = await _pipe.Reader.ReadAsync(_ct).ConfigureAwait(false);
 
-                ReadOnlySequence<byte> buffer = result.Buffer;
+                var buffer = result.Buffer;
 
                 var data = buffer.ToArray();
 
@@ -76,7 +78,7 @@ namespace WebSocketMockServer.WebSockets
             {
                 while (_webSocket.State == WebSocketState.Open)
                 {
-                    Memory<byte> memory = _pipe.Writer.GetMemory(_minimumBufferSize);
+                    var memory = _pipe.Writer.GetMemory(_minimumBufferSize);
 
                     _ct.ThrowIfCancellationRequested();
 
@@ -94,7 +96,7 @@ namespace WebSocketMockServer.WebSockets
 
                         if (receiveResult.EndOfMessage)
                         {
-                            FlushResult result = await _pipe.Writer.FlushAsync(_ct).ConfigureAwait(false);
+                            var result = await _pipe.Writer.FlushAsync(_ct).ConfigureAwait(false);
                             if (result.IsCompleted)
                             {
                                 break;

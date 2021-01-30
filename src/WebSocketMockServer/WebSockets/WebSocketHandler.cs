@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,7 +62,7 @@ namespace WebSocketMockServer.WebSockets
             await Task.WhenAll(adapter.StartAsync(), ReadDataAsync());
         }
 
-        private async Task ProcessRequestAsync(MockTemplate mockTemplate, IWebSocketProxy webSocket, CancellationToken ct)
+        private static async Task ProcessRequestAsync(MockTemplate mockTemplate, IWebSocketProxy webSocket, CancellationToken ct)
         {
             foreach (var reaction in mockTemplate.Reactions)
             {
@@ -70,7 +70,7 @@ namespace WebSocketMockServer.WebSockets
             }
         }
 
-        private string ConvertBytesAsJsonString(byte[] bytes)
+        private static string ConvertBytesAsJsonString(byte[] bytes)
         {
             var request = Encoding.UTF8.GetString(bytes);
 

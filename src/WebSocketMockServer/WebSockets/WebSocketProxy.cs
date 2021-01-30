@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -18,10 +18,8 @@ namespace WebSocketMockServer.WebSockets
         /// <summary>
         /// Creates <see cref="WebSocketProxy"/>.
         /// </summary>
-        public static IWebSocketProxy Create(WebSocket ws, ILoggerFactory? factory)
-        {
-            return new WebSocketProxy(ws, factory?.CreateLogger<WebSocketProxy>());
-        }
+        public static IWebSocketProxy Create(WebSocket ws, ILoggerFactory? factory) =>
+            new WebSocketProxy(ws, factory?.CreateLogger<WebSocketProxy>());
 
         /// <summary>
         ///  Creates <see cref="WebSocketProxy"/>.
@@ -31,7 +29,9 @@ namespace WebSocketMockServer.WebSockets
         private WebSocketProxy(WebSocket ws, ILogger<WebSocketProxy>? logger)
         {
             if (ws is null)
+            {
                 throw new ArgumentNullException(nameof(ws));
+            }
 
             _webSocket = ws;
             _logger = logger;
@@ -43,14 +43,16 @@ namespace WebSocketMockServer.WebSockets
         /// <inheritdoc/>
         public async Task CloseAsync(CancellationToken ct)
         {
-            using (await _socketWriteGuard.LockAsync())
+            using (await _socketWriteGuard.LockAsync(ct))
             {
-                using (await _socketReadGuard.LockAsync())
+                using (await _socketReadGuard.LockAsync(ct))
                 {
                     try
                     {
                         if (State == WebSocketState.Open)
+                        {
                             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "No predefiened response", ct).ConfigureAwait(false);
+                        }
                     }
                     catch (OperationCanceledException)
                     {
@@ -73,7 +75,7 @@ namespace WebSocketMockServer.WebSockets
         {
             var data = Encoding.UTF8.GetBytes(msg);
 
-            using (await _socketWriteGuard.LockAsync())
+            using (await _socketWriteGuard.LockAsync(ct))
             {
                 if (State == WebSocketState.Open)
                 {

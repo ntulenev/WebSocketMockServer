@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -49,7 +49,7 @@ namespace WebSocketMockServer.Tests
         public void ResponseCanBeCreated()
         {
             //Arrange
-            string msg = "aaa";
+            var msg = "aaa";
 
             // Act
             var exception = Record.Exception(
@@ -61,7 +61,7 @@ namespace WebSocketMockServer.Tests
 
         [Fact(DisplayName = "Response can not be sended with empty socket.")]
         [Trait("Category", "Unit")]
-        public async Task CantSendWithEmptyProxy()
+        public async Task CantSendWithEmptyProxyAsync()
         {
             //Arrange
             var msg = "Test";
@@ -78,7 +78,7 @@ namespace WebSocketMockServer.Tests
 
         [Fact(DisplayName = "Response could be sended.")]
         [Trait("Category", "Unit")]
-        public async Task CouldSendReaction()
+        public async Task CouldSendReactionAsync()
         {
             //Arrange
             var msg = "Test";
