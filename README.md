@@ -56,6 +56,3 @@ Current version supports only JSON communication.
 ### Example
 
 ![example](Example.png)
-
-### Plan to add
-* Add unit and integration tests
