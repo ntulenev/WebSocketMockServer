@@ -54,11 +54,11 @@ namespace WebSocketMockServer.Tests
 
             await webSocket.SendAsync(encoded, WebSocketMessageType.Text, true, cts.Token).ConfigureAwait(false);
 
-            var realResponse1 = await GetWSDataAsync(webSocket, cts.Token);
+            var realResponse1 = await GetWSDataAsync(webSocket, cts.Token).ConfigureAwait(false);
 
             realResponse1.Should().Be(response1);
 
-            var realResponse2 = await GetWSDataAsync(webSocket, cts.Token);
+            var realResponse2 = await GetWSDataAsync(webSocket, cts.Token).ConfigureAwait(false);
 
             realResponse2.Should().Be(response2);
 

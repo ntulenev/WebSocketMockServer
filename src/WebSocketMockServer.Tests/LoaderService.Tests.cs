@@ -101,7 +101,7 @@ namespace WebSocketMockServer.Tests
             var service = new LoaderService(logger, lifetime.Object, loader.Object);
 
             // Act
-            await service.StartAsync(CancellationToken.None);
+            await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
 
             // Assert
             loader.Verify(x => x.LoadAsync(It.Is<CancellationToken>(a => a == CancellationToken.None)), Times.Once);
@@ -122,7 +122,7 @@ namespace WebSocketMockServer.Tests
             var service = new LoaderService(logger, lifetime.Object, loader.Object);
 
             // Act
-            await service.StartAsync(CancellationToken.None);
+            await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
 
             // Assert
             lifetime.Verify(x => x.StopApplication(), Times.Once);

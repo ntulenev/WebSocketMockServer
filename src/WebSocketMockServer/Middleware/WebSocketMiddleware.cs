@@ -43,9 +43,9 @@ namespace WebSocketMockServer.Middleware
                 {
                     try
                     {
-                        using var webSocket = await httpContext.WebSockets.AcceptWebSocketAsync();
+                        using var webSocket = await httpContext.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false);
                         var wsProxy = WebSocketProxy.Create(webSocket, _loggerFactory);
-                        await _handler.HandleAsync(wsProxy, _hostApplicationLifetime.ApplicationStopping);
+                        await _handler.HandleAsync(wsProxy, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
                     }
                     catch (OperationCanceledException)
                     {

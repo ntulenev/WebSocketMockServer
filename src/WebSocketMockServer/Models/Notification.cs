@@ -32,14 +32,14 @@ namespace WebSocketMockServer.Models
         }
 
         /// <inheritdoc/>
-        public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct)
+        public override Task SendMessageAsync(IWebSocketProxy webSocket, CancellationToken ct)
         {
             if (webSocket is null)
             {
                 throw new ArgumentNullException(nameof(webSocket));
             }
 
-            //TODO Add track task to handle all not sended notifications.
+            //TODO Create separate IDelayedExecutionPool that responsible all delayed tasks and handle all issues if any. 
             _ = Task.Run(async () =>
             {
                 await Task.Delay(Delay).ConfigureAwait(false);

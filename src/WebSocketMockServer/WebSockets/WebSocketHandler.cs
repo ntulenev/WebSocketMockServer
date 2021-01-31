@@ -36,7 +36,7 @@ namespace WebSocketMockServer.WebSockets
             {
                 try
                 {
-                    await foreach (var bytes in adapter.ReadDataAsync())
+                    await foreach (var bytes in adapter.ReadDataAsync().ConfigureAwait(false))
                     {
                         var request = ConvertBytesAsJsonString(bytes);
 
@@ -59,14 +59,14 @@ namespace WebSocketMockServer.WebSockets
                 }
             }
 
-            await Task.WhenAll(adapter.StartAsync(), ReadDataAsync());
+            await Task.WhenAll(adapter.StartAsync(), ReadDataAsync()).ConfigureAwait(false);
         }
 
         private static async Task ProcessRequestAsync(MockTemplate mockTemplate, IWebSocketProxy webSocket, CancellationToken ct)
         {
             foreach (var reaction in mockTemplate.Reactions)
             {
-                await reaction.SendMessage(webSocket, ct);
+                await reaction.SendMessageAsync(webSocket, ct).ConfigureAwait(false);
             }
         }
 

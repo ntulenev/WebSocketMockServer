@@ -23,7 +23,7 @@ namespace WebSocketMockServer.Models
         /// <param name="ws">web socket for sending.</param>
         /// <param name="ct">Cancellatin token.</param>
         /// <returns></returns>
-        public abstract Task SendMessage(IWebSocketProxy ws, CancellationToken ct);
+        public abstract Task SendMessageAsync(IWebSocketProxy ws, CancellationToken ct);
 
         /// <summary>
         /// Creates reaction.

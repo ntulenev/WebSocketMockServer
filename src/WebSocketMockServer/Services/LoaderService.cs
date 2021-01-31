@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +26,7 @@ namespace WebSocketMockServer.Services
         {
             try
             {
-                await _loader.LoadAsync(cancellationToken);  
+                await _loader.LoadAsync(cancellationToken).ConfigureAwait(false);  
             }
             catch (Exception ex)
             {

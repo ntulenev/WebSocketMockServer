@@ -43,9 +43,9 @@ namespace WebSocketMockServer.WebSockets
         /// <inheritdoc/>
         public async Task CloseAsync(CancellationToken ct)
         {
-            using (await _socketWriteGuard.LockAsync(ct))
+            using (await _socketWriteGuard.LockAsync(ct).ConfigureAwait(false))
             {
-                using (await _socketReadGuard.LockAsync(ct))
+                using (await _socketReadGuard.LockAsync(ct).ConfigureAwait(false))
                 {
                     try
                     {
@@ -69,8 +69,8 @@ namespace WebSocketMockServer.WebSockets
         /// <inheritdoc/>
         public async ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(Memory<byte> buffer, CancellationToken ct)
         {
-            using var _ = await _socketReadGuard.LockAsync(ct);
-            return await _webSocket.ReceiveAsync(buffer, ct);
+            using var _ = await _socketReadGuard.LockAsync(ct).ConfigureAwait(false);
+            return await _webSocket.ReceiveAsync(buffer, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
@@ -78,7 +78,7 @@ namespace WebSocketMockServer.WebSockets
         {
             var data = Encoding.UTF8.GetBytes(msg);
 
-            using (await _socketWriteGuard.LockAsync(ct))
+            using (await _socketWriteGuard.LockAsync(ct).ConfigureAwait(false))
             {
                 if (State == WebSocketState.Open)
                 {
@@ -86,7 +86,7 @@ namespace WebSocketMockServer.WebSockets
 
                     try
                     {
-                        await _webSocket.SendAsync(data.AsMemory(), WebSocketMessageType.Text, true, ct);
+                        await _webSocket.SendAsync(data.AsMemory(), WebSocketMessageType.Text, true, ct).ConfigureAwait(false);
                     }
                     catch (OperationCanceledException)
                     {

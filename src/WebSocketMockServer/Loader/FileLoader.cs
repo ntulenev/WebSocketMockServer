@@ -55,7 +55,7 @@ namespace WebSocketMockServer.Loader
 
         private async Task<string> GetFileContentAsync(string fileName, CancellationToken ct)
         {
-            var requestText = await File.ReadAllTextAsync(GetFilePath(fileName), ct);
+            var requestText = await File.ReadAllTextAsync(GetFilePath(fileName), ct).ConfigureAwait(false);
             return requestText.ReconvertWithJson();
         }
 
@@ -72,7 +72,7 @@ namespace WebSocketMockServer.Loader
 
                 _logger?.LogInformation("Reading request from {filename}", template.File);
 
-                var requestText = await GetFileContentAsync(template.File!, ct);
+                var requestText = await GetFileContentAsync(template.File!, ct).ConfigureAwait(false);
 
                 var reactions = new List<Reaction>();
 
@@ -81,13 +81,13 @@ namespace WebSocketMockServer.Loader
                     if (res.Delay.HasValue)
                     {
                         _logger?.LogInformation("Reading notification from {response} with delay {delay} ms", res.File, res.Delay);
-                        var reactionText = await GetFileContentAsync(res.File!, ct);
+                        var reactionText = await GetFileContentAsync(res.File!, ct).ConfigureAwait(false);
                         reactions.Add(Reaction.Create(reactionText, res.Delay.Value));
                     }
                     else
                     {
                         _logger?.LogInformation("Reading response from {response}", res.File, res.Delay);
-                        var reactionText = await GetFileContentAsync(res.File!, ct);
+                        var reactionText = await GetFileContentAsync(res.File!, ct).ConfigureAwait(false);
                         reactions.Add(Reaction.Create(reactionText));
                     }
                 }

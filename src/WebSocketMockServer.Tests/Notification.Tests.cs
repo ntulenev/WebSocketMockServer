@@ -93,7 +93,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = await Record.ExceptionAsync(
-                () => reaction.SendMessage(proxy, CancellationToken.None));
+                () => reaction.SendMessageAsync(proxy, CancellationToken.None));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -110,14 +110,14 @@ namespace WebSocketMockServer.Tests
             var proxy = new Mock<IWebSocketProxy>();
 
             // Act
-            var t = reaction.SendMessage(proxy.Object, CancellationToken.None);
+            var t = reaction.SendMessageAsync(proxy.Object, CancellationToken.None);
 
             // Assert
             t.IsCompleted.Should().BeTrue();
 
             proxy.Verify(x => x.SendMessageAsync(It.Is<string>(v => v == msg), It.IsAny<CancellationToken>()), Times.Never);
 
-            await Task.Delay(delay * 2); // Attempts to ensure that background task is completed.
+            await Task.Delay(delay * 2).ConfigureAwait(false); // Attempts to ensure that background task is completed.
 
             proxy.Verify(x => x.SendMessageAsync(It.Is<string>(v => v == msg), It.IsAny<CancellationToken>()), Times.Once);
 

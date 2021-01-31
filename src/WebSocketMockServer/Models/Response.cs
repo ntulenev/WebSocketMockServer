@@ -21,7 +21,7 @@ namespace WebSocketMockServer.Models
         }
 
         /// <inheritdoc/>
-        public override Task SendMessage(IWebSocketProxy webSocket, CancellationToken ct) =>
+        public override Task SendMessageAsync(IWebSocketProxy webSocket, CancellationToken ct) =>
             webSocket is null ? throw new ArgumentNullException(nameof(webSocket)) : webSocket.SendMessageAsync(Result, ct);
     }
 }
