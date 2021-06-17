@@ -115,6 +115,7 @@ namespace WebSocketMockServer.WebSockets
             }
         }
 
+       
         private void ThrowIfDisposed()
         {
             if (_isDisposed)
@@ -123,6 +124,7 @@ namespace WebSocketMockServer.WebSockets
             }
         }
 
+        ///<inheritdoc/>
         public void Dispose()
         {
             if (!_isDisposed)
