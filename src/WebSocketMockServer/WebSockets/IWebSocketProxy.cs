@@ -8,7 +8,7 @@ namespace WebSocketMockServer.WebSockets
     /// <summary>
     /// Wrapper that gives abstraction of <see cref="WebSocket"/> for other layers.
     /// </summary>
-    public interface IWebSocketProxy
+    public interface IWebSocketProxy : IDisposable
     {
         /// <summary>
         /// Closes web socket

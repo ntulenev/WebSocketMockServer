@@ -13,7 +13,7 @@ namespace WebSocketMockServer.WebSockets
     /// <summary>
     /// Wrapper that gives abstraction of <see cref="WebSocket"/> for other layers.
     /// </summary>
-    public class WebSocketProxy : IWebSocketProxy
+    public sealed class WebSocketProxy : IWebSocketProxy
     {
         /// <summary>
         /// Creates <see cref="WebSocketProxy"/>.
@@ -43,6 +43,10 @@ namespace WebSocketMockServer.WebSockets
         /// <inheritdoc/>
         public async Task CloseAsync(CancellationToken ct)
         {
+            ThrowIfDisposed();
+
+            _socketClosingToken.Cancel();
+
             using (await _socketWriteGuard.LockAsync(ct).ConfigureAwait(false))
             {
                 using (await _socketReadGuard.LockAsync(ct).ConfigureAwait(false))
@@ -69,13 +73,20 @@ namespace WebSocketMockServer.WebSockets
         /// <inheritdoc/>
         public async ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(Memory<byte> buffer, CancellationToken ct)
         {
+            ThrowIfDisposed();
+
+            using var source = CancellationTokenSource.CreateLinkedTokenSource(ct, _socketClosingToken.Token);
             using var _ = await _socketReadGuard.LockAsync(ct).ConfigureAwait(false);
-            return await _webSocket.ReceiveAsync(buffer, ct).ConfigureAwait(false);
+            return await _webSocket.ReceiveAsync(buffer, source.Token).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
         public async Task SendMessageAsync(string msg, CancellationToken ct)
         {
+            ThrowIfDisposed();
+
+            using var source = CancellationTokenSource.CreateLinkedTokenSource(ct, _socketClosingToken.Token);
+
             var data = Encoding.UTF8.GetBytes(msg);
 
             using (await _socketWriteGuard.LockAsync(ct).ConfigureAwait(false))
@@ -86,7 +97,7 @@ namespace WebSocketMockServer.WebSockets
 
                     try
                     {
-                        await _webSocket.SendAsync(data.AsMemory(), WebSocketMessageType.Text, true, ct).ConfigureAwait(false);
+                        await _webSocket.SendAsync(data.AsMemory(), WebSocketMessageType.Text, true, source.Token).ConfigureAwait(false);
                     }
                     catch (OperationCanceledException)
                     {
@@ -104,9 +115,28 @@ namespace WebSocketMockServer.WebSockets
             }
         }
 
+        private void ThrowIfDisposed()
+        {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException($"Object is disposed {GetType().FullName}");
+            }
+        }
+
+        public void Dispose()
+        {
+            if (!_isDisposed)
+            {
+                _socketClosingToken.Dispose();
+                _isDisposed = true;
+            }
+        }
+
         private readonly WebSocket _webSocket;
         private readonly AsyncLock _socketWriteGuard = new AsyncLock();
         private readonly AsyncLock _socketReadGuard = new AsyncLock();
+        private readonly CancellationTokenSource _socketClosingToken = new CancellationTokenSource();
         private readonly ILogger<WebSocketProxy>? _logger;
+        private bool _isDisposed;
     }
 }
