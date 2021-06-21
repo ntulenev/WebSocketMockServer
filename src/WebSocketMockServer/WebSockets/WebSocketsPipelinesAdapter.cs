@@ -6,6 +6,8 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Nito.AsyncEx;
+
 namespace WebSocketMockServer.WebSockets
 {
     /// <summary>
@@ -66,6 +68,8 @@ namespace WebSocketMockServer.WebSockets
                 {
                     break;
                 }
+
+                _pipeReadMessageGuard.Set();
             }
         }
 
@@ -101,6 +105,9 @@ namespace WebSocketMockServer.WebSockets
                             {
                                 break;
                             }
+
+                            // Crutch to fix incorrect pipe state when reader in slower then writer
+                            await _pipeReadMessageGuard.WaitAsync(_ct);
                         }
                     }
                 }
@@ -114,6 +121,7 @@ namespace WebSocketMockServer.WebSockets
         }
 
         private readonly IWebSocketProxy _webSocket;
+        private readonly AsyncAutoResetEvent _pipeReadMessageGuard = new();
         private readonly int _minimumBufferSize;
         private readonly Pipe _pipe;
         private readonly CancellationToken _ct;
