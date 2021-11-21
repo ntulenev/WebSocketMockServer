@@ -64,7 +64,7 @@ namespace WebSocketMockServer.WebSockets
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error on closing socket");
+                        _logger?.LogError(ex, "Error on closing socket");
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace WebSocketMockServer.WebSockets
             }
         }
 
-       
+
         private void ThrowIfDisposed()
         {
             if (_isDisposed)
