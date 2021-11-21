@@ -43,6 +43,7 @@ namespace WebSocketMockServer.Middleware
                 {
                     try
                     {
+
                         using var webSocket = await httpContext.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false);
                         using var wsProxy = WebSocketProxy.Create(webSocket, _loggerFactory);
                         await _handler.HandleAsync(wsProxy, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
@@ -53,7 +54,7 @@ namespace WebSocketMockServer.Middleware
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error on process ws");
+                        _logger?.LogError(ex, "Error on process ws");
                     }
                 }
                 else

@@ -86,7 +86,7 @@ namespace WebSocketMockServer.Loader
                     }
                     else
                     {
-                        _logger?.LogInformation("Reading response from {response}", res.File, res.Delay);
+                        _logger?.LogInformation("Reading response from {response} with delay {delay} ms", res.File, res.Delay);
                         var reactionText = await GetFileContentAsync(res.File!, ct).ConfigureAwait(false);
                         reactions.Add(Reaction.Create(reactionText));
                     }
