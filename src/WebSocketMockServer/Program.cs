@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.WebSockets;
-
 using WebSocketMockServer.Configuration;
 using WebSocketMockServer.Loader;
+using WebSocketMockServer.Middleware;
 using WebSocketMockServer.Services;
 using WebSocketMockServer.Storage;
 using WebSocketMockServer.WebSockets;
@@ -28,7 +27,10 @@ app.UseWebSockets(new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromSeconds(30)
 });
-app.UseMiddleware<WebSocketMiddleware>();
+app.UseMiddleware<CustomWebSocketMiddleware>();
 
 app.Run();
+
+// Make the implicit Program class public so test projects can access it
+public partial class Program { }
 
