@@ -1,11 +1,3 @@
-using System;
-using System.Net.WebSockets;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
 using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer.Middleware
@@ -13,13 +5,13 @@ namespace WebSocketMockServer.Middleware
     /// <summary>
     /// Custom middleware that provides web sockets operations
     /// </summary>
-    public class WebSocketMiddleware
+    public class CustomWebSocketMiddleware
     {
         /// <summary>
         /// Creates web sockets middleware
         /// </summary>
-        public WebSocketMiddleware(RequestDelegate next,
-                                   ILogger<WebSocketMiddleware>? logger,
+        public CustomWebSocketMiddleware(RequestDelegate next,
+                                   ILogger<CustomWebSocketMiddleware>? logger,
                                    IHostApplicationLifetime hostApplicationLifetime,
                                    IWebSocketHandler handler,
                                    ILoggerFactory? loggerFactory
@@ -71,7 +63,7 @@ namespace WebSocketMockServer.Middleware
         private readonly RequestDelegate _next;
         private readonly IWebSocketHandler _handler;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
-        private readonly ILogger<WebSocketMiddleware>? _logger;
+        private readonly ILogger<CustomWebSocketMiddleware>? _logger;
         private readonly ILoggerFactory? _loggerFactory;
         private const string DEFAULT_PATH = "/ws";
     }
