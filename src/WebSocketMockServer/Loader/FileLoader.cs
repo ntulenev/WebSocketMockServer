@@ -61,7 +61,6 @@ namespace WebSocketMockServer.Loader
 
             foreach (var template in _config.Mapping!)
             {
-
                 _logger?.LogInformation("Reading request from {filename}", template.File);
 
                 var requestText = await GetFileContentAsync(template.File!, ct).ConfigureAwait(false);
