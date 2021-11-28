@@ -4,6 +4,9 @@ using Microsoft.Extensions.Options;
 
 namespace WebSocketMockServer.Configuration.Validation
 {
+    /// <summary>
+    /// Validator for <see cref="FileLoaderConfiguration"/>.
+    /// </summary>
     public class FileLoaderConfigurationValidator : IValidateOptions<FileLoaderConfiguration>
     {
         /// <summary>
