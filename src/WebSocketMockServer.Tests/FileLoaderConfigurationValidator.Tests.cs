@@ -1,15 +1,15 @@
-using System.Configuration;
-
 using FluentAssertions;
+
+using WebSocketMockServer.Configuration;
+using WebSocketMockServer.Configuration.Validation;
 
 using Xunit;
 
-using WebSocketMockServer.Configuration;
-
 namespace WebSocketMockServer.Tests
 {
-    public class FileLoaderConfigurationTests
+    public class FileLoaderConfigurationValidatorTests
     {
+
         [Fact(DisplayName = "FileLoaderConfiguration could be validated.")]
         [Trait("Category", "Unit")]
         public void CanValidateFileLoaderConfigurationWithValidData()
@@ -34,13 +34,13 @@ namespace WebSocketMockServer.Tests
                       }
                   }
             };
+            var validator = new FileLoaderConfigurationValidator();
 
             // Act
-            var exception = Record.Exception(
-                () => config.Validate());
+            var validationResult = validator.Validate(string.Empty, config);
 
             // Assert
-            exception.Should().BeNull();
+            validationResult.Failed.Should().BeFalse();
         }
 
         [Fact(DisplayName = "FileLoaderConfiguration cant be validated with empty folder.")]
@@ -67,13 +67,13 @@ namespace WebSocketMockServer.Tests
                       }
                   }
             };
+            var validator = new FileLoaderConfigurationValidator();
 
             // Act
-            var exception = Record.Exception(
-                () => config.Validate());
+            var validationResult = validator.Validate(string.Empty, config);
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ConfigurationErrorsException>();
+            validationResult.Failed.Should().BeTrue();
         }
 
         [Fact(DisplayName = "FileLoaderConfiguration cant be validated with null mapping.")]
@@ -86,13 +86,13 @@ namespace WebSocketMockServer.Tests
                 Folder = "A",
                 Mapping = null
             };
+            var validator = new FileLoaderConfigurationValidator();
 
             // Act
-            var exception = Record.Exception(
-                () => config.Validate());
+            var validationResult = validator.Validate(string.Empty, config);
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ConfigurationErrorsException>();
+            validationResult.Failed.Should().BeTrue();
         }
 
         [Theory(DisplayName = "FileLoaderConfiguration cant be validated with empty Mapping.")]
@@ -108,13 +108,13 @@ namespace WebSocketMockServer.Tests
                 Folder = name,
                 Mapping = Enumerable.Empty<RequestMappingTemplate>()
             };
+            var validator = new FileLoaderConfigurationValidator();
 
             // Act
-            var exception = Record.Exception(
-                () => config.Validate());
+            var validationResult = validator.Validate(string.Empty, config);
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ConfigurationErrorsException>();
+            validationResult.Failed.Should().BeTrue();
         }
 
         [Theory(DisplayName = "FileLoaderConfiguration cant be validated with empty File.")]
@@ -144,13 +144,13 @@ namespace WebSocketMockServer.Tests
                       }
                   }
             };
+            var validator = new FileLoaderConfigurationValidator();
 
             // Act
-            var exception = Record.Exception(
-                () => config.Validate());
+            var validationResult = validator.Validate(string.Empty, config);
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ConfigurationErrorsException>();
+            validationResult.Failed.Should().BeTrue();
         }
 
         [Fact(DisplayName = "FileLoaderConfiguration cant be validated with null response.")]
@@ -170,13 +170,13 @@ namespace WebSocketMockServer.Tests
                       }
                   }
             };
+            var validator = new FileLoaderConfigurationValidator();
 
             // Act
-            var exception = Record.Exception(
-                () => config.Validate());
+            var validationResult = validator.Validate(string.Empty, config);
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ConfigurationErrorsException>();
+            validationResult.Failed.Should().BeTrue();
         }
 
         [Fact(DisplayName = "FileLoaderConfiguration cant be validated with empty response.")]
@@ -196,13 +196,13 @@ namespace WebSocketMockServer.Tests
                       }
                   }
             };
+            var validator = new FileLoaderConfigurationValidator();
 
             // Act
-            var exception = Record.Exception(
-                () => config.Validate());
+            var validationResult = validator.Validate(string.Empty, config);
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ConfigurationErrorsException>();
+            validationResult.Failed.Should().BeTrue();
         }
 
 
@@ -233,13 +233,13 @@ namespace WebSocketMockServer.Tests
                       }
                   }
             };
+            var validator = new FileLoaderConfigurationValidator();
 
             // Act
-            var exception = Record.Exception(
-                () => config.Validate());
+            var validationResult = validator.Validate(string.Empty, config);
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ConfigurationErrorsException>();
+            validationResult.Failed.Should().BeTrue();
         }
 
     }
