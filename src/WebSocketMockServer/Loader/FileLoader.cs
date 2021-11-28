@@ -34,8 +34,6 @@ namespace WebSocketMockServer.Loader
                 throw new ArgumentException("Value of the config is not set.", nameof(config));
             }
 
-            configData.Validate();
-
             _config = configData;
 
             _logger = logger;
