@@ -1,4 +1,7 @@
+using Microsoft.Extensions.Options;
+
 using WebSocketMockServer.Configuration;
+using WebSocketMockServer.Configuration.Validation;
 using WebSocketMockServer.Loader;
 using WebSocketMockServer.Middleware;
 using WebSocketMockServer.Services;
@@ -11,6 +14,7 @@ builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IMockTemplateStorage, MockTemplateStorage>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
 builder.Services.Configure<FileLoaderConfiguration>(builder.Configuration.GetSection(nameof(FileLoaderConfiguration)));
+builder.Services.AddSingleton<IValidateOptions<FileLoaderConfiguration>, FileLoaderConfigurationValidator>();
 builder.Services.AddSingleton<ILoader, FileLoader>();
 builder.Services.AddHostedService<LoaderService>();
 
