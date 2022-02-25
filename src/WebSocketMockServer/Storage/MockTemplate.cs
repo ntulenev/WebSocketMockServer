@@ -26,10 +26,7 @@ namespace WebSocketMockServer.Storage
         /// <exception cref="ArgumentException">Throws if request data or reactions is empty.</exception>
         public MockTemplate(string request, IEnumerable<Reaction> reactions)
         {
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            ArgumentNullException.ThrowIfNull(request);
 
             if (string.IsNullOrWhiteSpace(request))
             {
@@ -38,10 +35,7 @@ namespace WebSocketMockServer.Storage
 
             Request = request;
 
-            if (reactions == null)
-            {
-                throw new ArgumentNullException(nameof(reactions));
-            }
+            ArgumentNullException.ThrowIfNull(reactions);
 
             Reactions = reactions.ToList(); // Materialize
 

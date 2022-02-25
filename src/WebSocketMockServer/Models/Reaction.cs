@@ -27,10 +27,7 @@ namespace WebSocketMockServer.Models
         /// <param name="result">Reaction message</param>
         public Reaction(string result)
         {
-            if (result is null)
-            {
-                throw new ArgumentNullException(nameof(result));
-            }
+            ArgumentNullException.ThrowIfNull(result);
 
             if (string.IsNullOrWhiteSpace(result))
             {

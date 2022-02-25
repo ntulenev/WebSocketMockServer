@@ -17,10 +17,7 @@ namespace WebSocketMockServer.Helpers
         /// <exception cref="InvalidOperationException">Throws if string has incorrect format.</exception>
         public static string ReconvertWithJson(this string str)
         {
-            if (str is null)
-            {
-                throw new ArgumentNullException(nameof(str));
-            }
+            ArgumentNullException.ThrowIfNull(str);
 
             if (string.IsNullOrWhiteSpace(str))
             {

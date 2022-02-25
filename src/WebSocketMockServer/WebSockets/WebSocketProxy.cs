@@ -23,10 +23,7 @@ namespace WebSocketMockServer.WebSockets
         /// <param name="logger"></param>
         private WebSocketProxy(WebSocket ws, ILogger<WebSocketProxy>? logger)
         {
-            if (ws is null)
-            {
-                throw new ArgumentNullException(nameof(ws));
-            }
+            ArgumentNullException.ThrowIfNull(ws);
 
             _webSocket = ws;
             _logger = logger;

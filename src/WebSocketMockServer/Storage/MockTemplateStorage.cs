@@ -16,11 +16,7 @@ namespace WebSocketMockServer.Storage
         /// <exception cref="InvalidOperationException">Thows if loader has no templates.</exception>
         public MockTemplateStorage(ILoader loader, ILogger<MockTemplateStorage>? logger)
         {
-
-            if (loader == null)
-            {
-                throw new ArgumentNullException(nameof(loader));
-            }
+            ArgumentNullException.ThrowIfNull(loader);
 
             try
             {
