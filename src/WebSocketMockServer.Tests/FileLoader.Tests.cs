@@ -67,7 +67,7 @@ namespace WebSocketMockServer.Tests
                   {
                       new RequestMappingTemplate
                       {
-                           File = "B",
+                            File = "B",
                             Reactions = new[]
                             {
                                 new ReactionMappingTemplate
@@ -85,7 +85,7 @@ namespace WebSocketMockServer.Tests
                 () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IWebHostEnvironment>(), null!));
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
+            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
         }
 
         [Fact(DisplayName = "FileLoader can be created with correct data.")]
