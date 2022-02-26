@@ -127,9 +127,9 @@ namespace WebSocketMockServer.WebSockets
         }
 
         private readonly WebSocket _webSocket;
-        private readonly AsyncLock _socketWriteGuard = new AsyncLock();
-        private readonly AsyncLock _socketReadGuard = new AsyncLock();
-        private readonly CancellationTokenSource _socketClosingToken = new CancellationTokenSource();
+        private readonly AsyncLock _socketWriteGuard = new();
+        private readonly AsyncLock _socketReadGuard = new();
+        private readonly CancellationTokenSource _socketClosingToken = new();
         private readonly ILogger<WebSocketProxy>? _logger;
         private bool _isDisposed;
     }
