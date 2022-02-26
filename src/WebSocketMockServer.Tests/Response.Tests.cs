@@ -6,6 +6,7 @@ using Moq;
 
 using WebSocketMockServer.Models;
 using WebSocketMockServer.WebSockets;
+using Microsoft.Extensions.Logging;
 
 namespace WebSocketMockServer.Tests
 {
@@ -20,7 +21,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => Reaction.Create(msg));
+                () => Reaction.Create(msg, Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -34,7 +35,7 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => Reaction.Create(msg));
+                () => Reaction.Create(msg, Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -49,7 +50,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => Reaction.Create(msg));
+                () => Reaction.Create(msg, Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().BeNull();
@@ -61,7 +62,7 @@ namespace WebSocketMockServer.Tests
         {
             //Arrange
             var msg = "Test";
-            var reaction = Reaction.Create(msg);
+            var reaction = Reaction.Create(msg, Mock.Of<ILogger<Reaction>>());
             var proxy = (IWebSocketProxy)null!;
 
             // Act
@@ -78,7 +79,7 @@ namespace WebSocketMockServer.Tests
         {
             //Arrange
             var msg = "Test";
-            var reaction = Reaction.Create(msg);
+            var reaction = Reaction.Create(msg, Mock.Of<ILogger<Reaction>>());
             var proxy = new Mock<IWebSocketProxy>();
 
             // Act

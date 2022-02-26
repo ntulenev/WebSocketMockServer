@@ -4,6 +4,8 @@ using Xunit;
 
 using WebSocketMockServer.Models;
 using WebSocketMockServer.Storage;
+using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace WebSocketMockServer.Tests
 {
@@ -43,7 +45,7 @@ namespace WebSocketMockServer.Tests
         public void CantCreateMockTemplateOnNullResponses()
         {
             //Arrange
-            string request = "aaa";
+            var request = "aaa";
             IEnumerable<Reaction> resps = null!;
 
             // Act
@@ -59,8 +61,8 @@ namespace WebSocketMockServer.Tests
         public void CantCreateMockTemplateOnEmptyResponses()
         {
             //Arrange
-            string request = "aaa";
-            IEnumerable<Reaction> resps = Enumerable.Empty<Reaction>();
+            var request = "aaa";
+            var resps = Enumerable.Empty<Reaction>();
 
             // Act
             var exception = Record.Exception(
@@ -75,11 +77,11 @@ namespace WebSocketMockServer.Tests
         public void MockTemplateCouldBeCreated()
         {
             //Arrange
-            string request = "aaa";
+            var request = "aaa";
             IEnumerable<Reaction> resps = new[]
             {
-                Reaction.Create("A"),
-                new Notification("B",1000)
+                Reaction.Create("A",Mock.Of<ILogger<Reaction>>()),
+                new Notification("B",1000,Mock.Of<ILogger<Reaction>>())
             };
 
             // Act

@@ -25,7 +25,7 @@ namespace WebSocketMockServer.Models
         /// Creates reaction.
         /// </summary>
         /// <param name="result">Reaction message</param>
-        public Reaction(string result)
+        public Reaction(string result, ILogger<Reaction> logger)
         {
             ArgumentNullException.ThrowIfNull(result);
 
@@ -35,13 +35,17 @@ namespace WebSocketMockServer.Models
             }
 
             Result = result;
+
+            _logger = logger;
+
+            _logger.LogDebug("Reaction for {Result} created.", result);
         }
 
         /// <summary>
         /// Creates <see cref="Response"/>.
         /// </summary>
         /// <param name="data">Response message</param>
-        public static Reaction Create(string data) => new Response(data);
+        public static Reaction Create(string data, ILogger<Reaction> logger) => new Response(data, logger);
 
         /// <summary>
         /// Creates <see cref="Notification"/>.
@@ -49,6 +53,8 @@ namespace WebSocketMockServer.Models
         /// <param name="data">Notification message.</param>
         /// <param name="delay">Delay in ms.</param>
         /// <returns></returns>
-        public static Reaction Create(string data, int delay) => new Notification(data, delay);
+        public static Reaction Create(string data, int delay, ILogger<Reaction> logger) => new Notification(data, delay, logger);
+
+        protected readonly ILogger<Reaction> _logger;
     }
 }

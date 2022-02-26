@@ -9,6 +9,7 @@ using Moq;
 
 
 using WebSocketMockServer.Models;
+using Microsoft.Extensions.Logging;
 
 namespace WebSocketMockServer.Tests
 {
@@ -53,7 +54,7 @@ namespace WebSocketMockServer.Tests
             var loader = new Mock<ILoader>();
 
             var testDictionary = new Dictionary<string, MockTemplate>();
-            var template = new MockTemplate("aaa", new[] { Reaction.Create("bbb") });
+            var template = new MockTemplate("aaa", new[] { Reaction.Create("bbb", Mock.Of<ILogger<Reaction>>()) });
             testDictionary.Add(template.Request, template);
 
             loader.Setup(x => x.GetLoadedData()).Returns(testDictionary);

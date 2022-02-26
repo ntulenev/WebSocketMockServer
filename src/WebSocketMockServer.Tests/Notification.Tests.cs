@@ -6,6 +6,7 @@ using Moq;
 
 using WebSocketMockServer.WebSockets;
 using WebSocketMockServer.Models;
+using Microsoft.Extensions.Logging;
 
 namespace WebSocketMockServer.Tests
 {
@@ -21,7 +22,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay));
+                () => new Notification(msg, delay,Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -38,7 +39,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay));
+                () => new Notification(msg, delay, Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -54,7 +55,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay));
+                () => new Notification(msg, delay, Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -70,7 +71,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay));
+                () => new Notification(msg, delay, Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().BeNull();
@@ -84,7 +85,7 @@ namespace WebSocketMockServer.Tests
             //Arrange
             var msg = "Test";
             var delay = 1;
-            var reaction = Reaction.Create(msg, delay);
+            var reaction = Reaction.Create(msg, delay, Mock.Of<ILogger<Reaction>>());
             var proxy = (IWebSocketProxy)null!;
 
             // Act
@@ -102,7 +103,7 @@ namespace WebSocketMockServer.Tests
             //Arrange
             var msg = "Test";
             var delay = 1000;
-            var reaction = Reaction.Create(msg, delay);
+            var reaction = Reaction.Create(msg, delay, Mock.Of<ILogger<Reaction>>());
             var proxy = new Mock<IWebSocketProxy>();
 
             // Act

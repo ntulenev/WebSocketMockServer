@@ -17,7 +17,7 @@ namespace WebSocketMockServer.Models
         /// </summary>
         /// <exception cref="ArgumentNullException">Throws if result is null.</exception>
         /// <exception cref="ArgumentException">Throws if result is not set or delay is incorrect.</exception>
-        public Notification(string result, int delay) : base(result)
+        public Notification(string result, int delay, ILogger<Reaction> logger) : base(result, logger)
         {
             if (delay <= 0)
             {
@@ -32,11 +32,28 @@ namespace WebSocketMockServer.Models
         {
             ArgumentNullException.ThrowIfNull(webSocket);
 
-            //TODO Create separate IDelayedExecutionPool that responsible all delayed tasks and handle all issues if any. 
             _ = Task.Run(async () =>
             {
+                using var _ = _logger.BeginScope("Response {Response}", Result);
+
+                _logger.LogDebug("Prepare for sending in {Seconds} seconds...", Delay);
+
                 await Task.Delay(Delay).ConfigureAwait(false);
-                await webSocket.SendMessageAsync(Result, ct).ConfigureAwait(false);
+
+                _logger.LogDebug("Sending...");
+
+                try
+                {
+                    await webSocket.SendMessageAsync(Result, ct).ConfigureAwait(false);
+
+                    _logger.LogDebug("Has beed sended...");
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+
+                    _logger.LogError(ex, "Error on sending response");
+                }
+
             }, ct);
 
             return Task.CompletedTask;

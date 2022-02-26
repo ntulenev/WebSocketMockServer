@@ -12,12 +12,22 @@ namespace WebSocketMockServer.Models
         /// </summary>
         /// <exception cref="ArgumentNullException">Throws if result is null.</exception>
         /// <exception cref="ArgumentException">Throws if result is not set.</exception>
-        public Response(string result) : base(result)
+        public Response(string result, ILogger<Reaction> logger) : base(result, logger)
         {
         }
 
         /// <inheritdoc/>
-        public override Task SendMessageAsync(IWebSocketProxy webSocket, CancellationToken ct) =>
-            webSocket is null ? throw new ArgumentNullException(nameof(webSocket)) : webSocket.SendMessageAsync(Result, ct);
+        public async override Task SendMessageAsync(IWebSocketProxy webSocket, CancellationToken ct)
+        {
+            ArgumentNullException.ThrowIfNull(webSocket);
+
+            using var _ = _logger.BeginScope("Response {Response}", Result);
+
+            _logger.LogDebug("Sending...");
+
+            await webSocket.SendMessageAsync(Result, ct).ConfigureAwait(false);
+
+            _logger.LogDebug("Has beed sended");
+        }
     }
 }

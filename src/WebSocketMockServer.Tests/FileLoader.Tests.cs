@@ -19,15 +19,9 @@ namespace WebSocketMockServer.Tests
         [Trait("Category", "Unit")]
         public void CantCreateFileLoaderWithNullEnvironment()
         {
-            //Arrange
-            IWebHostEnvironment hostingEnvironment = null!;
-            IOptions<FileLoaderConfiguration> config = null!;
-            ILogger<FileLoader>? logger = null!;
-
-
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(config, logger, hostingEnvironment));
+                () => new FileLoader(Mock.Of<IOptions<FileLoaderConfiguration>>(), Mock.Of<ILogger<FileLoader>>(), null!, Mock.Of<ILoggerFactory>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -37,14 +31,9 @@ namespace WebSocketMockServer.Tests
         [Trait("Category", "Unit")]
         public void CantCreateFileLoaderWithNullConfig()
         {
-            //Arrange
-            var hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
-            IOptions<FileLoaderConfiguration> config = null!;
-            ILogger<FileLoader>? logger = null!;
-
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(config, logger, hostingEnvironment));
+                () => new FileLoader(null!, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IWebHostEnvironment>(), Mock.Of<ILoggerFactory>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -55,24 +44,21 @@ namespace WebSocketMockServer.Tests
         public void CantCreateFileLoaderWithNullConfigData()
         {
             //Arrange
-            var hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
             var config = (new Mock<IOptions<FileLoaderConfiguration>>()).Object;
-            ILogger<FileLoader>? logger = null!;
 
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(config, logger, hostingEnvironment));
+                () => new FileLoader(config, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IWebHostEnvironment>(), Mock.Of<ILoggerFactory>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
         }
 
-        [Fact(DisplayName = "FileLoader can be created with correct data.")]
+        [Fact(DisplayName = "FileLoader can not process null logger factory.")]
         [Trait("Category", "Unit")]
-        public void CanCreateFileLoaderWithCorrectData()
+        public void CantCreateFileLoaderWithNullLoggerFactory()
         {
             //Arrange
-            var hostingEnvironment = (new Mock<IWebHostEnvironment>()).Object;
             var configMock = new Mock<IOptions<FileLoaderConfiguration>>();
             configMock.Setup(x => x.Value).Returns(new FileLoaderConfiguration
             {
@@ -93,11 +79,44 @@ namespace WebSocketMockServer.Tests
                       }
                   }
             });
-            ILogger<FileLoader>? logger = null!;
 
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(configMock.Object, logger, hostingEnvironment));
+                () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IWebHostEnvironment>(), null!));
+
+            // Assert
+            exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
+        }
+
+        [Fact(DisplayName = "FileLoader can be created with correct data.")]
+        [Trait("Category", "Unit")]
+        public void CanCreateFileLoaderWithCorrectData()
+        {
+            //Arrange
+            var configMock = new Mock<IOptions<FileLoaderConfiguration>>(MockBehavior.Strict);
+            configMock.Setup(x => x.Value).Returns(new FileLoaderConfiguration
+            {
+                Folder = "A",
+                Mapping = new[]
+                  {
+                      new RequestMappingTemplate
+                      {
+                           File = "B",
+                            Reactions = new[]
+                            {
+                                new ReactionMappingTemplate
+                                {
+                                     Delay = 1,
+                                     File = "C"
+                                }
+                            }
+                      }
+                  }
+            });
+
+            // Act
+            var exception = Record.Exception(
+                () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IWebHostEnvironment>(), Mock.Of<ILoggerFactory>()));
 
             // Assert
             exception.Should().BeNull();
