@@ -24,6 +24,8 @@ namespace WebSocketMockServer.WebSockets
         /// <inheritdoc/>
         public async Task HandleAsync(IWebSocketProxy wsProxy, CancellationToken ct)
         {
+            ArgumentNullException.ThrowIfNull(wsProxy);
+
             var adapter = new WebSocketsPipelinesAdapter(wsProxy, ct);
 
             //Method for processing data

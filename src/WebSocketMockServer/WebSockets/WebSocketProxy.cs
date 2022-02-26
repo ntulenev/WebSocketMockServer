@@ -77,6 +77,8 @@ namespace WebSocketMockServer.WebSockets
         {
             ThrowIfDisposed();
 
+            ArgumentNullException.ThrowIfNull(msg);
+
             using var source = CancellationTokenSource.CreateLinkedTokenSource(ct, _socketClosingToken.Token);
 
             var data = Encoding.UTF8.GetBytes(msg);
