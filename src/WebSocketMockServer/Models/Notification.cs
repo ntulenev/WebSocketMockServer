@@ -15,7 +15,10 @@ namespace WebSocketMockServer.Models
         /// <summary>
         /// Creates delayed response.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Throws if result is null.</exception>
+        /// <param name="result">Notification message.</param>
+        /// <param name="delay">Delay in ms.</param>
+        /// <param name="logger">Logger.</param>
+        /// <exception cref="ArgumentNullException">Throws if result or logger is null.</exception>
         /// <exception cref="ArgumentException">Throws if result is not set or delay is incorrect.</exception>
         public Notification(string result, int delay, ILogger<Reaction> logger) : base(result, logger)
         {

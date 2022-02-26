@@ -24,9 +24,13 @@ namespace WebSocketMockServer.Models
         /// <summary>
         /// Creates reaction.
         /// </summary>
-        /// <param name="result">Reaction message</param>
+        /// <param name="result">Reaction data.</param>
+        /// <param name="logger">Logger.</param>
+        /// <exception cref="ArgumentException">If result is not set.</exception>
+        /// <exception cref="ArgumentNullException">If result or logger is null.</exception>
         public Reaction(string result, ILogger<Reaction> logger)
         {
+            ArgumentNullException.ThrowIfNull(logger);
             ArgumentNullException.ThrowIfNull(result);
 
             if (string.IsNullOrWhiteSpace(result))
@@ -45,6 +49,7 @@ namespace WebSocketMockServer.Models
         /// Creates <see cref="Response"/>.
         /// </summary>
         /// <param name="data">Response message</param>
+        /// <param name="logger">Logger.</param>
         public static Reaction Create(string data, ILogger<Reaction> logger) => new Response(data, logger);
 
         /// <summary>
@@ -52,7 +57,7 @@ namespace WebSocketMockServer.Models
         /// </summary>
         /// <param name="data">Notification message.</param>
         /// <param name="delay">Delay in ms.</param>
-        /// <returns></returns>
+        /// <param name="logger">Logger.</param>
         public static Reaction Create(string data, int delay, ILogger<Reaction> logger) => new Notification(data, delay, logger);
 
         protected readonly ILogger<Reaction> _logger;

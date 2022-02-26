@@ -10,7 +10,9 @@ namespace WebSocketMockServer.Models
         /// <summary>
         /// Creates response.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Throws if result is null.</exception>
+        /// <param name="result">Reaction data.</param>
+        /// <param name="logger">Logger.</param>
+        /// <exception cref="ArgumentNullException">Throws if result or logger is null.</exception>
         /// <exception cref="ArgumentException">Throws if result is not set.</exception>
         public Response(string result, ILogger<Reaction> logger) : base(result, logger)
         {
