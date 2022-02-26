@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Options;
 
+using Serilog;
+
 using WebSocketMockServer.Configuration;
 using WebSocketMockServer.Configuration.Validation;
 using WebSocketMockServer.Loader;
@@ -17,6 +19,8 @@ builder.Services.Configure<FileLoaderConfiguration>(builder.Configuration.GetSec
 builder.Services.AddSingleton<IValidateOptions<FileLoaderConfiguration>, FileLoaderConfigurationValidator>();
 builder.Services.AddSingleton<ILoader, FileLoader>();
 builder.Services.AddHostedService<LoaderService>();
+
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
 using var app = builder.Build();
 
