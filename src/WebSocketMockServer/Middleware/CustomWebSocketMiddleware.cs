@@ -11,20 +11,19 @@ namespace WebSocketMockServer.Middleware
         /// Creates web sockets middleware
         /// </summary>
         public CustomWebSocketMiddleware(RequestDelegate next,
-                                   ILogger<CustomWebSocketMiddleware>? logger,
+                                   ILogger<CustomWebSocketMiddleware> logger,
                                    IHostApplicationLifetime hostApplicationLifetime,
                                    IWebSocketHandler handler,
-                                   ILoggerFactory? loggerFactory
+                                   ILoggerFactory loggerFactory
                                    )
         {
             _next = next;
             _hostApplicationLifetime = hostApplicationLifetime;
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
-            _logger = logger;
-            _loggerFactory = loggerFactory;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        /// <summary>
         /// Handles user request
         /// </summary>
         public async Task InvokeAsync(HttpContext httpContext)
@@ -45,7 +44,7 @@ namespace WebSocketMockServer.Middleware
                     }
                     catch (Exception ex)
                     {
-                        _logger?.LogError(ex, "Error on process ws");
+                        _logger.LogError(ex, "Error on process ws");
                     }
                 }
                 else
@@ -62,8 +61,8 @@ namespace WebSocketMockServer.Middleware
         private readonly RequestDelegate _next;
         private readonly IWebSocketHandler _handler;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
-        private readonly ILogger<CustomWebSocketMiddleware>? _logger;
-        private readonly ILoggerFactory? _loggerFactory;
+        private readonly ILogger<CustomWebSocketMiddleware> _logger;
+        private readonly ILoggerFactory _loggerFactory;
         private const string DEFAULT_PATH = "/ws";
     }
 }

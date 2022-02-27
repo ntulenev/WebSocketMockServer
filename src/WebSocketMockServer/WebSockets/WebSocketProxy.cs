@@ -13,15 +13,20 @@ namespace WebSocketMockServer.WebSockets
         /// <summary>
         /// Creates <see cref="WebSocketProxy"/>.
         /// </summary>
-        public static IWebSocketProxy Create(WebSocket ws, ILoggerFactory? factory) =>
-            new WebSocketProxy(ws, factory?.CreateLogger<WebSocketProxy>());
+        public static IWebSocketProxy Create(WebSocket ws, ILoggerFactory factory)
+        {
+            ArgumentNullException.ThrowIfNull(ws);
+            ArgumentNullException.ThrowIfNull(factory);
+
+            return new WebSocketProxy(ws, factory.CreateLogger<WebSocketProxy>());
+        }
 
         /// <summary>
         ///  Creates <see cref="WebSocketProxy"/>.
         /// </summary>
         /// <param name="ws"></param>
         /// <param name="logger"></param>
-        private WebSocketProxy(WebSocket ws, ILogger<WebSocketProxy>? logger)
+        private WebSocketProxy(WebSocket ws, ILogger<WebSocketProxy> logger)
         {
             ArgumentNullException.ThrowIfNull(ws);
 
@@ -56,7 +61,7 @@ namespace WebSocketMockServer.WebSockets
                     }
                     catch (Exception ex)
                     {
-                        _logger?.LogError(ex, "Error on closing socket");
+                        _logger.LogError(ex, "Error on closing socket");
                     }
                 }
             }
@@ -87,7 +92,7 @@ namespace WebSocketMockServer.WebSockets
             {
                 if (State == WebSocketState.Open)
                 {
-                    _logger?.LogInformation("{Date} Send to client - {msg}", DateTime.UtcNow, msg);
+                    _logger.LogInformation("{Date} Send to client - {msg}", DateTime.UtcNow, msg);
 
                     try
                     {
@@ -99,12 +104,12 @@ namespace WebSocketMockServer.WebSockets
                     }
                     catch (Exception ex)
                     {
-                        _logger?.LogError(ex, "{Date} Error on sending - {msg}.", DateTime.UtcNow, msg);
+                        _logger.LogError(ex, "{Date} Error on sending - {msg}.", DateTime.UtcNow, msg);
                     }
                 }
                 else
                 {
-                    _logger?.LogWarning("{Date} Unable to send - {msg}. Socket is closed.", DateTime.UtcNow, msg);
+                    _logger.LogWarning("{Date} Unable to send - {msg}. Socket is closed.", DateTime.UtcNow, msg);
                 }
             }
         }
@@ -132,7 +137,7 @@ namespace WebSocketMockServer.WebSockets
         private readonly AsyncLock _socketWriteGuard = new();
         private readonly AsyncLock _socketReadGuard = new();
         private readonly CancellationTokenSource _socketClosingToken = new();
-        private readonly ILogger<WebSocketProxy>? _logger;
+        private readonly ILogger<WebSocketProxy> _logger;
         private bool _isDisposed;
     }
 }
