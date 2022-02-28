@@ -34,7 +34,7 @@ namespace WebSocketMockServer.WebSockets
 
             if (minimumBufferSize <= 0)
             {
-                throw new ArgumentException("Buffer size <= 0.");
+                throw new ArgumentException("Buffer size <= 0.", nameof(minimumBufferSize));
             }
 
             _minimumBufferSize = minimumBufferSize;
