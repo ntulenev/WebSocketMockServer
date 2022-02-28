@@ -4,11 +4,10 @@ using Xunit;
 
 using WebSocketMockServer.Loader;
 using WebSocketMockServer.Storage;
+using WebSocketMockServer.Models;
 
 using Moq;
 
-
-using WebSocketMockServer.Models;
 using Microsoft.Extensions.Logging;
 
 namespace WebSocketMockServer.Tests
@@ -24,7 +23,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new MockTemplateStorage(loader, null!));
+                () => new MockTemplateStorage(loader, Mock.Of<ILogger<MockTemplateStorage>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -40,7 +39,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new MockTemplateStorage(loader.Object, null!));
+                () => new MockTemplateStorage(loader.Object, Mock.Of<ILogger<MockTemplateStorage>>()));
 
             // Assert
             exception.Should().BeNull();
@@ -58,7 +57,7 @@ namespace WebSocketMockServer.Tests
             testDictionary.Add(template.Request, template);
 
             loader.Setup(x => x.GetLoadedData()).Returns(testDictionary);
-            var storage = new MockTemplateStorage(loader.Object, null!);
+            var storage = new MockTemplateStorage(loader.Object, Mock.Of<ILogger<MockTemplateStorage>>());
 
             // Act
             var status = storage.TryGetTemplate(template.Request, out var result);

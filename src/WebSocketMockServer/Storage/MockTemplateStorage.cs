@@ -14,9 +14,11 @@ namespace WebSocketMockServer.Storage
         /// </summary>
         /// <exception cref="ArgumentNullException">Thows if loader is not set.</exception>
         /// <exception cref="InvalidOperationException">Thows if loader has no templates.</exception>
-        public MockTemplateStorage(ILoader loader, ILogger<MockTemplateStorage>? logger)
+        public MockTemplateStorage(ILoader loader, ILogger<MockTemplateStorage> logger)
         {
             ArgumentNullException.ThrowIfNull(loader);
+
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             try
             {
@@ -24,7 +26,7 @@ namespace WebSocketMockServer.Storage
             }
             catch (InvalidOperationException ex)
             {
-                logger?.LogWarning(ex, "No templates load in storage");
+                _logger.LogWarning(ex, "No templates load in storage");
                 _templates = new Dictionary<string, MockTemplate>();
             }
         }
@@ -34,15 +36,21 @@ namespace WebSocketMockServer.Storage
         {
             result = null;
 
+
+
             if (_templates.TryGetValue(key, out var value))
             {
+                _logger.LogDebug("Getting template key {Key} - value {Value}", key, value);
                 result = value;
                 return true;
             }
+
+            _logger.LogDebug("No data for key {Key}", key);
 
             return false;
         }
 
         private readonly IReadOnlyDictionary<string, MockTemplate> _templates;
+        private readonly ILogger<MockTemplateStorage> _logger;
     }
 }
