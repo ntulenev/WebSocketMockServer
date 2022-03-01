@@ -2,6 +2,7 @@ using Microsoft.Extensions.Options;
 
 using WebSocketMockServer.Configuration;
 using WebSocketMockServer.Helpers;
+using WebSocketMockServer.IO;
 using WebSocketMockServer.Models;
 using WebSocketMockServer.Storage;
 
@@ -20,11 +21,9 @@ namespace WebSocketMockServer.Loader
         /// <param name="hostingEnvironment">Hosting environment.</param>
         public FileLoader(IOptions<FileLoaderConfiguration> config,
                           ILogger<FileLoader> logger,
-                          IWebHostEnvironment hostingEnvironment,
-                          ILoggerFactory loggerFactory)
+                          ILoggerFactory loggerFactory,
+                          IFileUtility fileUtility)
         {
-            _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
-
             ArgumentNullException.ThrowIfNull(config);
 
             var configData = config.Value;
@@ -38,15 +37,12 @@ namespace WebSocketMockServer.Loader
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _fileUtility = fileUtility ?? throw new ArgumentNullException(nameof(fileUtility));
         }
-
-
-        private string GetFilePath(string name)
-            => Path.Combine(_hostingEnvironment.ContentRootPath, _config.Folder!, name);
 
         private async Task<string> GetFileContentAsync(string fileName, CancellationToken ct)
         {
-            var requestText = await File.ReadAllTextAsync(GetFilePath(fileName), ct).ConfigureAwait(false);
+            var requestText = await _fileUtility.ReadFileAsync(_config.Folder!, fileName, ct).ConfigureAwait(false);
             return requestText.ReconvertWithJson();
         }
 
@@ -91,9 +87,10 @@ namespace WebSocketMockServer.Loader
         }
 
         private readonly FileLoaderConfiguration _config;
-        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ILogger<FileLoader> _logger;
         private readonly ILoggerFactory _loggerFactory;
+        private readonly IFileUtility _fileUtility;
+
         private IReadOnlyDictionary<string, MockTemplate> _data = null!;
 
     }
