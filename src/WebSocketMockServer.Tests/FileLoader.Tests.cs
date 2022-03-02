@@ -2,14 +2,13 @@ using FluentAssertions;
 
 using Xunit;
 
-using WebSocketMockServer.Configuration;
-using WebSocketMockServer.Loader;
-
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Hosting;
 
 using Moq;
+
+using WebSocketMockServer.Configuration;
+using WebSocketMockServer.Loader;
 using WebSocketMockServer.IO;
 
 namespace WebSocketMockServer.Tests
