@@ -52,6 +52,8 @@ namespace WebSocketMockServer.Loader
         ///<inheritdoc/>
         public async Task LoadAsync(CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
+
             var templates = new Dictionary<string, MockTemplate>();
 
             foreach (var template in _config.Mapping!)
