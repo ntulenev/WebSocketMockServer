@@ -22,7 +22,7 @@ namespace WebSocketMockServer.Tests
         public void CantCreateFileLoaderWithNullLogger()
         {
             // Arrange
-            var configMock = new Mock<IOptions<FileLoaderConfiguration>>();
+            var configMock = new Mock<IOptions<FileLoaderConfiguration>>(MockBehavior.Strict);
             configMock.Setup(x => x.Value).Returns(new FileLoaderConfiguration
             {
                 Folder = "A",
@@ -68,12 +68,9 @@ namespace WebSocketMockServer.Tests
         [Trait("Category", "Unit")]
         public void CantCreateFileLoaderWithNullConfigData()
         {
-            //Arrange
-            var config = (new Mock<IOptions<FileLoaderConfiguration>>()).Object;
-
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(config, Mock.Of<ILogger<FileLoader>>(), Mock.Of<ILoggerFactory>(), Mock.Of<IFileUtility>()));
+                () => new FileLoader(Mock.Of<IOptions<FileLoaderConfiguration>>(), Mock.Of<ILogger<FileLoader>>(), Mock.Of<ILoggerFactory>(), Mock.Of<IFileUtility>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -84,7 +81,7 @@ namespace WebSocketMockServer.Tests
         public void CantCreateFileLoaderWithNullLoggerFactory()
         {
             //Arrange
-            var configMock = new Mock<IOptions<FileLoaderConfiguration>>();
+            var configMock = new Mock<IOptions<FileLoaderConfiguration>>(MockBehavior.Strict);
             configMock.Setup(x => x.Value).Returns(new FileLoaderConfiguration
             {
                 Folder = "A",
@@ -118,7 +115,7 @@ namespace WebSocketMockServer.Tests
         public void CantCreateFileLoaderWithNullLoggerFileUtility()
         {
             //Arrange
-            var configMock = new Mock<IOptions<FileLoaderConfiguration>>();
+            var configMock = new Mock<IOptions<FileLoaderConfiguration>>(MockBehavior.Strict);
             configMock.Setup(x => x.Value).Returns(new FileLoaderConfiguration
             {
                 Folder = "A",
@@ -188,7 +185,7 @@ namespace WebSocketMockServer.Tests
 #pragma warning restore IDE1006 // Naming Styles
         {
             //Arrange
-            var configMock = new Mock<IOptions<FileLoaderConfiguration>>();
+            var configMock = new Mock<IOptions<FileLoaderConfiguration>>(MockBehavior.Strict);
             configMock.Setup(x => x.Value).Returns(new FileLoaderConfiguration
             {
                 Folder = "A",
