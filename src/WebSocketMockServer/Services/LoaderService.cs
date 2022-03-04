@@ -5,12 +5,12 @@ namespace WebSocketMockServer.Services
     /// </summary>
     public class LoaderService : IHostedService
     {
-        public LoaderService(ILogger<LoaderService>? logger,
+        public LoaderService(ILogger<LoaderService> logger,
                              IHostApplicationLifetime hostApplicationLifetime,
                              Loader.ILoader loader
                                     )
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _hostApplicationLifetime = hostApplicationLifetime ?? throw new ArgumentNullException(nameof(hostApplicationLifetime));
             _loader = loader ?? throw new ArgumentNullException(nameof(loader));
         }
@@ -19,18 +19,18 @@ namespace WebSocketMockServer.Services
         {
             try
             {
-                await _loader.LoadAsync(cancellationToken).ConfigureAwait(false);  
+                await _loader.LoadAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                _logger?.LogCritical(ex, "Error on load templates");
+                _logger.LogCritical(ex, "Error on load templates");
                 _hostApplicationLifetime.StopApplication();
             }
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        private readonly ILogger<LoaderService>? _logger;
+        private readonly ILogger<LoaderService> _logger;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
         private readonly Loader.ILoader _loader;
     }
