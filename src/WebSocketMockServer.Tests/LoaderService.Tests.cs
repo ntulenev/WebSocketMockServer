@@ -19,15 +19,9 @@ namespace WebSocketMockServer.Tests
         [Trait("Category", "Unit")]
         public void CantCreateLoaderServiceWithNullLifeTime()
         {
-            //Arrange
-            ILogger<LoaderService>? logger = null!;
-            IHostApplicationLifetime lifetime = null!;
-            var loader = new Mock<ILoader>();
-
-
             // Act
             var exception = Record.Exception(
-                () => new LoaderService(logger, lifetime, loader.Object));
+                () => new LoaderService(Mock.Of<ILogger<LoaderService>>(), null!, Mock.Of<ILoader>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -37,15 +31,9 @@ namespace WebSocketMockServer.Tests
         [Trait("Category", "Unit")]
         public void CantCreateLoaderServiceWithNullLoader()
         {
-            //Arrange
-            ILogger<LoaderService>? logger = null!;
-            var lifetime = new Mock<IHostApplicationLifetime>()!;
-            ILoader loader = null!;
-
-
             // Act
             var exception = Record.Exception(
-                () => new LoaderService(logger, lifetime.Object, loader));
+                () => new LoaderService(null!, Mock.Of<IHostApplicationLifetime>(), Mock.Of<ILoader>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -55,15 +43,9 @@ namespace WebSocketMockServer.Tests
         [Trait("Category", "Unit")]
         public void LoaderServiceCouldBeCreated()
         {
-            //Arrange
-            ILogger<LoaderService>? logger = null!;
-            var lifetime = new Mock<IHostApplicationLifetime>()!;
-            var loader = new Mock<ILoader>();
-
-
             // Act
             var exception = Record.Exception(
-                () => new LoaderService(logger, lifetime.Object, loader.Object));
+                () => new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(), Mock.Of<ILoader>()));
 
             // Assert
             exception.Should().BeNull();
@@ -74,10 +56,7 @@ namespace WebSocketMockServer.Tests
         public void LoaderServiceReturnsCompleteTaskOnStop()
         {
             //Arrange
-            ILogger<LoaderService>? logger = null!;
-            var lifetime = new Mock<IHostApplicationLifetime>()!;
-            var loader = new Mock<ILoader>();
-            var service = new LoaderService(logger, lifetime.Object, loader.Object);
+            var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(), Mock.Of<ILoader>());
 
             // Act
             var completeTask = service.StopAsync(CancellationToken.None);
@@ -91,10 +70,8 @@ namespace WebSocketMockServer.Tests
         public async Task LoaderServiceLoadsDataOnStartAsync()
         {
             //Arrange
-            ILogger<LoaderService>? logger = null!;
-            var lifetime = new Mock<IHostApplicationLifetime>()!;
             var loader = new Mock<ILoader>();
-            var service = new LoaderService(logger, lifetime.Object, loader.Object);
+            var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(), loader.Object);
 
             // Act
             await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
@@ -108,14 +85,12 @@ namespace WebSocketMockServer.Tests
         public async Task LoaderServiceShouldStopAppOnErrorAsync()
         {
             //Arrange
-            ILogger<LoaderService>? logger = null!;
-
             var lifetime = new Mock<IHostApplicationLifetime>()!;
 
             var loader = new Mock<ILoader>();
             loader.Setup(x => x.LoadAsync(It.IsAny<CancellationToken>())).Throws(new InvalidOperationException());
 
-            var service = new LoaderService(logger, lifetime.Object, loader.Object);
+            var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), lifetime.Object, loader.Object);
 
             // Act
             await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
