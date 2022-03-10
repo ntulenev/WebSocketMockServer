@@ -78,15 +78,18 @@ namespace WebSocketMockServer.Tests
         public async Task CouldSendReactionAsync()
         {
             //Arrange
+            using var cts = new CancellationTokenSource();
+
             var msg = "Test";
             var reaction = Reaction.Create(msg, Mock.Of<ILogger<Reaction>>());
-            var proxy = new Mock<IWebSocketProxy>();
+            var proxy = new Mock<IWebSocketProxy>(MockBehavior.Strict);
+            proxy.Setup(x => x.SendMessageAsync(msg, cts.Token)).Returns(Task.CompletedTask);
 
             // Act
-            await reaction.SendMessageAsync(proxy.Object, CancellationToken.None).ConfigureAwait(false);
+            await reaction.SendMessageAsync(proxy.Object, cts.Token).ConfigureAwait(false);
 
             // Assert
-            proxy.Verify(x => x.SendMessageAsync(It.Is<string>(v => v == msg), It.IsAny<CancellationToken>()), Times.Once);
+            proxy.Verify(x => x.SendMessageAsync(msg, cts.Token), Times.Once);
         }
     }
 }
