@@ -1,3 +1,5 @@
+using WebSocketMockServer.Loader;
+
 namespace WebSocketMockServer.Services
 {
     /// <summary>
@@ -21,7 +23,7 @@ namespace WebSocketMockServer.Services
             {
                 await _loader.LoadAsync(cancellationToken).ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 _logger.LogCritical(ex, "Error on load templates");
                 _hostApplicationLifetime.StopApplication();
@@ -32,6 +34,6 @@ namespace WebSocketMockServer.Services
 
         private readonly ILogger<LoaderService> _logger;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
-        private readonly Loader.ILoader _loader;
+        private readonly ILoader _loader;
     }
 }

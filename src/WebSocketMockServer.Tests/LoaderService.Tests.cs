@@ -56,10 +56,12 @@ namespace WebSocketMockServer.Tests
         public void LoaderServiceReturnsCompleteTaskOnStop()
         {
             //Arrange
+            using var cts = new CancellationTokenSource();
+
             var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(), Mock.Of<ILoader>());
 
             // Act
-            var completeTask = service.StopAsync(CancellationToken.None);
+            var completeTask = service.StopAsync(cts.Token);
 
             // Assert
             completeTask.IsCompleted.Should().BeTrue();
@@ -70,33 +72,62 @@ namespace WebSocketMockServer.Tests
         public async Task LoaderServiceLoadsDataOnStartAsync()
         {
             //Arrange
+            using var cts = new CancellationTokenSource();
+
             var loader = new Mock<ILoader>();
             var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(), loader.Object);
 
             // Act
-            await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
+            await service.StartAsync(cts.Token).ConfigureAwait(false);
 
             // Assert
-            loader.Verify(x => x.LoadAsync(It.Is<CancellationToken>(a => a == CancellationToken.None)), Times.Once);
+            loader.Verify(x => x.LoadAsync(cts.Token), Times.Once);
         }
 
-        [Fact(DisplayName = "LoaderService should stop app on error.")]
+        [Fact(DisplayName = "LoaderService stops app on fail.")]
         [Trait("Category", "Unit")]
-        public async Task LoaderServiceShouldStopAppOnErrorAsync()
+        public async Task LoaderServiceStopsAppOnFailAsync()
         {
             //Arrange
-            var lifetime = new Mock<IHostApplicationLifetime>()!;
+            using var cts = new CancellationTokenSource();
 
-            var loader = new Mock<ILoader>();
-            loader.Setup(x => x.LoadAsync(It.IsAny<CancellationToken>())).Throws(new InvalidOperationException());
+            var loader = new Mock<ILoader>(MockBehavior.Strict);
+            loader.Setup(x => x.LoadAsync(cts.Token)).Throws(new InvalidOperationException());
+
+            var lifetime = new Mock<IHostApplicationLifetime>(MockBehavior.Strict);
+            lifetime.Setup(x => x.StopApplication());
 
             var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), lifetime.Object, loader.Object);
 
             // Act
-            await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
+            await service.StartAsync(cts.Token).ConfigureAwait(false);
 
             // Assert
             lifetime.Verify(x => x.StopApplication(), Times.Once);
+
+        }
+
+        [Fact(DisplayName = "LoaderService skips app on cancellation.")]
+        [Trait("Category", "Unit")]
+        public async Task LoaderServiceDontStopsAppOnCancelAsync()
+        {
+            //Arrange
+            using var cts = new CancellationTokenSource();
+
+            var loader = new Mock<ILoader>(MockBehavior.Strict);
+            loader.Setup(x => x.LoadAsync(cts.Token)).Throws(new TaskCanceledException());
+
+            var lifetime = new Mock<IHostApplicationLifetime>(MockBehavior.Strict);
+            lifetime.Setup(x => x.StopApplication());
+
+            var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), lifetime.Object, loader.Object);
+
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await service.StartAsync(cts.Token).ConfigureAwait(false));
+
+            // Assert
+            exception.Should().NotBeNull().And.BeOfType<TaskCanceledException>();
+            lifetime.Verify(x => x.StopApplication(), Times.Never);
         }
     }
 }
