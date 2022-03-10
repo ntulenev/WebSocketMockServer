@@ -21,7 +21,7 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => new LoaderService(Mock.Of<ILogger<LoaderService>>(), null!, Mock.Of<ILoader>()));
+                () => new LoaderService(Mock.Of<ILogger<LoaderService>>(), null!, Mock.Of<ILoader>(MockBehavior.Strict)));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -33,7 +33,7 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => new LoaderService(null!, Mock.Of<IHostApplicationLifetime>(), Mock.Of<ILoader>()));
+                () => new LoaderService(null!, Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), Mock.Of<ILoader>(MockBehavior.Strict)));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -45,7 +45,7 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(), Mock.Of<ILoader>()));
+                () => new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), Mock.Of<ILoader>(MockBehavior.Strict)));
 
             // Assert
             exception.Should().BeNull();
@@ -58,7 +58,7 @@ namespace WebSocketMockServer.Tests
             //Arrange
             using var cts = new CancellationTokenSource();
 
-            var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(), Mock.Of<ILoader>());
+            var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), Mock.Of<ILoader>(MockBehavior.Strict));
 
             // Act
             var completeTask = service.StopAsync(cts.Token);
@@ -75,7 +75,7 @@ namespace WebSocketMockServer.Tests
             using var cts = new CancellationTokenSource();
 
             var loader = new Mock<ILoader>();
-            var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(), loader.Object);
+            var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), loader.Object);
 
             // Act
             await service.StartAsync(cts.Token).ConfigureAwait(false);
