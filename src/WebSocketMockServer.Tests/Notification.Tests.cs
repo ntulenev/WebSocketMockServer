@@ -104,7 +104,7 @@ namespace WebSocketMockServer.Tests
             var msg = "Test";
             var delay = 1000;
             var reaction = Reaction.Create(msg, delay, Mock.Of<ILogger<Reaction>>());
-            var proxy = new Mock<IWebSocketProxy>();
+            var proxy = new Mock<IWebSocketProxy>(MockBehavior.Strict);
 
             // Act
             var t = reaction.SendMessageAsync(proxy.Object, CancellationToken.None);
