@@ -85,7 +85,7 @@ namespace WebSocketMockServer.Tests
         public void SendMessageAsyncProperly()
         {
             //Arrange
-            var ws = new Mock<WebSocket>();
+            var ws = new Mock<WebSocket>(MockBehavior.Strict);
             ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>())).Returns(new ValueTask(Task.CompletedTask));
             ws.Setup(x => x.State).Returns(WebSocketState.Open);
             var proxy = WebSocketProxy.Create(ws.Object, new NullLoggerFactory());
@@ -117,7 +117,7 @@ namespace WebSocketMockServer.Tests
         public void SendMessageAsyncSkipsProperly(WebSocketState testState)
         {
             //Arrange
-            var ws = new Mock<WebSocket>();
+            var ws = new Mock<WebSocket>(MockBehavior.Strict);
             ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>())).Returns(new ValueTask(Task.CompletedTask));
             ws.Setup(x => x.State).Returns(testState);
             var proxy = WebSocketProxy.Create(ws.Object, Mock.Of<ILoggerFactory>());
@@ -138,7 +138,7 @@ namespace WebSocketMockServer.Tests
             var tcsFirst = new TaskCompletionSource<bool>();
             var isFirst = true;
             //Arrange
-            var ws = new Mock<WebSocket>();
+            var ws = new Mock<WebSocket>(MockBehavior.Strict);
             ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>())).Returns(() =>
             {
                 if (isFirst)
