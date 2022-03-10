@@ -34,7 +34,7 @@ namespace WebSocketMockServer.Tests
         public void MockTemplateCreatesEmptyStorageOnLoaderException()
         {
             //Arrange
-            var loader = new Mock<ILoader>();
+            var loader = new Mock<ILoader>(MockBehavior.Strict);
             loader.Setup(x => x.GetLoadedData()).Throws<InvalidOperationException>();
 
             // Act
@@ -50,7 +50,7 @@ namespace WebSocketMockServer.Tests
         public void MockTemplateCreatesStorageOnLoader()
         {
             //Arrange
-            var loader = new Mock<ILoader>();
+            var loader = new Mock<ILoader>(MockBehavior.Strict);
 
             var testDictionary = new Dictionary<string, MockTemplate>();
             var template = new MockTemplate("aaa", new[] { Reaction.Create("bbb", Mock.Of<ILogger<Reaction>>()) });
