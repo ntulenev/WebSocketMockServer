@@ -1,6 +1,6 @@
 using WebSocketMockServer.WebSockets;
 
-namespace WebSocketMockServer.Models
+namespace WebSocketMockServer.Reactions
 {
     /// <summary>
     /// Response with delay

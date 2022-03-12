@@ -1,4 +1,4 @@
-using WebSocketMockServer.Models;
+using WebSocketMockServer.Reactions;
 
 namespace WebSocketMockServer.Storage
 {

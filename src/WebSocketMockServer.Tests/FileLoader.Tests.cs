@@ -12,6 +12,7 @@ using WebSocketMockServer.Configuration;
 using WebSocketMockServer.Loader;
 using WebSocketMockServer.IO;
 using WebSocketMockServer.Helpers;
+using WebSocketMockServer.Reactions;
 
 namespace WebSocketMockServer.Tests
 {
@@ -46,7 +47,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(configMock.Object, null!, Mock.Of<ILoggerFactory>(MockBehavior.Strict), Mock.Of<IFileUtility>(MockBehavior.Strict)));
+                () => new FileLoader(configMock.Object, null!, Mock.Of<IFileUtility>(MockBehavior.Strict), Mock.Of<IReactionFactory>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -58,7 +59,7 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(null!, Mock.Of<ILogger<FileLoader>>(), Mock.Of<ILoggerFactory>(MockBehavior.Strict), Mock.Of<IFileUtility>(MockBehavior.Strict)));
+                () => new FileLoader(null!, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IFileUtility>(MockBehavior.Strict), Mock.Of<IReactionFactory>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -70,15 +71,15 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(Mock.Of<IOptions<FileLoaderConfiguration>>(), Mock.Of<ILogger<FileLoader>>(), Mock.Of<ILoggerFactory>(MockBehavior.Strict), Mock.Of<IFileUtility>(MockBehavior.Strict)));
+                () => new FileLoader(Mock.Of<IOptions<FileLoaderConfiguration>>(), Mock.Of<ILogger<FileLoader>>(), Mock.Of<IFileUtility>(MockBehavior.Strict), Mock.Of<IReactionFactory>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
         }
 
-        [Fact(DisplayName = "FileLoader can not process null logger factory.")]
+        [Fact(DisplayName = "FileLoader can not process null file utility.")]
         [Trait("Category", "Unit")]
-        public void CantCreateFileLoaderWithNullLoggerFactory()
+        public void CantCreateFileLoaderWithNullUtility()
         {
             //Arrange
             var configMock = new Mock<IOptions<FileLoaderConfiguration>>(MockBehavior.Strict);
@@ -104,13 +105,13 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), null!, Mock.Of<IFileUtility>(MockBehavior.Strict)));
+                () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), null!, Mock.Of<IReactionFactory>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
         }
 
-        [Fact(DisplayName = "FileLoader can not process null file utility.")]
+        [Fact(DisplayName = "FileLoader can not process null reaction factory.")]
         [Trait("Category", "Unit")]
         public void CantCreateFileLoaderWithNullLoggerFileUtility()
         {
@@ -138,7 +139,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<ILoggerFactory>(MockBehavior.Strict), null!));
+                () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IFileUtility>(MockBehavior.Strict), null!));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -172,7 +173,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<ILoggerFactory>(MockBehavior.Strict), Mock.Of<IFileUtility>(MockBehavior.Strict)));
+                () => new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IFileUtility>(MockBehavior.Strict), Mock.Of<IReactionFactory>()));
 
             // Assert
             exception.Should().BeNull();
@@ -211,7 +212,7 @@ namespace WebSocketMockServer.Tests
 
             var loggerFactory = new NullLoggerFactory();
 
-            var loader = new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<ILoggerFactory>(MockBehavior.Strict), Mock.Of<IFileUtility>(MockBehavior.Strict));
+            var loader = new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), Mock.Of<IFileUtility>(MockBehavior.Strict), Mock.Of<IReactionFactory>());
 
             // Act
             var exception = await Record.ExceptionAsync(
@@ -283,7 +284,7 @@ namespace WebSocketMockServer.Tests
 
             var loggerFactory = new NullLoggerFactory();
 
-            var loader = new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), loggerFactory, fileUtilityMock.Object);
+            var loader = new FileLoader(configMock.Object, Mock.Of<ILogger<FileLoader>>(), fileUtilityMock.Object, Mock.Of<IReactionFactory>());
 
             // Act
             await loader.LoadAsync(cts.Token);

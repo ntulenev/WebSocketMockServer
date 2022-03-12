@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using WebSocketMockServer.Configuration;
 using WebSocketMockServer.Helpers;
 using WebSocketMockServer.IO;
-using WebSocketMockServer.Models;
+using WebSocketMockServer.Reactions;
 using WebSocketMockServer.Storage;
 
 namespace WebSocketMockServer.Loader
@@ -21,8 +21,8 @@ namespace WebSocketMockServer.Loader
         /// <param name="hostingEnvironment">Hosting environment.</param>
         public FileLoader(IOptions<FileLoaderConfiguration> config,
                           ILogger<FileLoader> logger,
-                          ILoggerFactory loggerFactory,
-                          IFileUtility fileUtility)
+                          IFileUtility fileUtility,
+                          IReactionFactory reactionFactory)
         {
             ArgumentNullException.ThrowIfNull(config);
 
@@ -36,8 +36,8 @@ namespace WebSocketMockServer.Loader
             _config = configData;
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             _fileUtility = fileUtility ?? throw new ArgumentNullException(nameof(fileUtility));
+            _reactionFactory = reactionFactory ?? throw new ArgumentNullException(nameof(reactionFactory));
         }
 
         private async Task<string> GetFileContentAsync(string fileName, CancellationToken ct)
@@ -64,21 +64,19 @@ namespace WebSocketMockServer.Loader
 
                 var reactions = new List<Reaction>();
 
-                var reactionLogger = _loggerFactory.CreateLogger<Reaction>();
-
                 foreach (var res in template.Reactions!)
                 {
                     if (res.Delay.HasValue)
                     {
                         _logger.LogInformation("Reading notification from {response} with delay {delay} ms", res.File, res.Delay);
                         var reactionText = await GetFileContentAsync(res.File!, ct).ConfigureAwait(false);
-                        reactions.Add(Reaction.Create(reactionText, res.Delay.Value, reactionLogger));
+                        reactions.Add(_reactionFactory.Create(reactionText, res.Delay.Value));
                     }
                     else
                     {
                         _logger.LogInformation("Reading response from {response} with delay {delay} ms", res.File, res.Delay);
                         var reactionText = await GetFileContentAsync(res.File!, ct).ConfigureAwait(false);
-                        reactions.Add(Reaction.Create(reactionText, reactionLogger));
+                        reactions.Add(_reactionFactory.Create(reactionText));
                     }
                 }
 
@@ -90,8 +88,8 @@ namespace WebSocketMockServer.Loader
 
         private readonly FileLoaderConfiguration _config;
         private readonly ILogger<FileLoader> _logger;
-        private readonly ILoggerFactory _loggerFactory;
         private readonly IFileUtility _fileUtility;
+        private readonly IReactionFactory _reactionFactory;
 
         private IReadOnlyDictionary<string, MockTemplate> _data = null!;
 

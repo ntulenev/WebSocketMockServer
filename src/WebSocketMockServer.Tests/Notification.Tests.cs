@@ -5,7 +5,7 @@ using Xunit;
 using Moq;
 
 using WebSocketMockServer.WebSockets;
-using WebSocketMockServer.Models;
+using WebSocketMockServer.Reactions;
 using Microsoft.Extensions.Logging;
 
 namespace WebSocketMockServer.Tests
@@ -85,7 +85,7 @@ namespace WebSocketMockServer.Tests
             //Arrange
             var msg = "Test";
             var delay = 1;
-            var reaction = Reaction.Create(msg, delay, Mock.Of<ILogger<Reaction>>());
+            var reaction = new Notification(msg, delay, Mock.Of<ILogger<Reaction>>());
             var proxy = (IWebSocketProxy)null!;
 
             // Act
@@ -103,7 +103,7 @@ namespace WebSocketMockServer.Tests
             //Arrange
             var msg = "Test";
             var delay = 1000;
-            var reaction = Reaction.Create(msg, delay, Mock.Of<ILogger<Reaction>>());
+            var reaction = new Notification(msg, delay, Mock.Of<ILogger<Reaction>>());
             var proxy = new Mock<IWebSocketProxy>(MockBehavior.Strict);
 
             // Act

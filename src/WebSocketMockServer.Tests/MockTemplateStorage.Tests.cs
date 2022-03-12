@@ -4,7 +4,7 @@ using Xunit;
 
 using WebSocketMockServer.Loader;
 using WebSocketMockServer.Storage;
-using WebSocketMockServer.Models;
+using WebSocketMockServer.Reactions;
 
 using Moq;
 
@@ -53,7 +53,7 @@ namespace WebSocketMockServer.Tests
             var loader = new Mock<ILoader>(MockBehavior.Strict);
 
             var testDictionary = new Dictionary<string, MockTemplate>();
-            var template = new MockTemplate("aaa", new[] { Reaction.Create("bbb", Mock.Of<ILogger<Reaction>>()) });
+            var template = new MockTemplate("aaa", new[] { new Response("bbb", Mock.Of<ILogger<Reaction>>()) });
             testDictionary.Add(template.Request, template);
 
             loader.Setup(x => x.GetLoadedData()).Returns(testDictionary);

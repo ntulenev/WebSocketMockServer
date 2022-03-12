@@ -2,7 +2,7 @@ using FluentAssertions;
 
 using Xunit;
 
-using WebSocketMockServer.Models;
+using WebSocketMockServer.Reactions;
 using WebSocketMockServer.Storage;
 using Moq;
 using Microsoft.Extensions.Logging;
@@ -78,9 +78,9 @@ namespace WebSocketMockServer.Tests
         {
             //Arrange
             var request = "aaa";
-            IEnumerable<Reaction> resps = new[]
+            IEnumerable<Reaction> resps = new Reaction[]
             {
-                Reaction.Create("A",Mock.Of<ILogger<Reaction>>()),
+                new Response("A",Mock.Of<ILogger<Reaction>>()),
                 new Notification("B",1000,Mock.Of<ILogger<Reaction>>())
             };
 
