@@ -1,7 +1,15 @@
 namespace WebSocketMockServer.Reactions
 {
+    /// <summary>
+    /// Factory for creating <see cref="Notification"/> and <see cref="Response"/>.
+    /// </summary>
     public class ReactionFactory : IReactionFactory
     {
+        /// <summary>
+        /// Creates <see cref="ReactionFactory"/>.
+        /// </summary>
+        /// <param name="logger">Logger.</param>
+        /// <exception cref="ArgumentNullException">Throws is logger is null.</exception>
         public ReactionFactory(ILogger<Reaction> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

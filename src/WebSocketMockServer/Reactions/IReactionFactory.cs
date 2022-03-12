@@ -1,5 +1,8 @@
 namespace WebSocketMockServer.Reactions
 {
+    /// <summary>
+    /// Contract for Reaction factory logic.
+    /// </summary>
     public interface IReactionFactory
     {
         /// <summary>
