@@ -1,3 +1,4 @@
+using WebSocketMockServer.Scheduling;
 using WebSocketMockServer.WebSockets;
 
 namespace WebSocketMockServer.Reactions
@@ -20,12 +21,14 @@ namespace WebSocketMockServer.Reactions
         /// <param name="logger">Logger.</param>
         /// <exception cref="ArgumentNullException">Throws if result or logger is null.</exception>
         /// <exception cref="ArgumentException">Throws if result is not set or delay is incorrect.</exception>
-        public Notification(string result, int delay, ILogger<Reaction> logger) : base(result, logger)
+        public Notification(string result, int delay, IWorkSheduler sheduler, ILogger<Reaction> logger) : base(result, logger)
         {
             if (delay <= 0)
             {
                 throw new ArgumentException("Delay should be positive", nameof(delay));
             }
+
+            _sheduler = sheduler ?? throw new ArgumentNullException(nameof(sheduler));
 
             Delay = delay;
         }
@@ -35,7 +38,7 @@ namespace WebSocketMockServer.Reactions
         {
             ArgumentNullException.ThrowIfNull(webSocket);
 
-            _ = Task.Run(async () =>
+            _sheduler.Schedule(async () =>
             {
                 using var _ = _logger.BeginScope("Response {Response}", Result);
 
@@ -61,5 +64,7 @@ namespace WebSocketMockServer.Reactions
 
             return Task.CompletedTask;
         }
+
+        private readonly IWorkSheduler _sheduler;
     }
 }

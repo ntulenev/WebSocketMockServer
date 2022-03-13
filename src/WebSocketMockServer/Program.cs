@@ -8,6 +8,7 @@ using WebSocketMockServer.IO;
 using WebSocketMockServer.Loader;
 using WebSocketMockServer.Middleware;
 using WebSocketMockServer.Reactions;
+using WebSocketMockServer.Scheduling;
 using WebSocketMockServer.Services;
 using WebSocketMockServer.Storage;
 using WebSocketMockServer.WebSockets;
@@ -15,6 +16,7 @@ using WebSocketMockServer.WebSockets;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHealthChecks();
+builder.Services.AddSingleton<IWorkSheduler, WorkSheduler>();
 builder.Services.AddSingleton<IMockTemplateStorage, MockTemplateStorage>();
 builder.Services.AddSingleton<IReactionFactory>(sp =>
     new ReactionFactory(

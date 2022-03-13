@@ -7,6 +7,7 @@ using Moq;
 using WebSocketMockServer.WebSockets;
 using WebSocketMockServer.Reactions;
 using Microsoft.Extensions.Logging;
+using WebSocketMockServer.Scheduling;
 
 namespace WebSocketMockServer.Tests
 {
@@ -22,7 +23,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay,Mock.Of<ILogger<Reaction>>()));
+                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -39,7 +40,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay, Mock.Of<ILogger<Reaction>>()));
+                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -55,7 +56,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay, Mock.Of<ILogger<Reaction>>()));
+                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -71,7 +72,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay, Mock.Of<ILogger<Reaction>>()));
+                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().BeNull();
@@ -85,7 +86,7 @@ namespace WebSocketMockServer.Tests
             //Arrange
             var msg = "Test";
             var delay = 1;
-            var reaction = new Notification(msg, delay, Mock.Of<ILogger<Reaction>>());
+            var reaction = new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>());
             var proxy = (IWebSocketProxy)null!;
 
             // Act
@@ -96,28 +97,26 @@ namespace WebSocketMockServer.Tests
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
         }
 
-        [Fact(DisplayName = "Response could be sended.")]
+        [Fact(DisplayName = "Notification could be sended.")]
         [Trait("Category", "Unit")]
-        public async Task CouldSendReactionAsync()
+        public void CouldSendNotification()
         {
             //Arrange
+            using var cts = new CancellationTokenSource();
+
             var msg = "Test";
             var delay = 1000;
-            var reaction = new Notification(msg, delay, Mock.Of<ILogger<Reaction>>());
-            var proxy = new Mock<IWebSocketProxy>(MockBehavior.Strict);
+
+            var scheduler = new Mock<IWorkSheduler>();
+
+            var reaction = new Notification(msg, delay, scheduler.Object, Mock.Of<ILogger<Reaction>>());
 
             // Act
-            var t = reaction.SendMessageAsync(proxy.Object, CancellationToken.None);
+            var t = reaction.SendMessageAsync(Mock.Of<IWebSocketProxy>(MockBehavior.Strict), cts.Token);
 
             // Assert
             t.IsCompleted.Should().BeTrue();
-
-            proxy.Verify(x => x.SendMessageAsync(It.Is<string>(v => v == msg), It.IsAny<CancellationToken>()), Times.Never);
-
-            await Task.Delay(delay * 2).ConfigureAwait(false); // Attempts to ensure that background task is completed.
-
-            proxy.Verify(x => x.SendMessageAsync(It.Is<string>(v => v == msg), It.IsAny<CancellationToken>()), Times.Once);
-
+            scheduler.Verify(x => x.Schedule(It.IsAny<Func<Task>>(), cts.Token), Times.Once);
         }
     }
 }

@@ -4,7 +4,10 @@ using Xunit;
 
 using WebSocketMockServer.Reactions;
 using WebSocketMockServer.Storage;
+using WebSocketMockServer.Scheduling;
+
 using Moq;
+
 using Microsoft.Extensions.Logging;
 
 namespace WebSocketMockServer.Tests
@@ -81,7 +84,7 @@ namespace WebSocketMockServer.Tests
             IEnumerable<Reaction> resps = new Reaction[]
             {
                 new Response("A",Mock.Of<ILogger<Reaction>>()),
-                new Notification("B",1000,Mock.Of<ILogger<Reaction>>())
+                new Notification("B",1000,Mock.Of<IWorkSheduler>(),Mock.Of<ILogger<Reaction>>())
             };
 
             // Act
