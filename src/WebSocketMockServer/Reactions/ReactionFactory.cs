@@ -5,29 +5,34 @@ namespace WebSocketMockServer.Reactions
     /// </summary>
     public class ReactionFactory : IReactionFactory
     {
+
         /// <summary>
         /// Creates <see cref="ReactionFactory"/>.
         /// </summary>
-        /// <param name="logger">Logger.</param>
-        /// <exception cref="ArgumentNullException">Throws is logger is null.</exception>
-        public ReactionFactory(ILogger<Reaction> logger)
+        /// <param name="responseFactory">Factory delegate for <see cref="Response"/>.</param>
+        /// <param name="notificationFactory">Factory deletega for <see cref="Notification"/>.</param>
+        /// <exception cref="ArgumentNullException">Throws is factory delegates are null.</exception>
+        public ReactionFactory(Func<string, Response> responseFactory,
+                               Func<string, int, Notification> notificationFactory)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _responseFactory = responseFactory ?? throw new ArgumentNullException(nameof(responseFactory));
+            _notificationFactory = notificationFactory ?? throw new ArgumentNullException(nameof(notificationFactory));
         }
 
         /// <summary>
         /// Creates <see cref="Response"/>.
         /// </summary>
         /// <param name="data">Response message</param>
-        public Reaction Create(string data) => new Response(data, _logger);
+        public Reaction Create(string data) => _responseFactory(data);
 
         /// <summary>
         /// Creates <see cref="Notification"/>.
         /// </summary>
         /// <param name="data">Notification message.</param>
         /// <param name="delay">Delay in ms.</param>
-        public Reaction Create(string data, int delay) => new Notification(data, delay, _logger);
+        public Reaction Create(string data, int delay) => _notificationFactory(data, delay);
 
-        private readonly ILogger<Reaction> _logger;
+        private readonly Func<string, Response> _responseFactory;
+        private readonly Func<string, int, Notification> _notificationFactory;
     }
 }

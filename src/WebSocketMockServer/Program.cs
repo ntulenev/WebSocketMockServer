@@ -16,7 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IMockTemplateStorage, MockTemplateStorage>();
-builder.Services.AddSingleton<IReactionFactory, ReactionFactory>();
+builder.Services.AddSingleton<IReactionFactory>(sp =>
+    new ReactionFactory(
+    (data) => ActivatorUtilities.CreateInstance<Response>(sp, new[] { data }),
+    (data, delay) => ActivatorUtilities.CreateInstance<Notification>(sp, new object[] { data, delay })
+    ));
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
 builder.Services.Configure<FileLoaderConfiguration>(builder.Configuration.GetSection(nameof(FileLoaderConfiguration)));
 builder.Services.AddSingleton<IValidateOptions<FileLoaderConfiguration>, FileLoaderConfigurationValidator>();
