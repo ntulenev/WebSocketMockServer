@@ -7,7 +7,6 @@ using Xunit;
 using Moq;
 
 using WebSocketMockServer.WebSockets;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace WebSocketMockServer.Tests
@@ -23,7 +22,22 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => WebSocketProxy.Create(ws, Mock.Of<ILoggerFactory>()));
+                () => WebSocketProxy.Create(ws, new NullLoggerFactory()));
+
+            // Assert
+            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+        }
+
+        [Fact(DisplayName = "Unable to create web socket proxy with null factory.")]
+        [Trait("Category", "Unit")]
+        public void CantCreateWsProxyWithNullFactory()
+        {
+            //Arrange
+            var ws = new Mock<WebSocket>(MockBehavior.Strict);
+
+            // Act
+            var exception = Record.Exception(
+                () => WebSocketProxy.Create(ws.Object, null!));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -34,11 +48,11 @@ namespace WebSocketMockServer.Tests
         public void WsProxyCouldBeCreated()
         {
             //Arrange
-            var ws = new Mock<WebSocket>();
+            var ws = new Mock<WebSocket>(MockBehavior.Strict);
 
             // Act
             var exception = Record.Exception(
-                () => WebSocketProxy.Create(ws.Object, Mock.Of<ILoggerFactory>()));
+                () => WebSocketProxy.Create(ws.Object, new NullLoggerFactory()));
 
             // Assert
             exception.Should().BeNull();
@@ -52,7 +66,7 @@ namespace WebSocketMockServer.Tests
             var wStatus = WebSocketState.Aborted;
             var ws = new Mock<WebSocket>();
             ws.Setup(x => x.State).Returns(wStatus);
-            var proxy = WebSocketProxy.Create(ws.Object, Mock.Of<ILoggerFactory>());
+            var proxy = WebSocketProxy.Create(ws.Object, new NullLoggerFactory());
 
             // Act
             var status = proxy.State;
@@ -70,7 +84,7 @@ namespace WebSocketMockServer.Tests
             var wresult = new ValueWebSocketReceiveResult(1, WebSocketMessageType.Binary, true);
             var vtResult = new ValueTask<ValueWebSocketReceiveResult>(Task.FromResult(wresult));
             ws.Setup(x => x.ReceiveAsync(It.IsAny<Memory<byte>>(), It.IsAny<CancellationToken>())).Returns(vtResult);
-            var proxy = WebSocketProxy.Create(ws.Object, Mock.Of<ILoggerFactory>());
+            var proxy = WebSocketProxy.Create(ws.Object, new NullLoggerFactory());
 
             // Act
             var result = await proxy.ReceiveAsync(null, CancellationToken.None).ConfigureAwait(false);
@@ -120,7 +134,7 @@ namespace WebSocketMockServer.Tests
             var ws = new Mock<WebSocket>(MockBehavior.Strict);
             ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>())).Returns(new ValueTask(Task.CompletedTask));
             ws.Setup(x => x.State).Returns(testState);
-            var proxy = WebSocketProxy.Create(ws.Object, Mock.Of<ILoggerFactory>());
+            var proxy = WebSocketProxy.Create(ws.Object, new NullLoggerFactory());
 
             // Act
             var t = proxy.SendMessageAsync("text", CancellationToken.None);
