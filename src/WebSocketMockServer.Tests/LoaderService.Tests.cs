@@ -74,7 +74,9 @@ namespace WebSocketMockServer.Tests
             //Arrange
             using var cts = new CancellationTokenSource();
 
-            var loader = new Mock<ILoader>();
+            var loader = new Mock<ILoader>(MockBehavior.Strict);
+            loader.Setup(x => x.LoadAsync(cts.Token)).Returns(Task.CompletedTask);
+
             var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), loader.Object);
 
             // Act

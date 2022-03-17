@@ -31,7 +31,7 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => new FileUtility(Mock.Of<IWebHostEnvironment>(), null!));
+                () => new FileUtility(Mock.Of<IWebHostEnvironment>(MockBehavior.Strict), null!));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -43,7 +43,7 @@ namespace WebSocketMockServer.Tests
         {
             // Act
             var exception = Record.Exception(
-                () => new FileUtility(Mock.Of<IWebHostEnvironment>(), Mock.Of<ILogger<FileUtility>>()));
+                () => new FileUtility(Mock.Of<IWebHostEnvironment>(MockBehavior.Strict), Mock.Of<ILogger<FileUtility>>()));
 
             // Assert
             exception.Should().BeNull();
