@@ -84,7 +84,7 @@ namespace WebSocketMockServer.Tests
             IEnumerable<Reaction> resps = new Reaction[]
             {
                 new Response("A",Mock.Of<ILogger<Reaction>>()),
-                new Notification("B",1000,Mock.Of<IWorkSheduler>(),Mock.Of<ILogger<Reaction>>())
+                new Notification("B",1000,Mock.Of<IWorkSheduler>(MockBehavior.Strict),Mock.Of<ILogger<Reaction>>())
             };
 
             // Act

@@ -23,7 +23,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>()));
+                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -40,7 +40,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>()));
+                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -56,7 +56,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>()));
+                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -72,7 +72,7 @@ namespace WebSocketMockServer.Tests
 
             // Act
             var exception = Record.Exception(
-                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>()));
+                () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>()));
 
             // Assert
             exception.Should().BeNull();
@@ -86,7 +86,7 @@ namespace WebSocketMockServer.Tests
             //Arrange
             var msg = "Test";
             var delay = 1;
-            var reaction = new Notification(msg, delay, Mock.Of<IWorkSheduler>(), Mock.Of<ILogger<Reaction>>());
+            var reaction = new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>());
             var proxy = (IWebSocketProxy)null!;
 
             // Act
