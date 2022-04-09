@@ -79,7 +79,7 @@ namespace WebSocketMockServer.Tests
                 () => new ReactionFactory(responseFactory, notificationFactory));
 
             // Assert
-            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+            exception.Should().BeNull();
             respCounter.Should().Be(0);
             notifyCounter.Should().Be(0);
         }
