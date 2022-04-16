@@ -143,57 +143,5 @@ namespace WebSocketMockServer.Tests
             t.IsCompleted.Should().BeTrue();
             ws.Verify(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()), Times.Never);
         }
-
-
-        [Fact(DisplayName = "SendMessageAsync should be blocked by guard.")]
-        [Trait("Category", "Unit")]
-        public void SendMessageAsyncBlocksProperly()
-        {
-            var tcsFirst = new TaskCompletionSource<bool>();
-            var isFirst = true;
-            //Arrange
-            var ws = new Mock<WebSocket>(MockBehavior.Strict);
-            ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>())).Returns(() =>
-            {
-                if (isFirst)
-                {
-                    return new ValueTask(tcsFirst.Task);
-                }
-                else
-                {
-                    return new ValueTask(Task.CompletedTask);
-                }
-            });
-            ws.Setup(x => x.State).Returns(WebSocketState.Open);
-
-            var loggerFactory = new NullLoggerFactory();
-
-            var proxy = WebSocketProxy.Create(ws.Object, loggerFactory);
-
-            // Act
-            var t = proxy.SendMessageAsync("text", CancellationToken.None);
-
-            var run1 = Task.Run(async () => await proxy.SendMessageAsync("text1", CancellationToken.None));
-
-            Thread.Sleep(500); //Attemp to check that task 1 is running
-            isFirst = false;
-
-            var run2 = Task.Run(async () => await proxy.SendMessageAsync("text2", CancellationToken.None));
-            Thread.Sleep(500); //Attemp to check that task 2 is running
-
-            // Assert
-            run2.IsCompleted.Should().BeFalse();
-
-            tcsFirst.SetResult(true);
-            Thread.Sleep(500); //Attemp to check that task 2 is finished
-
-            run2.IsCompleted.Should().BeTrue();
-        }
-
-        //TODO
-
-        //ADD SendMessage with close
-
-        //ADD ReceiveAsync with close
     }
 }
