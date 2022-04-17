@@ -13,6 +13,19 @@ namespace WebSocketMockServer.Tests
 {
     public class WebSocketProxyTests
     {
+        private static TheoryData<WebSocketState> WebSocketsStatusGenerator()
+        {
+            var td = new TheoryData<WebSocketState>();
+            foreach (var status in Enum.GetValues(typeof(WebSocketState)).Cast<WebSocketState>())
+            {
+                if (status != WebSocketState.Open)
+                {
+                    td.Add(status);
+                }
+            }
+            return td;
+        }
+
         [Fact(DisplayName = "Unable to create web socket proxy with empty socket.")]
         [Trait("Category", "Unit")]
         public void CantCreateWsProxyWithEmptySocket()
@@ -80,18 +93,25 @@ namespace WebSocketMockServer.Tests
         public async Task ReceiveAsyncShouldWorkProperlyAsync()
         {
             //Arrange
-            var ws = new Mock<WebSocket>();
+            using var cts = new CancellationTokenSource();
+
             var wresult = new ValueWebSocketReceiveResult(1, WebSocketMessageType.Binary, true);
             var vtResult = new ValueTask<ValueWebSocketReceiveResult>(Task.FromResult(wresult));
-            ws.Setup(x => x.ReceiveAsync(It.IsAny<Memory<byte>>(), It.IsAny<CancellationToken>())).Returns(vtResult);
+            var callCount = 0;
+
+            var ws = new Mock<WebSocket>();
+            ws.Setup(x => x.ReceiveAsync(It.IsAny<Memory<byte>>(), It.IsAny<CancellationToken>()))
+              .Returns(vtResult)
+              .Callback(() => callCount++);
+
             var proxy = WebSocketProxy.Create(ws.Object, new NullLoggerFactory());
 
             // Act
-            var result = await proxy.ReceiveAsync(null, CancellationToken.None).ConfigureAwait(false);
+            var result = await proxy.ReceiveAsync(null, cts.Token).ConfigureAwait(false);
 
             // Assert
             wresult.Should().Be(result);
-            ws.Verify(x => x.ReceiveAsync(It.IsAny<Memory<byte>>(), It.IsAny<CancellationToken>()), Times.Once);
+            callCount.Should().Be(1);
         }
 
         [Fact(DisplayName = "WebSocket proxy runs SendMessageAsync properly.")]
@@ -99,30 +119,23 @@ namespace WebSocketMockServer.Tests
         public void SendMessageAsyncProperly()
         {
             //Arrange
+            using var cts = new CancellationTokenSource();
+            var callCount = 0;
+
             var ws = new Mock<WebSocket>(MockBehavior.Strict);
-            ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>())).Returns(new ValueTask(Task.CompletedTask));
+            ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()))
+              .Returns(new ValueTask(Task.CompletedTask))
+              .Callback(() => callCount++);
             ws.Setup(x => x.State).Returns(WebSocketState.Open);
+
             var proxy = WebSocketProxy.Create(ws.Object, new NullLoggerFactory());
 
             // Act
-            var t = proxy.SendMessageAsync("text", CancellationToken.None);
+            var t = proxy.SendMessageAsync("text", cts.Token);
 
             // Assert
             t.IsCompleted.Should().BeTrue();
-            ws.Verify(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()), Times.Once);
-        }
-
-        private static TheoryData<WebSocketState> WebSocketsStatusGenerator()
-        {
-            var td = new TheoryData<WebSocketState>();
-            foreach (var status in Enum.GetValues(typeof(WebSocketState)).Cast<WebSocketState>())
-            {
-                if (status != WebSocketState.Open)
-                {
-                    td.Add(status);
-                }
-            }
-            return td;
+            callCount.Should().Be(1);
         }
 
         [Theory(DisplayName = "WebSocket proxy runs SendMessageAsync properly for not open status.")]
@@ -131,17 +144,23 @@ namespace WebSocketMockServer.Tests
         public void SendMessageAsyncSkipsProperly(WebSocketState testState)
         {
             //Arrange
+            using var cts = new CancellationTokenSource();
+            var callCount = 0;
+
             var ws = new Mock<WebSocket>(MockBehavior.Strict);
-            ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>())).Returns(new ValueTask(Task.CompletedTask));
+            ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask(Task.CompletedTask))
+               .Callback(() => callCount++);
             ws.Setup(x => x.State).Returns(testState);
+
             var proxy = WebSocketProxy.Create(ws.Object, new NullLoggerFactory());
 
             // Act
-            var t = proxy.SendMessageAsync("text", CancellationToken.None);
+            var t = proxy.SendMessageAsync("text", cts.Token);
 
             // Assert
             t.IsCompleted.Should().BeTrue();
-            ws.Verify(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()), Times.Never);
+            callCount.Should().Be(0);
         }
     }
 }
