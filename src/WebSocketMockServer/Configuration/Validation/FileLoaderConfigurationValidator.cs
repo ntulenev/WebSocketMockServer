@@ -12,7 +12,7 @@ namespace WebSocketMockServer.Configuration.Validation
         /// <summary>
         /// Validates <see cref="FileLoaderConfiguration"/>.
         /// </summary>
-        public ValidateOptionsResult Validate(string name, FileLoaderConfiguration options)
+        public ValidateOptionsResult Validate(string? name, FileLoaderConfiguration options)
         {
             Debug.Assert(name is not null);
             Debug.Assert(options is not null);
