@@ -9,153 +9,152 @@ using WebSocketMockServer.Scheduling;
 
 using Xunit;
 
-namespace WebSocketMockServer.Tests
+namespace WebSocketMockServer.Tests;
+
+public class ReactionFactoryTests
 {
-    public class ReactionFactoryTests
+    [Fact(DisplayName = "ReactionFactory can't be created without response delegate.")]
+    [Trait("Category", "Unit")]
+    public void CantBeCreatedWithoutResponseDelegate()
     {
-        [Fact(DisplayName = "ReactionFactory can't be created without response delegate.")]
-        [Trait("Category", "Unit")]
-        public void CantBeCreatedWithoutResponseDelegate()
+        // Arrange
+        var counter = 0;
+        Notification notificationFactory(string _, int __)
         {
-            // Arrange
-            var counter = 0;
-            Notification notificationFactory(string _, int __)
-            {
-                counter++;
-                return null!;
-            }
-
-            // Act
-            var exception = Record.Exception(
-                () => new ReactionFactory(null!, notificationFactory));
-
-            // Assert
-            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
-            counter.Should().Be(0);
+            counter++;
+            return null!;
         }
 
-        [Fact(DisplayName = "ReactionFactory can't be created without notification delegate.")]
-        [Trait("Category", "Unit")]
-        public void CantBeCreatedWithoutNotificationDelegate()
+        // Act
+        var exception = Record.Exception(
+            () => new ReactionFactory(null!, notificationFactory));
+
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+        counter.Should().Be(0);
+    }
+
+    [Fact(DisplayName = "ReactionFactory can't be created without notification delegate.")]
+    [Trait("Category", "Unit")]
+    public void CantBeCreatedWithoutNotificationDelegate()
+    {
+        // Arrange
+        var counter = 0;
+        Response responseFactory(string _)
         {
-            // Arrange
-            var counter = 0;
-            Response responseFactory(string _)
-            {
-                counter++;
-                return null!;
-            }
-
-            // Act
-            var exception = Record.Exception(
-                () => new ReactionFactory(responseFactory, null!));
-
-            // Assert
-            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
-            counter.Should().Be(0);
+            counter++;
+            return null!;
         }
 
-        [Fact(DisplayName = "ReactionFactory could be created.")]
-        [Trait("Category", "Unit")]
-        public void CouldCreateFactory()
+        // Act
+        var exception = Record.Exception(
+            () => new ReactionFactory(responseFactory, null!));
+
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+        counter.Should().Be(0);
+    }
+
+    [Fact(DisplayName = "ReactionFactory could be created.")]
+    [Trait("Category", "Unit")]
+    public void CouldCreateFactory()
+    {
+        // Arrange
+        var respCounter = 0;
+        Response responseFactory(string _)
         {
-            // Arrange
-            var respCounter = 0;
-            Response responseFactory(string _)
-            {
-                respCounter++;
-                return null!;
-            }
-
-            var notifyCounter = 0;
-            Notification notificationFactory(string _, int __)
-            {
-                notifyCounter++;
-                return null!;
-            }
-
-            // Act
-            var exception = Record.Exception(
-                () => new ReactionFactory(responseFactory, notificationFactory));
-
-            // Assert
-            exception.Should().BeNull();
-            respCounter.Should().Be(0);
-            notifyCounter.Should().Be(0);
+            respCounter++;
+            return null!;
         }
 
-        [Fact(DisplayName = "ReactionFactory could create Response.")]
-        [Trait("Category", "Unit")]
-        public void CouldCreateResponse()
+        var notifyCounter = 0;
+        Notification notificationFactory(string _, int __)
         {
-            // Arrange
-            var data = "test";
-            var respCounter = 0;
-            var response = new Response(data, new NullLogger<Reaction>());
-            string checkData = null!;
-            Response responseFactory(string _)
-            {
-                respCounter++;
-                checkData = _;
-                return response;
-            }
-
-            var notifyCounter = 0;
-            Notification notificationFactory(string _, int __)
-            {
-                notifyCounter++;
-                return null!;
-            }
-
-            var factory = new ReactionFactory(responseFactory, notificationFactory);
-
-            // Act
-            var result = factory.Create(data);
-
-            // Assert
-            respCounter.Should().Be(1);
-            checkData.Should().Be(data);
-            result.Should().Be(response);
-            notifyCounter.Should().Be(0);
+            notifyCounter++;
+            return null!;
         }
 
-        [Fact(DisplayName = "ReactionFactory could create Notification.")]
-        [Trait("Category", "Unit")]
-        public void CouldCreateNotification()
+        // Act
+        var exception = Record.Exception(
+            () => new ReactionFactory(responseFactory, notificationFactory));
+
+        // Assert
+        exception.Should().BeNull();
+        respCounter.Should().Be(0);
+        notifyCounter.Should().Be(0);
+    }
+
+    [Fact(DisplayName = "ReactionFactory could create Response.")]
+    [Trait("Category", "Unit")]
+    public void CouldCreateResponse()
+    {
+        // Arrange
+        var data = "test";
+        var respCounter = 0;
+        var response = new Response(data, new NullLogger<Reaction>());
+        string checkData = null!;
+        Response responseFactory(string _)
         {
-            // Arrange
-            var data = "test";
-            var delay = 1000;
-            var respCounter = 0;
-            var notification = new Notification(data, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), new NullLogger<Reaction>());
-            string checkData = null!;
-            var checkDelay = -1;
-            Response responseFactory(string _)
-            {
-                respCounter++;
-                return null!;
-            }
-
-            var notifyCounter = 0;
-            Notification notificationFactory(string _, int __)
-            {
-                notifyCounter++;
-                checkData = _;
-                checkDelay = __;
-                return notification;
-            }
-
-            var factory = new ReactionFactory(responseFactory, notificationFactory);
-
-            // Act
-            var result = factory.Create(data, delay);
-
-            // Assert
-            respCounter.Should().Be(0);
-            checkData.Should().Be(data);
-            checkDelay.Should().Be(delay);
-            result.Should().Be(notification);
-            notifyCounter.Should().Be(1);
+            respCounter++;
+            checkData = _;
+            return response;
         }
+
+        var notifyCounter = 0;
+        Notification notificationFactory(string _, int __)
+        {
+            notifyCounter++;
+            return null!;
+        }
+
+        var factory = new ReactionFactory(responseFactory, notificationFactory);
+
+        // Act
+        var result = factory.Create(data);
+
+        // Assert
+        respCounter.Should().Be(1);
+        checkData.Should().Be(data);
+        result.Should().Be(response);
+        notifyCounter.Should().Be(0);
+    }
+
+    [Fact(DisplayName = "ReactionFactory could create Notification.")]
+    [Trait("Category", "Unit")]
+    public void CouldCreateNotification()
+    {
+        // Arrange
+        var data = "test";
+        var delay = 1000;
+        var respCounter = 0;
+        var notification = new Notification(data, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), new NullLogger<Reaction>());
+        string checkData = null!;
+        var checkDelay = -1;
+        Response responseFactory(string _)
+        {
+            respCounter++;
+            return null!;
+        }
+
+        var notifyCounter = 0;
+        Notification notificationFactory(string _, int __)
+        {
+            notifyCounter++;
+            checkData = _;
+            checkDelay = __;
+            return notification;
+        }
+
+        var factory = new ReactionFactory(responseFactory, notificationFactory);
+
+        // Act
+        var result = factory.Create(data, delay);
+
+        // Assert
+        respCounter.Should().Be(0);
+        checkData.Should().Be(data);
+        checkDelay.Should().Be(delay);
+        result.Should().Be(notification);
+        notifyCounter.Should().Be(1);
     }
 }

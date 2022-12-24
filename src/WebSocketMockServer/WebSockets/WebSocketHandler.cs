@@ -3,90 +3,89 @@ using System.Text;
 using WebSocketMockServer.Helpers;
 using WebSocketMockServer.Storage;
 
-namespace WebSocketMockServer.WebSockets
+namespace WebSocketMockServer.WebSockets;
+
+/// <summary>
+/// WebSocket processing infrastructure
+/// </summary>
+public class WebSocketHandler : IWebSocketHandler
 {
+
     /// <summary>
-    /// WebSocket processing infrastructure
+    /// Creates <see cref="WebSocketHandler"/>.
     /// </summary>
-    public class WebSocketHandler : IWebSocketHandler
+    public WebSocketHandler(ILogger<WebSocketHandler>? logger,
+                               IMockTemplateStorage storage)
     {
+        _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+        _logger = logger;
+    }
 
-        /// <summary>
-        /// Creates <see cref="WebSocketHandler"/>.
-        /// </summary>
-        public WebSocketHandler(ILogger<WebSocketHandler>? logger,
-                                   IMockTemplateStorage storage)
+    /// <inheritdoc/>
+    public async Task HandleAsync(IWebSocketProxy wsProxy, CancellationToken ct)
+    {
+        ArgumentNullException.ThrowIfNull(wsProxy);
+
+        var adapter = new WebSocketsPipelinesAdapter(wsProxy, ct);
+
+        //Method for processing data
+        async Task ReadDataAsync()
         {
-            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
-            _logger = logger;
-        }
-
-        /// <inheritdoc/>
-        public async Task HandleAsync(IWebSocketProxy wsProxy, CancellationToken ct)
-        {
-            ArgumentNullException.ThrowIfNull(wsProxy);
-
-            var adapter = new WebSocketsPipelinesAdapter(wsProxy, ct);
-
-            //Method for processing data
-            async Task ReadDataAsync()
+            try
             {
-                try
+                await foreach (var bytes in adapter.ReadDataAsync().ConfigureAwait(false))
                 {
-                    await foreach (var bytes in adapter.ReadDataAsync().ConfigureAwait(false))
+                    var request = ConvertBytesAsJsonString(bytes);
+
+                    _logger?.LogInformation("Get from client - {request}", request);
+
+                    if (_storage.TryGetTemplate(request, out var mockTemplate))
                     {
-                        var request = ConvertBytesAsJsonString(bytes);
-
-                        _logger?.LogInformation("Get from client - {request}", request);
-
-                        if (_storage.TryGetTemplate(request, out var mockTemplate))
-                        {
-                            await ProcessRequestAsync(mockTemplate, wsProxy, ct).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            _logger?.LogWarning("No predefiened response - closing socket");
-                            await wsProxy.CloseAsync(ct).ConfigureAwait(false);
-                        }
+                        await ProcessRequestAsync(mockTemplate, wsProxy, ct).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        _logger?.LogWarning("No predefiened response - closing socket");
+                        await wsProxy.CloseAsync(ct).ConfigureAwait(false);
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    // Skip
-                }
             }
-
-            await Task.WhenAll(adapter.StartAsync(), ReadDataAsync()).ConfigureAwait(false);
-        }
-
-        private static async Task ProcessRequestAsync(MockTemplate mockTemplate, IWebSocketProxy webSocket, CancellationToken ct)
-        {
-            foreach (var reaction in mockTemplate.Reactions)
+            catch (OperationCanceledException)
             {
-                await reaction.SendMessageAsync(webSocket, ct).ConfigureAwait(false);
+                // Skip
             }
         }
 
-        private static string ConvertBytesAsJsonString(byte[] bytes)
-        {
-            var request = Encoding.UTF8.GetString(bytes);
-
-            if (!string.IsNullOrWhiteSpace(request))
-            {
-                try
-                {
-                    request = request.ReconvertWithJson();
-                }
-                catch
-                {
-                    // Unable to parse - just get original text  
-                }
-            }
-
-            return request;
-        }
-
-        private readonly IMockTemplateStorage _storage;
-        private readonly ILogger<WebSocketHandler>? _logger;
+        await Task.WhenAll(adapter.StartAsync(), ReadDataAsync()).ConfigureAwait(false);
     }
+
+    private static async Task ProcessRequestAsync(MockTemplate mockTemplate, IWebSocketProxy webSocket, CancellationToken ct)
+    {
+        foreach (var reaction in mockTemplate.Reactions)
+        {
+            await reaction.SendMessageAsync(webSocket, ct).ConfigureAwait(false);
+        }
+    }
+
+    private static string ConvertBytesAsJsonString(byte[] bytes)
+    {
+        var request = Encoding.UTF8.GetString(bytes);
+
+        if (!string.IsNullOrWhiteSpace(request))
+        {
+            try
+            {
+                request = request.ReconvertWithJson();
+            }
+            catch
+            {
+                // Unable to parse - just get original text  
+            }
+        }
+
+        return request;
+    }
+
+    private readonly IMockTemplateStorage _storage;
+    private readonly ILogger<WebSocketHandler>? _logger;
 }

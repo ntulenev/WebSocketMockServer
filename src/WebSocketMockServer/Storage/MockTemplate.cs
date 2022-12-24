@@ -1,48 +1,47 @@
 using WebSocketMockServer.Reactions;
 
-namespace WebSocketMockServer.Storage
+namespace WebSocketMockServer.Storage;
+
+/// <summary>
+/// Mock template model.
+/// </summary>
+public class MockTemplate
 {
     /// <summary>
-    /// Mock template model.
+    /// Request text.
     /// </summary>
-    public class MockTemplate
+    public string Request { get; }
+
+    /// <summary>
+    /// Reactions for request.
+    /// </summary>
+    public IEnumerable<Reaction> Reactions { get; }
+
+    /// <summary>
+    /// Creates <see cref="MockTemplate"/>.
+    /// </summary>
+    /// <param name="request">Request text</param>
+    /// <param name="reactions">Reactions on request</param>
+    /// <exception cref="ArgumentNullException">Throws if request data or reactions is null.</exception>
+    /// <exception cref="ArgumentException">Throws if request data or reactions is empty.</exception>
+    public MockTemplate(string request, IEnumerable<Reaction> reactions)
     {
-        /// <summary>
-        /// Request text.
-        /// </summary>
-        public string Request { get; }
+        ArgumentNullException.ThrowIfNull(request);
 
-        /// <summary>
-        /// Reactions for request.
-        /// </summary>
-        public IEnumerable<Reaction> Reactions { get; }
-
-        /// <summary>
-        /// Creates <see cref="MockTemplate"/>.
-        /// </summary>
-        /// <param name="request">Request text</param>
-        /// <param name="reactions">Reactions on request</param>
-        /// <exception cref="ArgumentNullException">Throws if request data or reactions is null.</exception>
-        /// <exception cref="ArgumentException">Throws if request data or reactions is empty.</exception>
-        public MockTemplate(string request, IEnumerable<Reaction> reactions)
+        if (string.IsNullOrWhiteSpace(request))
         {
-            ArgumentNullException.ThrowIfNull(request);
+            throw new ArgumentException("Request not set", nameof(request));
+        }
 
-            if (string.IsNullOrWhiteSpace(request))
-            {
-                throw new ArgumentException("Request not set", nameof(request));
-            }
+        Request = request;
 
-            Request = request;
+        ArgumentNullException.ThrowIfNull(reactions);
 
-            ArgumentNullException.ThrowIfNull(reactions);
+        Reactions = reactions.ToList(); // Materialize
 
-            Reactions = reactions.ToList(); // Materialize
-
-            if (!Reactions.Any())
-            {
-                throw new ArgumentException("Reactions not set", nameof(reactions));
-            }
+        if (!Reactions.Any())
+        {
+            throw new ArgumentException("Reactions not set", nameof(reactions));
         }
     }
 }

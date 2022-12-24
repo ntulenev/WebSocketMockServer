@@ -1,15 +1,14 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 
-namespace WebSocketMockServer.Storage
+namespace WebSocketMockServer.Storage;
+
+/// <summary>
+/// Interface that provide logic to find teplates by key
+/// </summary>
+public interface IMockTemplateStorage
 {
     /// <summary>
-    /// Interface that provide logic to find teplates by key
+    /// Trying to get template by key if any.
     /// </summary>
-    public interface IMockTemplateStorage
-    {
-        /// <summary>
-        /// Trying to get template by key if any.
-        /// </summary>
-        public bool TryGetTemplate(string key, [NotNullWhen(true)] out MockTemplate? result);
-    }
+    public bool TryGetTemplate(string key, [NotNullWhen(true)] out MockTemplate? result);
 }

@@ -30,7 +30,6 @@ builder.Services.AddSingleton<ILoader, FileLoader>();
 builder.Services.AddSingleton<IFileUtility, FileUtility>();
 builder.Services.AddHostedService<LoaderService>();
 
-
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
 using var app = builder.Build();

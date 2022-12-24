@@ -7,66 +7,65 @@ using Newtonsoft.Json;
 
 using WebSocketMockServer.Helpers;
 
-namespace WebSocketMockServer.Tests
+namespace WebSocketMockServer.Tests;
+
+public class StringHelpersTests
 {
-    public class StringHelpersTests
+    [Fact(DisplayName = "ReconvertWithJson can not process null string.")]
+    [Trait("Category", "Unit")]
+    public void CantConvertNullString()
     {
-        [Fact(DisplayName = "ReconvertWithJson can not process null string.")]
-        [Trait("Category", "Unit")]
-        public void CantConvertNullString()
-        {
-            //Arrange
-            string request = null!;
+        //Arrange
+        string request = null!;
 
-            // Act
-            var exception = Record.Exception(
-                () => request.ReconvertWithJson());
+        // Act
+        var exception = Record.Exception(
+            () => request.ReconvertWithJson());
 
-            // Assert
-            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
-        }
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+    }
 
-        [Theory(DisplayName = "ReconvertWithJson can not process empty string.")]
-        [InlineData("")]
-        [InlineData("  ")]
-        [Trait("Category", "Unit")]
-        public void CantConvertEmptyString(string request)
-        {
-            // Act
-            var exception = Record.Exception(
-                () => request.ReconvertWithJson());
+    [Theory(DisplayName = "ReconvertWithJson can not process empty string.")]
+    [InlineData("")]
+    [InlineData("  ")]
+    [Trait("Category", "Unit")]
+    public void CantConvertEmptyString(string request)
+    {
+        // Act
+        var exception = Record.Exception(
+            () => request.ReconvertWithJson());
 
-            // Assert
-            exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
-        }
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
+    }
 
-        [Fact(DisplayName = "ReconvertWithJson can not convert not json string.")]
-        [Trait("Category", "Unit")]
-        public void CantConvertNotJsonString()
-        {
-            //Arrange
-            var request = "AAA";
+    [Fact(DisplayName = "ReconvertWithJson can not convert not json string.")]
+    [Trait("Category", "Unit")]
+    public void CantConvertNotJsonString()
+    {
+        //Arrange
+        var request = "AAA";
 
-            var exception = Record.Exception(
-               () => request.ReconvertWithJson());
+        var exception = Record.Exception(
+           () => request.ReconvertWithJson());
 
-            // Assert
-            exception.Should().NotBeNull().And.BeOfType<InvalidOperationException>();
-        }
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<InvalidOperationException>();
+    }
 
-        [Fact(DisplayName = "ReconvertWithJson skip convertation for not json string.")]
-        [Trait("Category", "Unit")]
-        public void ReconvertWithJsonProcessJsonString()
-        {
-            //Arrange
-            var request = "{   \"A\": \"1\" }";
+    [Fact(DisplayName = "ReconvertWithJson skip convertation for not json string.")]
+    [Trait("Category", "Unit")]
+    public void ReconvertWithJsonProcessJsonString()
+    {
+        //Arrange
+        var request = "{   \"A\": \"1\" }";
 
-            // Act
-            var request2 = request.ReconvertWithJson();
+        // Act
+        var request2 = request.ReconvertWithJson();
 
-            // Assert
-            var formatted = JObject.Parse(request).ToString(Formatting.Indented);
-            request2.Should().BeEquivalentTo(formatted);
-        }
+        // Assert
+        var formatted = JObject.Parse(request).ToString(Formatting.Indented);
+        request2.Should().BeEquivalentTo(formatted);
     }
 }

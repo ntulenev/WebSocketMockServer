@@ -9,44 +9,43 @@ using WebSocketMockServer.IO;
 
 using Xunit;
 
-namespace WebSocketMockServer.Tests
+namespace WebSocketMockServer.Tests;
+
+public class FileUtilityTests
 {
-    public class FileUtilityTests
+    [Fact(DisplayName = "FileUtility can not process null Environment.")]
+    [Trait("Category", "Unit")]
+    public void CantCreateFileUtilityWithNullEnvironment()
     {
-        [Fact(DisplayName = "FileUtility can not process null Environment.")]
-        [Trait("Category", "Unit")]
-        public void CantCreateFileUtilityWithNullEnvironment()
-        {
-            // Act
-            var exception = Record.Exception(
-                () => new FileUtility(null!, Mock.Of<ILogger<FileUtility>>()));
+        // Act
+        var exception = Record.Exception(
+            () => new FileUtility(null!, Mock.Of<ILogger<FileUtility>>()));
 
-            // Assert
-            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
-        }
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+    }
 
-        [Fact(DisplayName = "FileUtility can not process null Logger.")]
-        [Trait("Category", "Unit")]
-        public void CantCreateFileUtilityWithNullLogger()
-        {
-            // Act
-            var exception = Record.Exception(
-                () => new FileUtility(Mock.Of<IWebHostEnvironment>(MockBehavior.Strict), null!));
+    [Fact(DisplayName = "FileUtility can not process null Logger.")]
+    [Trait("Category", "Unit")]
+    public void CantCreateFileUtilityWithNullLogger()
+    {
+        // Act
+        var exception = Record.Exception(
+            () => new FileUtility(Mock.Of<IWebHostEnvironment>(MockBehavior.Strict), null!));
 
-            // Assert
-            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
-        }
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+    }
 
-        [Fact(DisplayName = "FileUtility can be certed.")]
-        [Trait("Category", "Unit")]
-        public void CanCreateFileUtility()
-        {
-            // Act
-            var exception = Record.Exception(
-                () => new FileUtility(Mock.Of<IWebHostEnvironment>(MockBehavior.Strict), Mock.Of<ILogger<FileUtility>>()));
+    [Fact(DisplayName = "FileUtility can be certed.")]
+    [Trait("Category", "Unit")]
+    public void CanCreateFileUtility()
+    {
+        // Act
+        var exception = Record.Exception(
+            () => new FileUtility(Mock.Of<IWebHostEnvironment>(MockBehavior.Strict), Mock.Of<ILogger<FileUtility>>()));
 
-            // Assert
-            exception.Should().BeNull();
-        }
+        // Assert
+        exception.Should().BeNull();
     }
 }
