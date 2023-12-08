@@ -8,19 +8,16 @@ namespace WebSocketMockServer.WebSockets;
 /// <summary>
 /// WebSocket processing infrastructure
 /// </summary>
-public class WebSocketHandler : IWebSocketHandler
+/// <param name="logger">The logger to use for logging information.</param>
+/// <param name="storage">Mock templates storage.</param>
+/// <exception cref="ArgumentNullException">Thrown when storage is null.</exception>
+/// <remarks>
+/// Creates <see cref="WebSocketHandler"/>.
+/// </remarks>
+public class WebSocketHandler(
+                           ILogger<WebSocketHandler>? logger,
+                           IMockTemplateStorage storage) : IWebSocketHandler
 {
-
-    /// <summary>
-    /// Creates <see cref="WebSocketHandler"/>.
-    /// </summary>
-    public WebSocketHandler(ILogger<WebSocketHandler>? logger,
-                               IMockTemplateStorage storage)
-    {
-        _storage = storage ?? throw new ArgumentNullException(nameof(storage));
-        _logger = logger;
-    }
-
     /// <inheritdoc/>
     public async Task HandleAsync(IWebSocketProxy wsProxy, CancellationToken ct)
     {
@@ -86,6 +83,7 @@ public class WebSocketHandler : IWebSocketHandler
         return request;
     }
 
-    private readonly IMockTemplateStorage _storage;
-    private readonly ILogger<WebSocketHandler>? _logger;
+    private readonly IMockTemplateStorage _storage = storage
+                                          ?? throw new ArgumentNullException(nameof(storage));
+    private readonly ILogger<WebSocketHandler>? _logger = logger;
 }
