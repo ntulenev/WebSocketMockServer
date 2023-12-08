@@ -17,7 +17,7 @@ public class WebSocketsPipelinesAdapter
     /// </summary>
     /// <param name="webSocket">Web socket that will provide data for pipeline</param>
     /// <param name="ct">Token for cancellation</param>
-    public WebSocketsPipelinesAdapter(IWebSocketProxy webSocket, CancellationToken ct = default)
+    public WebSocketsPipelinesAdapter(IWebSocketProxy webSocket, CancellationToken ct)
         : this(webSocket, DEFAULT_PIPE_BUFFER_SIZE, ct)
     {
     }
@@ -28,7 +28,7 @@ public class WebSocketsPipelinesAdapter
     /// <param name="webSocket">Web socket that will provide data for pipeline</param>
     /// <param name="minimumBufferSize">Initial memory buffer size for reading from socket</param>
     /// <param name="ct">Token for cancellation</param>
-    public WebSocketsPipelinesAdapter(IWebSocketProxy webSocket, int minimumBufferSize, CancellationToken ct = default)
+    public WebSocketsPipelinesAdapter(IWebSocketProxy webSocket, int minimumBufferSize, CancellationToken ct)
     {
         _webSocket = webSocket ?? throw new ArgumentNullException(nameof(webSocket));
 
