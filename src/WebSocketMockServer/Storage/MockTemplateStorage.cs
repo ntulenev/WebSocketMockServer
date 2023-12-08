@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 
 using WebSocketMockServer.Loader;
@@ -27,7 +28,7 @@ public class MockTemplateStorage : IMockTemplateStorage
         catch (InvalidOperationException ex)
         {
             _logger.LogWarning(ex, "No templates load in storage");
-            _templates = new Dictionary<string, MockTemplate>();
+            _templates = new Dictionary<string, MockTemplate>().ToFrozenDictionary();
         }
     }
 
@@ -35,8 +36,6 @@ public class MockTemplateStorage : IMockTemplateStorage
     public bool TryGetTemplate(string key, [NotNullWhen(true)] out MockTemplate? result)
     {
         result = null;
-
-
 
         if (_templates.TryGetValue(key, out var value))
         {
