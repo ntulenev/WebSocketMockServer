@@ -37,11 +37,11 @@ public class MockTemplate
 
         ArgumentNullException.ThrowIfNull(reactions);
 
-        Reactions = reactions.ToList(); // Materialize
-
-        if (!Reactions.Any())
+        if (!reactions.Any())
         {
             throw new ArgumentException("Reactions not set", nameof(reactions));
         }
+
+        Reactions = reactions.ToList(); // Materialize
     }
 }
