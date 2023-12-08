@@ -5,19 +5,15 @@ namespace WebSocketMockServer.Reactions;
 /// <summary>
 /// Response model.
 /// </summary>
-public class Response : Reaction
+/// <remarks>
+/// Creates response.
+/// </remarks>
+/// <param name="result">Reaction data.</param>
+/// <param name="logger">Logger.</param>
+/// <exception cref="ArgumentNullException">Throws if result or logger is null.</exception>
+/// <exception cref="ArgumentException">Throws if result is not set.</exception>
+public class Response(string result, ILogger<Reaction> logger) : Reaction(result, logger)
 {
-    /// <summary>
-    /// Creates response.
-    /// </summary>
-    /// <param name="result">Reaction data.</param>
-    /// <param name="logger">Logger.</param>
-    /// <exception cref="ArgumentNullException">Throws if result or logger is null.</exception>
-    /// <exception cref="ArgumentException">Throws if result is not set.</exception>
-    public Response(string result, ILogger<Reaction> logger) : base(result, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async override Task SendMessageAsync(IWebSocketProxy webSocket, CancellationToken ct)
     {
