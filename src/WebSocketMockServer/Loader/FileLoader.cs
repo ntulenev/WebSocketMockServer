@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+
 using Microsoft.Extensions.Options;
 
 using WebSocketMockServer.Configuration;
@@ -83,7 +85,7 @@ public class FileLoader : ILoader
             templates.Add(requestText, new MockTemplate(requestText, reactions));
         }
 
-        _data = templates;
+        _data = templates.ToFrozenDictionary();
     }
 
     private readonly FileLoaderConfiguration _config;
