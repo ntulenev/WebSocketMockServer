@@ -52,7 +52,10 @@ public sealed class WebSocketProxy : IWebSocketProxy
                 {
                     if (State == WebSocketState.Open)
                     {
-                        await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "No predefiened response", ct).ConfigureAwait(false);
+                        await _webSocket.CloseAsync(
+                            WebSocketCloseStatus.NormalClosure,
+                            "No predefiened response",
+                            ct).ConfigureAwait(false);
                     }
                 }
                 catch (OperationCanceledException)
@@ -68,11 +71,17 @@ public sealed class WebSocketProxy : IWebSocketProxy
     }
 
     /// <inheritdoc/>
-    public async ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(Memory<byte> buffer, CancellationToken ct)
+    public async ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(
+                                    Memory<byte> buffer,
+                                    CancellationToken ct)
     {
         ThrowIfDisposed();
+        ct.ThrowIfCancellationRequested();
 
-        using var source = CancellationTokenSource.CreateLinkedTokenSource(ct, _socketClosingToken.Token);
+        using var source = CancellationTokenSource.CreateLinkedTokenSource(
+                                                    ct,
+                                                    _socketClosingToken.Token);
+
         using var _ = await _socketReadGuard.LockAsync(ct).ConfigureAwait(false);
         return await _webSocket.ReceiveAsync(buffer, source.Token).ConfigureAwait(false);
     }
@@ -84,7 +93,9 @@ public sealed class WebSocketProxy : IWebSocketProxy
 
         ArgumentNullException.ThrowIfNull(msg);
 
-        using var source = CancellationTokenSource.CreateLinkedTokenSource(ct, _socketClosingToken.Token);
+        using var source = CancellationTokenSource.CreateLinkedTokenSource(
+                                                    ct,
+                                                    _socketClosingToken.Token);
 
         var data = Encoding.UTF8.GetBytes(msg);
 
@@ -96,7 +107,12 @@ public sealed class WebSocketProxy : IWebSocketProxy
 
                 try
                 {
-                    await _webSocket.SendAsync(data.AsMemory(), WebSocketMessageType.Text, true, source.Token).ConfigureAwait(false);
+                    await _webSocket.SendAsync(
+                                        data.AsMemory(),
+                                        WebSocketMessageType.Text,
+                                        true,
+                                        source.Token)
+                                        .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
                 {

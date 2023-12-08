@@ -37,19 +37,27 @@ public class FileLoader : ILoader
 
         _config = configData;
 
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileUtility = fileUtility ?? throw new ArgumentNullException(nameof(fileUtility));
-        _reactionFactory = reactionFactory ?? throw new ArgumentNullException(nameof(reactionFactory));
+        _logger = logger
+                    ?? throw new ArgumentNullException(nameof(logger));
+        _fileUtility = fileUtility
+                    ?? throw new ArgumentNullException(nameof(fileUtility));
+        _reactionFactory = reactionFactory
+                    ?? throw new ArgumentNullException(nameof(reactionFactory));
     }
 
     private async Task<string> GetFileContentAsync(string fileName, CancellationToken ct)
     {
-        var requestText = await _fileUtility.ReadFileAsync(_config.Folder!, fileName, ct).ConfigureAwait(false);
+        var requestText = await _fileUtility.ReadFileAsync(
+                                        _config.Folder!,
+                                        fileName,
+                                        ct).
+                                        ConfigureAwait(false);
         return requestText.ReconvertWithJson();
     }
 
     ///<inheritdoc/>
-    public IReadOnlyDictionary<string, MockTemplate> GetLoadedData() => _data ?? throw new InvalidOperationException("Data not loaded");
+    public IReadOnlyDictionary<string, MockTemplate> GetLoadedData() => _data ??
+                                        throw new InvalidOperationException("Data not loaded");
 
     ///<inheritdoc/>
     public async Task LoadAsync(CancellationToken ct)
@@ -62,7 +70,8 @@ public class FileLoader : ILoader
         {
             _logger.LogInformation("Reading request from {filename}", template.File);
 
-            var requestText = await GetFileContentAsync(template.File!, ct).ConfigureAwait(false);
+            var requestText = await GetFileContentAsync(template.File!, ct)
+                                    .ConfigureAwait(false);
 
             var reactions = new List<Reaction>();
 
@@ -70,14 +79,24 @@ public class FileLoader : ILoader
             {
                 if (res.Delay.HasValue)
                 {
-                    _logger.LogInformation("Reading notification from {response} with delay {delay} ms", res.File, res.Delay);
-                    var reactionText = await GetFileContentAsync(res.File!, ct).ConfigureAwait(false);
+                    _logger.LogInformation(
+                                    "Reading notification from {response} with delay {delay} ms",
+                                    res.File,
+                                    res.Delay);
+
+                    var reactionText = await GetFileContentAsync(res.File!, ct)
+                                            .ConfigureAwait(false);
                     reactions.Add(_reactionFactory.Create(reactionText, res.Delay.Value));
                 }
                 else
                 {
-                    _logger.LogInformation("Reading response from {response} with delay {delay} ms", res.File, res.Delay);
-                    var reactionText = await GetFileContentAsync(res.File!, ct).ConfigureAwait(false);
+                    _logger.LogInformation(
+                                    "Reading response from {response} with delay {delay} ms",
+                                    res.File,
+                                    res.Delay);
+
+                    var reactionText = await GetFileContentAsync(res.File!, ct)
+                                    .ConfigureAwait(false);
                     reactions.Add(_reactionFactory.Create(reactionText));
                 }
             }

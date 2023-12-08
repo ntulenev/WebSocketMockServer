@@ -34,9 +34,13 @@ public class CustomWebSocketMiddleware
             {
                 try
                 {
-                    using var webSocket = await httpContext.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false);
+                    using var webSocket = await httpContext.WebSockets
+                                                .AcceptWebSocketAsync()
+                                                .ConfigureAwait(false);
                     using var wsProxy = WebSocketProxy.Create(webSocket, _loggerFactory);
-                    await _handler.HandleAsync(wsProxy, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
+                    await _handler.HandleAsync(wsProxy,
+                                               _hostApplicationLifetime.ApplicationStopping)
+                                              .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
                 {

@@ -32,5 +32,6 @@ public class WorkSheduler(ILogger<WorkSheduler> logger) : IWorkSheduler
         }
     }
 
-    private readonly ILogger<WorkSheduler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly ILogger<WorkSheduler> _logger = logger
+                            ?? throw new ArgumentNullException(nameof(logger));
 }

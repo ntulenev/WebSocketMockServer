@@ -56,7 +56,10 @@ public class WebSocketHandler(
         await Task.WhenAll(adapter.StartAsync(), ReadDataAsync()).ConfigureAwait(false);
     }
 
-    private static async Task ProcessRequestAsync(MockTemplate mockTemplate, IWebSocketProxy webSocket, CancellationToken ct)
+    private static async Task ProcessRequestAsync(
+        MockTemplate mockTemplate,
+        IWebSocketProxy webSocket,
+        CancellationToken ct)
     {
         foreach (var reaction in mockTemplate.Reactions)
         {

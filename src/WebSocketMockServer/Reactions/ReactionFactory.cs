@@ -15,8 +15,10 @@ public class ReactionFactory : IReactionFactory
     public ReactionFactory(Func<string, Response> responseFactory,
                            Func<string, int, Notification> notificationFactory)
     {
-        _responseFactory = responseFactory ?? throw new ArgumentNullException(nameof(responseFactory));
-        _notificationFactory = notificationFactory ?? throw new ArgumentNullException(nameof(notificationFactory));
+        _responseFactory = responseFactory
+                        ?? throw new ArgumentNullException(nameof(responseFactory));
+        _notificationFactory = notificationFactory
+                        ?? throw new ArgumentNullException(nameof(notificationFactory));
     }
 
     /// <summary>

@@ -21,7 +21,9 @@ public interface IWebSocketProxy : IDisposable
     /// <summary>
     /// Receives data from web socket.
     /// </summary>
-    public ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(Memory<byte> buffer, CancellationToken ct);
+    public ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(
+                    Memory<byte> buffer,
+                    CancellationToken ct);
 
     /// <summary>
     /// Web socket state.
