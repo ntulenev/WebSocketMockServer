@@ -80,7 +80,7 @@ public class LoaderServiceTests
         var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), loader.Object);
 
         // Act
-        await service.StartAsync(cts.Token).ConfigureAwait(false);
+        await service.StartAsync(cts.Token);
 
         // Assert
         loader.Verify(x => x.LoadAsync(cts.Token), Times.Once);
@@ -102,7 +102,7 @@ public class LoaderServiceTests
         var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), lifetime.Object, loader.Object);
 
         // Act
-        await service.StartAsync(cts.Token).ConfigureAwait(false);
+        await service.StartAsync(cts.Token);
 
         // Assert
         lifetime.Verify(x => x.StopApplication(), Times.Once);
@@ -125,7 +125,7 @@ public class LoaderServiceTests
         var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), lifetime.Object, loader.Object);
 
         // Act
-        var exception = await Record.ExceptionAsync(async () => await service.StartAsync(cts.Token).ConfigureAwait(false));
+        var exception = await Record.ExceptionAsync(async () => await service.StartAsync(cts.Token));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<TaskCanceledException>();

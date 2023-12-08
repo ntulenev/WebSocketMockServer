@@ -21,7 +21,7 @@ public class ServiceTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task HealthCheckAsync()
     {
         var httpClient = _factory.CreateClient();
-        var response = await httpClient.GetStringAsync("/hc").ConfigureAwait(false);
+        var response = await httpClient.GetStringAsync("/hc");
         response.Should().Be("Healthy");
     }
 
@@ -35,7 +35,7 @@ public class ServiceTests : IClassFixture<WebApplicationFactory<Program>>
 
         var client = _factory.Server.CreateWebSocketClient();
 
-        var webSocket = await client.ConnectAsync(uri, cts.Token).ConfigureAwait(false);
+        var webSocket = await client.ConnectAsync(uri, cts.Token);
 
         var request1 = @"{" +
                             "\"Request\": \"A\"" +
@@ -47,13 +47,13 @@ public class ServiceTests : IClassFixture<WebApplicationFactory<Program>>
 
         var encoded = Encoding.UTF8.GetBytes(request1);
 
-        await webSocket.SendAsync(encoded, WebSocketMessageType.Text, true, cts.Token).ConfigureAwait(false);
+        await webSocket.SendAsync(encoded, WebSocketMessageType.Text, true, cts.Token);
 
-        var realResponse1 = await GetWSDataAsync(webSocket, cts.Token).ConfigureAwait(false);
+        var realResponse1 = await GetWSDataAsync(webSocket, cts.Token);
 
         realResponse1.Should().Be(response1);
 
-        var realResponse2 = await GetWSDataAsync(webSocket, cts.Token).ConfigureAwait(false);
+        var realResponse2 = await GetWSDataAsync(webSocket, cts.Token);
 
         realResponse2.Should().Be(response2);
 

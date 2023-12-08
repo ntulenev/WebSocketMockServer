@@ -100,7 +100,7 @@ public class FileLoaderConfigurationValidatorTests
     [InlineData("   ")]
     [InlineData(null)]
     [Trait("Category", "Unit")]
-    public void CantValidateFileLoaderConfigurationWithEmptyMapping(string name)
+    public void CantValidateFileLoaderConfigurationWithEmptyMapping(string? name)
     {
         //Arrange
         var config = new FileLoaderConfiguration
@@ -122,7 +122,7 @@ public class FileLoaderConfigurationValidatorTests
     [InlineData("   ")]
     [InlineData(null)]
     [Trait("Category", "Unit")]
-    public void CantValidateFileLoaderConfigurationWithEmptyFile(string name)
+    public void CantValidateFileLoaderConfigurationWithEmptyFile(string? name)
     {
         //Arrange
         var config = new FileLoaderConfiguration
@@ -211,7 +211,7 @@ public class FileLoaderConfigurationValidatorTests
     [InlineData("   ")]
     [InlineData(null)]
     [Trait("Category", "Unit")]
-    public void CantValidateFileLoaderConfigurationWithEmptyResponseFile(string name)
+    public void CantValidateFileLoaderConfigurationWithEmptyResponseFile(string? name)
     {
         //Arrange
         var config = new FileLoaderConfiguration

@@ -71,7 +71,7 @@ public class WorkShedulerTests
 
     [Fact(DisplayName = "WorkSheduler can shedule work.")]
     [Trait("Category", "Unit")]
-    public void WorkShedulerCanSheduleWork()
+    public async Task WorkShedulerCanSheduleWorkAsync()
     {
         // Arrange
         using var cts = new CancellationTokenSource();
@@ -88,12 +88,12 @@ public class WorkShedulerTests
         }, cts.Token);
 
         // Assert
-        tcs.Task.Wait();
+        await tcs.Task;
     }
 
     [Fact(DisplayName = "WorkSheduler can shedule work with error.")]
     [Trait("Category", "Unit")]
-    public void WorkShedulerCanSheduleWorkWithError()
+    public async Task WorkShedulerCanSheduleWorkWithErrorAsync()
     {
         // Arrange
         using var cts = new CancellationTokenSource();
@@ -110,7 +110,7 @@ public class WorkShedulerTests
         }, cts.Token);
 
         // Assert
-        tcs.Task.Wait();
+        await tcs.Task;
     }
 
 }

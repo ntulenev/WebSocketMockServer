@@ -13,7 +13,7 @@ namespace WebSocketMockServer.Tests;
 
 public class WebSocketProxyTests
 {
-    private static TheoryData<WebSocketState> WebSocketsStatusGenerator()
+    public static TheoryData<WebSocketState> WebSocketsStatusGenerator()
     {
         var td = new TheoryData<WebSocketState>();
         foreach (var status in Enum.GetValues(typeof(WebSocketState)).Cast<WebSocketState>())
@@ -107,7 +107,7 @@ public class WebSocketProxyTests
         var proxy = WebSocketProxy.Create(ws.Object, new NullLoggerFactory());
 
         // Act
-        var result = await proxy.ReceiveAsync(null, cts.Token).ConfigureAwait(false);
+        var result = await proxy.ReceiveAsync(null, cts.Token);
 
         // Assert
         wresult.Should().Be(result);
