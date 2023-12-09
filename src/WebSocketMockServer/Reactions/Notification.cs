@@ -41,6 +41,7 @@ public class Notification : Reaction
     public override Task SendMessageAsync(IWebSocketProxy webSocket, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(webSocket);
+        ct.ThrowIfCancellationRequested();
 
         _sheduler.Schedule(async () =>
         {
