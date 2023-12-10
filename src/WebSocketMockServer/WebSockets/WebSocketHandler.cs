@@ -15,7 +15,7 @@ namespace WebSocketMockServer.WebSockets;
 /// Creates <see cref="WebSocketHandler"/>.
 /// </remarks>
 public class WebSocketHandler(
-                           ILogger<WebSocketHandler>? logger,
+                           ILogger<WebSocketHandler> logger,
                            IMockTemplateStorage storage) : IWebSocketHandler
 {
     /// <inheritdoc/>
@@ -34,7 +34,7 @@ public class WebSocketHandler(
                 {
                     var request = ConvertBytesAsJsonString(bytes);
 
-                    _logger?.LogInformation("Get from client - {request}", request);
+                    _logger.LogInformation("Get from client - {request}", request);
 
                     if (_storage.TryGetTemplate(request, out var mockTemplate))
                     {
@@ -42,7 +42,7 @@ public class WebSocketHandler(
                     }
                     else
                     {
-                        _logger?.LogWarning("No predefiened response - closing socket");
+                        _logger.LogWarning("No predefiened response - closing socket");
                         await wsProxy.CloseAsync(ct).ConfigureAwait(false);
                     }
                 }
@@ -88,5 +88,6 @@ public class WebSocketHandler(
 
     private readonly IMockTemplateStorage _storage = storage
                                           ?? throw new ArgumentNullException(nameof(storage));
-    private readonly ILogger<WebSocketHandler>? _logger = logger;
+    private readonly ILogger<WebSocketHandler> _logger = logger
+                                          ?? throw new ArgumentNullException(nameof(logger));
 }
