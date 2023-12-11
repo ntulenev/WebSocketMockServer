@@ -22,6 +22,7 @@ public class WebSocketHandler(
     public async Task HandleAsync(IWebSocketProxy wsProxy, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(wsProxy);
+        ct.ThrowIfCancellationRequested();
 
         var adapter = new WebSocketsPipelinesAdapter(wsProxy, ct);
 
