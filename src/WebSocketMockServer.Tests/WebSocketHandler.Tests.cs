@@ -52,5 +52,42 @@ namespace WebSocketMockServer.Tests
             // Assert
             exception.Should().BeNull();
         }
+
+        [Fact(DisplayName = "WebSocketHandler throws ArgumentNullException for null wsProxy.")]
+        public async Task ThrowsArgumentNullExceptionForNullWsProxyAsync()
+        {
+            // Arrange
+            var handler = new WebSocketHandler(
+                Mock.Of<ILogger<WebSocketHandler>>(),
+                Mock.Of<IMockTemplateStorage>(MockBehavior.Strict));
+            using var cts = new CancellationTokenSource();
+
+            // Act
+            var exception = await Record.ExceptionAsync(
+                    async () => await handler.HandleAsync(null!, cts.Token));
+
+            // Assert
+            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+        }
+
+        [Fact(DisplayName = "WebSocketHandler throws OperationCanceled exception on cancelled token.")]
+        public async Task ThrowsExceptionForCanceledTokenAsync()
+        {
+            // Arrange
+            var handler = new WebSocketHandler(
+                Mock.Of<ILogger<WebSocketHandler>>(),
+                Mock.Of<IMockTemplateStorage>(MockBehavior.Strict));
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            // Act
+            var exception = await Record.ExceptionAsync(
+                    async () => await handler.HandleAsync(
+                                        Mock.Of<IWebSocketProxy>(MockBehavior.Strict),
+                                        cts.Token));
+
+            // Assert
+            exception.Should().NotBeNull().And.BeOfType<OperationCanceledException>();
+        }
     }
 }
