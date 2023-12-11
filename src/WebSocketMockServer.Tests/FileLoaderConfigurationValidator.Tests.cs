@@ -84,7 +84,7 @@ public class FileLoaderConfigurationValidatorTests
         var config = new FileLoaderConfiguration
         {
             Folder = "A",
-            Mapping = null
+            Mapping = null!
         };
         var validator = new FileLoaderConfigurationValidator();
 
@@ -105,7 +105,7 @@ public class FileLoaderConfigurationValidatorTests
         //Arrange
         var config = new FileLoaderConfiguration
         {
-            Folder = name,
+            Folder = name!,
             Mapping = Enumerable.Empty<RequestMappingTemplate>()
         };
         var validator = new FileLoaderConfigurationValidator();
@@ -132,7 +132,7 @@ public class FileLoaderConfigurationValidatorTests
               {
                   new RequestMappingTemplate
                   {
-                        File = name,
+                        File = name!,
                         Reactions = new[]
                         {
                             new ReactionMappingTemplate
@@ -166,7 +166,7 @@ public class FileLoaderConfigurationValidatorTests
                   new RequestMappingTemplate
                   {
                         File = "B",
-                        Reactions = null
+                        Reactions = null!
                   }
               }
         };
@@ -221,7 +221,7 @@ public class FileLoaderConfigurationValidatorTests
               {
                   new RequestMappingTemplate
                   {
-                        File = name,
+                        File = name!,
                         Reactions = new[]
                         {
                             new ReactionMappingTemplate

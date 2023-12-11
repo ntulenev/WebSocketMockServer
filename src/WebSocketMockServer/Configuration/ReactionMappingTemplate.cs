@@ -8,10 +8,10 @@ public class ReactionMappingTemplate
     /// <summary>
     /// Response or notification file name.
     /// </summary>
-    public string? File { get; set; }
+    public required string File { get; init; }
 
     /// <summary>
     /// Delay before we need to send the Notification. 
     /// </summary>
-    public int? Delay { get; set; }
+    public int? Delay { get; init; }
 }

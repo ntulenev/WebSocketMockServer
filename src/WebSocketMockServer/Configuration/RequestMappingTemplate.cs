@@ -8,10 +8,10 @@ public class RequestMappingTemplate
     /// <summary>
     /// Request file name.
     /// </summary>
-    public string? File { get; set; }
+    public required string File { get; init; }
 
     /// <summary>
     /// Reactions for request
     /// </summary>
-    public IEnumerable<ReactionMappingTemplate>? Reactions { get; set; }
+    public required IEnumerable<ReactionMappingTemplate> Reactions { get; init; }
 }

@@ -32,7 +32,7 @@ public class FileLoaderConfigurationValidator : IValidateOptions<FileLoaderConfi
             return ValidateOptionsResult.Fail("There is no any template in configuration.");
         }
 
-        foreach (var template in options.Mapping!)
+        foreach (var template in options.Mapping)
         {
             if (string.IsNullOrWhiteSpace(template.File))
             {

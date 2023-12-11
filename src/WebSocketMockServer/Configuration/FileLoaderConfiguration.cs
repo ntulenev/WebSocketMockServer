@@ -8,11 +8,11 @@ public class FileLoaderConfiguration
     /// <summary>
     /// Request/Reactions data.
     /// </summary>
-    public IEnumerable<RequestMappingTemplate>? Mapping { get; set; }
+    public required IEnumerable<RequestMappingTemplate> Mapping { get; init; }
 
     /// <summary>
     /// Root folder for tempalte files.
     /// </summary>
-    public string? Folder { get; set; }
+    public required string Folder { get; init; }
 }
 
