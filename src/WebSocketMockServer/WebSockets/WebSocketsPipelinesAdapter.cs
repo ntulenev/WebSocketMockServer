@@ -48,8 +48,10 @@ public class WebSocketsPipelinesAdapter
     /// <returns></returns>
     public async IAsyncEnumerable<byte[]> ReadDataAsync()
     {
-        while (!_ct.IsCancellationRequested)
+        while (true)
         {
+            _ct.ThrowIfCancellationRequested();
+
             var result = await _pipe.Reader.ReadAsync(_ct).ConfigureAwait(false);
 
             var buffer = result.Buffer;
