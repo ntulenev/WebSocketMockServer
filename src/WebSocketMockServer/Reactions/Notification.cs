@@ -11,7 +11,7 @@ public class Notification : Reaction
     /// <summary>
     /// Response delay in ms.
     /// </summary>
-    public int Delay { get; }
+    public TimeSpan Delay { get; }
 
     /// <summary>
     /// Creates delayed response.
@@ -22,12 +22,12 @@ public class Notification : Reaction
     /// <exception cref="ArgumentNullException">Throws if result or logger is null.</exception>
     /// <exception cref="ArgumentException">Throws if result is not set or delay is incorrect.</exception>
     public Notification(string result,
-                        int delay,
+                        TimeSpan delay,
                         IWorkSheduler sheduler,
                         ILogger<Reaction> logger) :
         base(result, logger)
     {
-        if (delay <= 0)
+        if (delay == TimeSpan.Zero)
         {
             throw new ArgumentException("Delay should be positive", nameof(delay));
         }

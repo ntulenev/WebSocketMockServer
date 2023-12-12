@@ -84,7 +84,11 @@ public class MockTemplateTests
         IEnumerable<Reaction> resps = new Reaction[]
         {
             new Response("A",Mock.Of<ILogger<Reaction>>()),
-            new Notification("B",1000,Mock.Of<IWorkSheduler>(MockBehavior.Strict),Mock.Of<ILogger<Reaction>>())
+            new Notification(
+                             "B",
+                             TimeSpan.FromMilliseconds(1000),
+                             Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                             Mock.Of<ILogger<Reaction>>())
         };
 
         // Act

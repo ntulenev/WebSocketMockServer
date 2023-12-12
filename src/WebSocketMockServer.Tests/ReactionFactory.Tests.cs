@@ -19,7 +19,7 @@ public class ReactionFactoryTests
     {
         // Arrange
         var counter = 0;
-        Notification notificationFactory(string _, int __)
+        Notification notificationFactory(string _, TimeSpan __)
         {
             counter++;
             return null!;
@@ -68,7 +68,7 @@ public class ReactionFactoryTests
         }
 
         var notifyCounter = 0;
-        Notification notificationFactory(string _, int __)
+        Notification notificationFactory(string _, TimeSpan __)
         {
             notifyCounter++;
             return null!;
@@ -101,7 +101,7 @@ public class ReactionFactoryTests
         }
 
         var notifyCounter = 0;
-        Notification notificationFactory(string _, int __)
+        Notification notificationFactory(string _, TimeSpan __)
         {
             notifyCounter++;
             return null!;
@@ -127,9 +127,13 @@ public class ReactionFactoryTests
         var data = "test";
         var delay = 1000;
         var respCounter = 0;
-        var notification = new Notification(data, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), new NullLogger<Reaction>());
+        var notification = new Notification(
+                                data,
+                                TimeSpan.FromMilliseconds(delay),
+                                Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                new NullLogger<Reaction>());
         string checkData = null!;
-        var checkDelay = -1;
+        var checkDelay = TimeSpan.FromMilliseconds(5000);
         Response responseFactory(string _)
         {
             respCounter++;
@@ -137,7 +141,7 @@ public class ReactionFactoryTests
         }
 
         var notifyCounter = 0;
-        Notification notificationFactory(string _, int __)
+        Notification notificationFactory(string _, TimeSpan __)
         {
             notifyCounter++;
             checkData = _;
@@ -148,12 +152,12 @@ public class ReactionFactoryTests
         var factory = new ReactionFactory(responseFactory, notificationFactory);
 
         // Act
-        var result = factory.Create(data, delay);
+        var result = factory.Create(data, TimeSpan.FromMilliseconds(delay));
 
         // Assert
         respCounter.Should().Be(0);
         checkData.Should().Be(data);
-        checkDelay.Should().Be(delay);
+        checkDelay.Should().Be(TimeSpan.FromMilliseconds(delay));
         result.Should().Be(notification);
         notifyCounter.Should().Be(1);
     }

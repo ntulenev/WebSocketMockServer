@@ -86,7 +86,8 @@ public class FileLoader : ILoader
 
                     var reactionText = await GetFileContentAsync(res.File!, ct)
                                             .ConfigureAwait(false);
-                    reactions.Add(_reactionFactory.Create(reactionText, res.Delay.Value));
+                    var timeDelay = TimeSpan.FromMilliseconds(res.Delay.Value);
+                    reactions.Add(_reactionFactory.Create(reactionText, timeDelay));
                 }
                 else
                 {

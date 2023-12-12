@@ -16,5 +16,5 @@ public interface IReactionFactory
     /// </summary>
     /// <param name="data">Notification message.</param>
     /// <param name="delay">Delay in ms.</param>
-    public Reaction Create(string data, int delay);
+    public Reaction Create(string data, TimeSpan delay);
 }

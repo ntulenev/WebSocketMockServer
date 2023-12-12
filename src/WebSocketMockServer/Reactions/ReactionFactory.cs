@@ -3,23 +3,16 @@ namespace WebSocketMockServer.Reactions;
 /// <summary>
 /// Factory for creating <see cref="Notification"/> and <see cref="Response"/>.
 /// </summary>
-public class ReactionFactory : IReactionFactory
+/// <remarks>
+/// Creates <see cref="ReactionFactory"/>.
+/// </remarks>
+/// <param name="responseFactory">Factory delegate for <see cref="Response"/>.</param>
+/// <param name="notificationFactory">Factory deletega for <see cref="Notification"/>.</param>
+/// <exception cref="ArgumentNullException">Throws is factory delegates are null.</exception>
+public class ReactionFactory(Func<string, Response> responseFactory,
+                       Func<string, TimeSpan, Notification> notificationFactory)
+            : IReactionFactory
 {
-
-    /// <summary>
-    /// Creates <see cref="ReactionFactory"/>.
-    /// </summary>
-    /// <param name="responseFactory">Factory delegate for <see cref="Response"/>.</param>
-    /// <param name="notificationFactory">Factory deletega for <see cref="Notification"/>.</param>
-    /// <exception cref="ArgumentNullException">Throws is factory delegates are null.</exception>
-    public ReactionFactory(Func<string, Response> responseFactory,
-                           Func<string, int, Notification> notificationFactory)
-    {
-        _responseFactory = responseFactory
-                        ?? throw new ArgumentNullException(nameof(responseFactory));
-        _notificationFactory = notificationFactory
-                        ?? throw new ArgumentNullException(nameof(notificationFactory));
-    }
 
     /// <summary>
     /// Creates <see cref="Response"/>.
@@ -32,8 +25,10 @@ public class ReactionFactory : IReactionFactory
     /// </summary>
     /// <param name="data">Notification message.</param>
     /// <param name="delay">Delay in ms.</param>
-    public Reaction Create(string data, int delay) => _notificationFactory(data, delay);
+    public Reaction Create(string data, TimeSpan delay) => _notificationFactory(data, delay);
 
-    private readonly Func<string, Response> _responseFactory;
-    private readonly Func<string, int, Notification> _notificationFactory;
+    private readonly Func<string, Response> _responseFactory = responseFactory
+                        ?? throw new ArgumentNullException(nameof(responseFactory));
+    private readonly Func<string, TimeSpan, Notification> _notificationFactory = notificationFactory
+                        ?? throw new ArgumentNullException(nameof(notificationFactory));
 }

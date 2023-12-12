@@ -23,7 +23,11 @@ public class NotificationTests
 
         // Act
         var exception = Record.Exception(
-            () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>()));
+            () => new Notification(
+                                  msg,
+                                  TimeSpan.FromMilliseconds(delay),
+                                  Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                  Mock.Of<ILogger<Reaction>>()));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -40,7 +44,11 @@ public class NotificationTests
 
         // Act
         var exception = Record.Exception(
-            () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>()));
+            () => new Notification(
+                                    msg,
+                                    TimeSpan.FromMilliseconds(delay),
+                                    Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                    Mock.Of<ILogger<Reaction>>()));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -56,7 +64,11 @@ public class NotificationTests
 
         // Act
         var exception = Record.Exception(
-            () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>()));
+            () => new Notification(
+                                msg,
+                                TimeSpan.FromMilliseconds(delay),
+                                Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                Mock.Of<ILogger<Reaction>>()));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -72,7 +84,11 @@ public class NotificationTests
 
         // Act
         var exception = Record.Exception(
-            () => new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>()));
+            () => new Notification(
+                                msg,
+                                TimeSpan.FromMilliseconds(delay),
+                                Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                Mock.Of<ILogger<Reaction>>()));
 
         // Assert
         exception.Should().BeNull();
@@ -87,7 +103,11 @@ public class NotificationTests
         using var cts = new CancellationTokenSource();
         var msg = "Test";
         var delay = 1;
-        var reaction = new Notification(msg, delay, Mock.Of<IWorkSheduler>(MockBehavior.Strict), Mock.Of<ILogger<Reaction>>());
+        var reaction = new Notification(
+                                    msg,
+                                    TimeSpan.FromMilliseconds(delay),
+                                    Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                    Mock.Of<ILogger<Reaction>>());
         var proxy = (IWebSocketProxy)null!;
 
         // Act
@@ -107,7 +127,11 @@ public class NotificationTests
         var msg = "Test";
         var delay = 1000;
         var scheduler = new Mock<IWorkSheduler>();
-        var reaction = new Notification(msg, delay, scheduler.Object, Mock.Of<ILogger<Reaction>>());
+        var reaction = new Notification(
+                                     msg,
+                                     TimeSpan.FromMilliseconds(delay),
+                                     scheduler.Object,
+                                     Mock.Of<ILogger<Reaction>>());
 
         // Act
         var t = reaction.SendMessageAsync(Mock.Of<IWebSocketProxy>(MockBehavior.Strict), cts.Token);
@@ -127,7 +151,11 @@ public class NotificationTests
         var msg = "Test";
         var delay = 1000;
         var scheduler = new Mock<IWorkSheduler>();
-        var reaction = new Notification(msg, delay, scheduler.Object, Mock.Of<ILogger<Reaction>>());
+        var reaction = new Notification(
+                                    msg,
+                                    TimeSpan.FromMilliseconds(delay),
+                                    scheduler.Object,
+                                    Mock.Of<ILogger<Reaction>>());
 
         // Act
         var exception = await Record.ExceptionAsync(
