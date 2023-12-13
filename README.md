@@ -21,7 +21,7 @@ Current version supports only JSON communication.
         },
         {
           "File": "Reaction2.json",
-          "Delay": "5000"
+          "Delay": "00:00:05"
         }
       ]
     }
