@@ -70,7 +70,7 @@ public class FileLoader : ILoader
         {
             _logger.LogInformation("Reading request from {filename}", template.File);
 
-            var requestText = await GetFileContentAsync(template.File!, ct)
+            var requestText = await GetFileContentAsync(template.File, ct)
                                     .ConfigureAwait(false);
 
             var reactions = new List<Reaction>();
@@ -80,23 +80,21 @@ public class FileLoader : ILoader
                 if (res.Delay.HasValue)
                 {
                     _logger.LogInformation(
-                                    "Reading notification from {response} with delay {delay} ms",
+                                    "Reading notification from {response} with delay {delay}",
                                     res.File,
                                     res.Delay);
 
-                    var reactionText = await GetFileContentAsync(res.File!, ct)
+                    var reactionText = await GetFileContentAsync(res.File, ct)
                                             .ConfigureAwait(false);
-                    var timeDelay = TimeSpan.FromMilliseconds(res.Delay.Value);
-                    reactions.Add(_reactionFactory.Create(reactionText, timeDelay));
+                    reactions.Add(_reactionFactory.Create(reactionText, res.Delay.Value));
                 }
                 else
                 {
                     _logger.LogInformation(
-                                    "Reading response from {response} with delay {delay} ms",
-                                    res.File,
-                                    res.Delay);
+                                    "Reading response from {response}",
+                                    res.File);
 
-                    var reactionText = await GetFileContentAsync(res.File!, ct)
+                    var reactionText = await GetFileContentAsync(res.File, ct)
                                     .ConfigureAwait(false);
                     reactions.Add(_reactionFactory.Create(reactionText));
                 }
