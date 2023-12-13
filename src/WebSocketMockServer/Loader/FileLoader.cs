@@ -66,7 +66,7 @@ public class FileLoader : ILoader
 
         var templates = new Dictionary<string, MockTemplate>();
 
-        foreach (var template in _config.Mapping!)
+        foreach (var template in _config.Mapping)
         {
             _logger.LogInformation("Reading request from {filename}", template.File);
 
@@ -75,7 +75,7 @@ public class FileLoader : ILoader
 
             var reactions = new List<Reaction>();
 
-            foreach (var res in template.Reactions!)
+            foreach (var res in template.Reactions)
             {
                 if (res.Delay.HasValue)
                 {
