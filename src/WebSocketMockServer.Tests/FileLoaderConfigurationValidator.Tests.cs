@@ -27,7 +27,7 @@ public class FileLoaderConfigurationValidatorTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
                         }
@@ -60,7 +60,7 @@ public class FileLoaderConfigurationValidatorTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
                         }
@@ -137,7 +137,7 @@ public class FileLoaderConfigurationValidatorTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
                         }
@@ -226,7 +226,7 @@ public class FileLoaderConfigurationValidatorTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = string.Empty
                             }
                         }

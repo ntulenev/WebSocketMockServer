@@ -36,7 +36,7 @@ public class FileLoaderTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
                         }
@@ -95,7 +95,7 @@ public class FileLoaderTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
                         }
@@ -129,7 +129,7 @@ public class FileLoaderTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
                         }
@@ -163,7 +163,7 @@ public class FileLoaderTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
                         }
@@ -199,7 +199,7 @@ public class FileLoaderTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
                         }
@@ -255,7 +255,7 @@ public class FileLoaderTests
                         {
                             new ReactionMappingTemplate
                             {
-                                 Delay = 1,
+                                 Delay = TimeSpan.FromSeconds(1),
                                  File = file2
                             }
                         }

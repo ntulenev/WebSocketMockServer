@@ -13,5 +13,5 @@ public class ReactionMappingTemplate
     /// <summary>
     /// Delay before we need to send the Notification. 
     /// </summary>
-    public int? Delay { get; init; }
+    public TimeSpan? Delay { get; init; }
 }
