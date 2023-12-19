@@ -12,7 +12,7 @@ namespace WebSocketMockServer.Tests;
 
 public class WorkShedulerTests
 {
-    [Fact(DisplayName = "Unable to create WorkSheduler with null logger.")]
+    [Fact(DisplayName = $"Unable to create {nameof(WorkSheduler)} with null logger.")]
     [Trait("Category", "Unit")]
     public void CantCreateWorkShedulerWithNullLogger()
     {
@@ -24,7 +24,7 @@ public class WorkShedulerTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
     }
 
-    [Fact(DisplayName = "WorkSheduler could be created.")]
+    [Fact(DisplayName = $"{nameof(WorkSheduler)} could be created.")]
     [Trait("Category", "Unit")]
     public void WorkShedulerCanBeCreated()
     {
@@ -36,7 +36,7 @@ public class WorkShedulerTests
         exception.Should().BeNull();
     }
 
-    [Fact(DisplayName = "WorkSheduler can't shedule null work.")]
+    [Fact(DisplayName = $"{nameof(WorkSheduler)} can't shedule null work.")]
     [Trait("Category", "Unit")]
     public void WorkShedulerCantSheduleNull()
     {
@@ -52,7 +52,7 @@ public class WorkShedulerTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
     }
 
-    [Fact(DisplayName = "WorkSheduler can't shedule if cancel.")]
+    [Fact(DisplayName = $"{nameof(WorkSheduler)} can't shedule if cancel.")]
     [Trait("Category", "Unit")]
     public void WorkShedulerCantSheduleIfCancel()
     {
@@ -69,7 +69,7 @@ public class WorkShedulerTests
         exception.Should().NotBeNull().And.BeOfType<OperationCanceledException>();
     }
 
-    [Fact(DisplayName = "WorkSheduler can shedule work.")]
+    [Fact(DisplayName = $"{nameof(WorkSheduler)} can shedule work.")]
     [Trait("Category", "Unit")]
     public async Task WorkShedulerCanSheduleWorkAsync()
     {
@@ -91,7 +91,7 @@ public class WorkShedulerTests
         await tcs.Task;
     }
 
-    [Fact(DisplayName = "WorkSheduler can shedule work with error.")]
+    [Fact(DisplayName = $"{nameof(WorkSheduler)} can shedule work with error.")]
     [Trait("Category", "Unit")]
     public async Task WorkShedulerCanSheduleWorkWithErrorAsync()
     {
