@@ -48,4 +48,53 @@ public class FileUtilityTests
         // Assert
         exception.Should().BeNull();
     }
+
+    [Fact(DisplayName = "FileUtility can not process null path.")]
+    [Trait("Category", "Unit")]
+    public async Task CantReadFileWithNullPathAsync()
+    {
+        // Arrange
+        using var cts = new CancellationTokenSource();
+        var fileUtility = new FileUtility(
+            Mock.Of<IWebHostEnvironment>(MockBehavior.Strict),
+            Mock.Of<ILogger<FileUtility>>());
+        // Act
+        var exception = await Record.ExceptionAsync(async
+                        () => await fileUtility.ReadFileAsync(null!, "name", cts.Token));
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+    }
+
+    [Fact(DisplayName = "FileUtility can not process null name.")]
+    [Trait("Category", "Unit")]
+    public async Task CantReadFileWithNullNameAsync()
+    {
+        // Arrange
+        using var cts = new CancellationTokenSource();
+        var fileUtility = new FileUtility(
+                       Mock.Of<IWebHostEnvironment>(MockBehavior.Strict),
+                                  Mock.Of<ILogger<FileUtility>>());
+        // Act
+        var exception = await Record.ExceptionAsync(async
+                                   () => await fileUtility.ReadFileAsync("path", null!, cts.Token));
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+    }
+
+    [Fact(DisplayName = "FileUtility can not process with Cancelled token.")]
+    [Trait("Category", "Unit")]
+    public async Task CantReadFileWithCancelledTokenAsync()
+    {
+        // Arrange
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+        var fileUtility = new FileUtility(
+                                  Mock.Of<IWebHostEnvironment>(MockBehavior.Strict),
+                                  Mock.Of<ILogger<FileUtility>>());
+        // Act
+        var exception = await Record.ExceptionAsync(async
+                                              () => await fileUtility.ReadFileAsync("path", "name", cts.Token));
+        // Assert
+        exception.Should().NotBeNull().And.BeOfType<OperationCanceledException>();
+    }
 }
