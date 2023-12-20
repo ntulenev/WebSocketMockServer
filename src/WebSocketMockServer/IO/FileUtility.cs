@@ -21,6 +21,8 @@ public class FileUtility(
         ArgumentNullException.ThrowIfNull(folder);
         ArgumentNullException.ThrowIfNull(name);
 
+        ct.ThrowIfCancellationRequested();
+
         var path = Path.Combine(_hostingEnvironment.ContentRootPath, folder, name);
 
         _logger.LogDebug("Loading file {File}", path);
