@@ -123,7 +123,11 @@ public class WebSocketProxyTests
         var callCount = 0;
 
         var ws = new Mock<WebSocket>(MockBehavior.Strict);
-        ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()))
+        ws.Setup(x => x.SendAsync(
+                            It.IsAny<ReadOnlyMemory<byte>>(),
+                            WebSocketMessageType.Text,
+                            true,
+                            It.IsAny<CancellationToken>()))
           .Returns(new ValueTask(Task.CompletedTask))
           .Callback(() => callCount++);
         ws.Setup(x => x.State).Returns(WebSocketState.Open);
@@ -148,7 +152,11 @@ public class WebSocketProxyTests
         var callCount = 0;
 
         var ws = new Mock<WebSocket>(MockBehavior.Strict);
-        ws.Setup(x => x.SendAsync(It.IsAny<ReadOnlyMemory<byte>>(), WebSocketMessageType.Text, true, It.IsAny<CancellationToken>()))
+        ws.Setup(x => x.SendAsync(
+                            It.IsAny<ReadOnlyMemory<byte>>(),
+                            WebSocketMessageType.Text,
+                            true,
+                            It.IsAny<CancellationToken>()))
             .Returns(new ValueTask(Task.CompletedTask))
            .Callback(() => callCount++);
         ws.Setup(x => x.State).Returns(testState);
