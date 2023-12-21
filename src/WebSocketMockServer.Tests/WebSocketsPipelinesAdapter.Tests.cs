@@ -41,7 +41,6 @@ public class WebSocketsPipelinesAdapterTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
     }
 
-    //WebSocketsPipelinesAdapter can be created with correct parameters.
     [Fact(DisplayName = "WebSocketsPipelinesAdapter can be created with correct parameters.")]
     [Trait("Category", "Unit")]
     public void WebSocketsPipelinesAdapterCanBeCreated()
