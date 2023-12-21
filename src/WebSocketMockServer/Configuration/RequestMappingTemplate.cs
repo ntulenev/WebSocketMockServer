@@ -1,7 +1,8 @@
 namespace WebSocketMockServer.Configuration;
 
 /// <summary>
-/// Sub-configuration class for <see cref="FileLoaderConfiguration"/> that represents Request mapping.
+/// Sub-configuration class for <see cref="FileLoaderConfiguration"/>
+/// that represents Request mapping.
 /// </summary>
 public class RequestMappingTemplate
 {

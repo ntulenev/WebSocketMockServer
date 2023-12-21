@@ -21,7 +21,7 @@ builder.Services.AddSingleton<IMockTemplateStorage, MockTemplateStorage>();
 builder.Services.AddSingleton<IReactionFactory>(sp =>
     new ReactionFactory(
     (data) => ActivatorUtilities.CreateInstance<Response>(sp, new[] { data }),
-    (data, delay) => ActivatorUtilities.CreateInstance<Notification>(sp, new object[] { data, delay })
+    (data, delay) => ActivatorUtilities.CreateInstance<Notification>(sp, [data, delay])
     ));
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
 builder.Services.Configure<FileLoaderConfiguration>(builder.Configuration.GetSection(nameof(FileLoaderConfiguration)));
@@ -30,7 +30,8 @@ builder.Services.AddSingleton<ILoader, FileLoader>();
 builder.Services.AddSingleton<IFileUtility, FileUtility>();
 builder.Services.AddHostedService<LoaderService>();
 
-builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
 using var app = builder.Build();
 

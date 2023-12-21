@@ -7,7 +7,8 @@ namespace WebSocketMockServer.Configuration.Validation;
 /// <summary>
 /// Validator for <see cref="FileLoaderConfiguration"/>.
 /// </summary>
-public class FileLoaderConfigurationValidator : IValidateOptions<FileLoaderConfiguration>
+public class FileLoaderConfigurationValidator :
+             IValidateOptions<FileLoaderConfiguration>
 {
     /// <summary>
     /// Validates <see cref="FileLoaderConfiguration"/>.
@@ -53,7 +54,8 @@ public class FileLoaderConfigurationValidator : IValidateOptions<FileLoaderConfi
             {
                 if (string.IsNullOrWhiteSpace(res.File))
                 {
-                    return ValidateOptionsResult.Fail($"Template {template.File} reactions file path not set.");
+                    return ValidateOptionsResult.Fail($"Template {template.File} " +
+                        $"reactions file path not set.");
                 }
             }
         }

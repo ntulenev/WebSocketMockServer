@@ -43,7 +43,8 @@ public class FileUtilityTests
     {
         // Act
         var exception = Record.Exception(
-            () => new FileUtility(Mock.Of<IWebHostEnvironment>(MockBehavior.Strict), Mock.Of<ILogger<FileUtility>>()));
+            () => new FileUtility(Mock.Of<IWebHostEnvironment>(MockBehavior.Strict),
+                                  Mock.Of<ILogger<FileUtility>>()));
 
         // Assert
         exception.Should().BeNull();
@@ -93,7 +94,7 @@ public class FileUtilityTests
                                   Mock.Of<ILogger<FileUtility>>());
         // Act
         var exception = await Record.ExceptionAsync(async
-                                              () => await fileUtility.ReadFileAsync("path", "name", cts.Token));
+                                      () => await fileUtility.ReadFileAsync("path", "name", cts.Token));
         // Assert
         exception.Should().NotBeNull().And.BeOfType<OperationCanceledException>();
     }

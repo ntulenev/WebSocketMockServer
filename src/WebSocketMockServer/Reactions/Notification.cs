@@ -19,8 +19,10 @@ public class Notification : Reaction
     /// <param name="result">Notification message.</param>
     /// <param name="delay">Delay in ms.</param>
     /// <param name="logger">Logger.</param>
-    /// <exception cref="ArgumentNullException">Throws if result or logger is null.</exception>
-    /// <exception cref="ArgumentException">Throws if result is not set or delay is incorrect.</exception>
+    /// <exception cref="ArgumentNullException">Throws if result or
+    /// logger is null.</exception>
+    /// <exception cref="ArgumentException">Throws if result is not set or
+    /// delay is incorrect.</exception>
     public Notification(string result,
                         TimeSpan delay,
                         IWorkSheduler sheduler,
@@ -38,7 +40,8 @@ public class Notification : Reaction
     }
 
     /// <inheritdoc/>
-    public override Task SendMessageAsync(IWebSocketProxy webSocket, CancellationToken ct)
+    public override Task SendMessageAsync(IWebSocketProxy webSocket,
+                                          CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(webSocket);
         ct.ThrowIfCancellationRequested();

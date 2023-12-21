@@ -21,7 +21,9 @@ public class LoaderServiceTests
     {
         // Act
         var exception = Record.Exception(
-            () => new LoaderService(Mock.Of<ILogger<LoaderService>>(), null!, Mock.Of<ILoader>(MockBehavior.Strict)));
+            () => new LoaderService(Mock.Of<ILogger<LoaderService>>(),
+                                    null!,
+                                    Mock.Of<ILoader>(MockBehavior.Strict)));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -33,7 +35,9 @@ public class LoaderServiceTests
     {
         // Act
         var exception = Record.Exception(
-            () => new LoaderService(null!, Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), Mock.Of<ILoader>(MockBehavior.Strict)));
+            () => new LoaderService(null!,
+                                    Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict),
+                                    Mock.Of<ILoader>(MockBehavior.Strict)));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -45,7 +49,9 @@ public class LoaderServiceTests
     {
         // Act
         var exception = Record.Exception(
-            () => new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), Mock.Of<ILoader>(MockBehavior.Strict)));
+            () => new LoaderService(Mock.Of<ILogger<LoaderService>>(),
+                                    Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict),
+                                    Mock.Of<ILoader>(MockBehavior.Strict)));
 
         // Assert
         exception.Should().BeNull();
@@ -58,7 +64,9 @@ public class LoaderServiceTests
         //Arrange
         using var cts = new CancellationTokenSource();
 
-        var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), Mock.Of<ILoader>(MockBehavior.Strict));
+        var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(),
+                                        Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict),
+                                        Mock.Of<ILoader>(MockBehavior.Strict));
 
         // Act
         var completeTask = service.StopAsync(cts.Token);
@@ -77,7 +85,9 @@ public class LoaderServiceTests
         var loader = new Mock<ILoader>(MockBehavior.Strict);
         loader.Setup(x => x.LoadAsync(cts.Token)).Returns(Task.CompletedTask);
 
-        var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict), loader.Object);
+        var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(),
+                                        Mock.Of<IHostApplicationLifetime>(MockBehavior.Strict),
+                                        loader.Object);
 
         // Act
         await service.StartAsync(cts.Token);
@@ -99,7 +109,9 @@ public class LoaderServiceTests
         var lifetime = new Mock<IHostApplicationLifetime>(MockBehavior.Strict);
         lifetime.Setup(x => x.StopApplication());
 
-        var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), lifetime.Object, loader.Object);
+        var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(),
+                                        lifetime.Object,
+                                        loader.Object);
 
         // Act
         await service.StartAsync(cts.Token);
@@ -122,10 +134,13 @@ public class LoaderServiceTests
         var lifetime = new Mock<IHostApplicationLifetime>(MockBehavior.Strict);
         lifetime.Setup(x => x.StopApplication());
 
-        var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(), lifetime.Object, loader.Object);
+        var service = new LoaderService(Mock.Of<ILogger<LoaderService>>(),
+                                        lifetime.Object,
+                                        loader.Object);
 
         // Act
-        var exception = await Record.ExceptionAsync(async () => await service.StartAsync(cts.Token));
+        var exception = await Record.ExceptionAsync(
+                                async () => await service.StartAsync(cts.Token));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<TaskCanceledException>();

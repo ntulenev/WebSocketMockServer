@@ -1,7 +1,8 @@
 namespace WebSocketMockServer.Configuration;
 
 /// <summary>
-/// Sub-configuration class for <see cref="RequestMappingTemplate"/> that represents Reactions mapping.
+/// Sub-configuration class for <see cref="RequestMappingTemplate"/>
+/// that represents Reactions mapping.
 /// </summary>
 public class ReactionMappingTemplate
 {
