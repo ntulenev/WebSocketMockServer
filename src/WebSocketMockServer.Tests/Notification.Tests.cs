@@ -134,11 +134,15 @@ public class NotificationTests
                                      Mock.Of<ILogger<Reaction>>());
 
         // Act
-        var t = reaction.SendMessageAsync(Mock.Of<IWebSocketProxy>(MockBehavior.Strict), cts.Token);
+        var t = reaction.SendMessageAsync(
+                                Mock.Of<IWebSocketProxy>(MockBehavior.Strict),
+                                cts.Token);
 
         // Assert
         t.IsCompleted.Should().BeTrue();
-        scheduler.Verify(x => x.Schedule(It.IsAny<Func<Task>>(), cts.Token), Times.Once);
+        scheduler.Verify(x => x.Schedule(
+                                It.IsAny<Func<Task>>(), cts.Token),
+                                Times.Once);
     }
 
     [Fact(DisplayName = "Notification cant be sended on cancelled token.")]
@@ -159,7 +163,9 @@ public class NotificationTests
 
         // Act
         var exception = await Record.ExceptionAsync(
-            () => reaction.SendMessageAsync(Mock.Of<IWebSocketProxy>(MockBehavior.Strict), cts.Token));
+            () => reaction.SendMessageAsync(
+                                    Mock.Of<IWebSocketProxy>(MockBehavior.Strict),
+                                    cts.Token));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<OperationCanceledException>();
