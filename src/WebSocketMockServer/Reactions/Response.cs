@@ -12,7 +12,7 @@ namespace WebSocketMockServer.Reactions;
 /// <param name="logger">Logger.</param>
 /// <exception cref="ArgumentNullException">Throws if result or logger is null.</exception>
 /// <exception cref="ArgumentException">Throws if result is not set.</exception>
-public class Response(string result, ILogger<Reaction> logger) : Reaction(result, logger)
+public sealed class Response(string result, ILogger<Reaction> logger) : Reaction(result, logger)
 {
     /// <inheritdoc/>
     public async override Task SendMessageAsync(IWebSocketProxy webSocket, CancellationToken ct)

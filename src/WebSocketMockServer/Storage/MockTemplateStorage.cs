@@ -8,7 +8,7 @@ namespace WebSocketMockServer.Storage;
 /// <summary>
 /// Storage for request/reactions templates.
 /// </summary>
-public class MockTemplateStorage : IMockTemplateStorage
+public sealed class MockTemplateStorage : IMockTemplateStorage
 {
     /// <summary>
     /// Creates <see cref="MockTemplateStorage"/>

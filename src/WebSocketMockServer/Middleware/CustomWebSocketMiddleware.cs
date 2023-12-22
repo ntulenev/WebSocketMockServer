@@ -5,7 +5,7 @@ namespace WebSocketMockServer.Middleware;
 /// <summary>
 /// Custom middleware that provides web sockets operations
 /// </summary>
-public class CustomWebSocketMiddleware
+public sealed class CustomWebSocketMiddleware
 {
     /// <summary>
     /// Creates web sockets middleware

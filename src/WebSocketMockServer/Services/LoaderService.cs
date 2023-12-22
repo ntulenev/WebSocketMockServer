@@ -12,7 +12,7 @@ namespace WebSocketMockServer.Services;
 /// <param name="hostApplicationLifetime">The lifetime object for the hosted application.</param>
 /// <param name="loader">The loader to use for loading templates.</param>
 /// <exception cref="ArgumentNullException">Thrown when any argument is null.</exception>
-public class LoaderService(
+public sealed class LoaderService(
                      ILogger<LoaderService> logger,
                      IHostApplicationLifetime hostApplicationLifetime,
                      ILoader loader) : IHostedService

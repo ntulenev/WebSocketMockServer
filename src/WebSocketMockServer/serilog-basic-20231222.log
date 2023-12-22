@@ -1,0 +1,60 @@
+2023-12-22T17:10:42.1422964+01:00 [Information] (/LAPTOP-LTTNFMSP/1) WebSocketMockServer.Loader.FileLoader  Reading request from "RequestA.json"
+2023-12-22T17:10:42.1796626+01:00 [Debug] (/LAPTOP-LTTNFMSP/1) WebSocketMockServer.IO.FileUtility  Loading file "D:\Git\WebSocketMockServer\src\WebSocketMockServer\Files\RequestA.json"
+2023-12-22T17:10:42.1884710+01:00 [Debug] (/LAPTOP-LTTNFMSP/5) WebSocketMockServer.IO.FileUtility  File loaded "D:\Git\WebSocketMockServer\src\WebSocketMockServer\Files\RequestA.json" - "{
+  \"Request\": \"A\"
+}
+".
+2023-12-22T17:10:42.3351064+01:00 [Information] (/LAPTOP-LTTNFMSP/5) WebSocketMockServer.Loader.FileLoader  Reading response from "Reaction1.json"
+2023-12-22T17:10:42.3367898+01:00 [Debug] (/LAPTOP-LTTNFMSP/5) WebSocketMockServer.IO.FileUtility  Loading file "D:\Git\WebSocketMockServer\src\WebSocketMockServer\Files\Reaction1.json"
+2023-12-22T17:10:42.3393926+01:00 [Debug] (/LAPTOP-LTTNFMSP/9) WebSocketMockServer.IO.FileUtility  File loaded "D:\Git\WebSocketMockServer\src\WebSocketMockServer\Files\Reaction1.json" - "{
+  \"Response\": \"A\"
+}
+".
+2023-12-22T17:10:42.3458200+01:00 [Debug] (/LAPTOP-LTTNFMSP/9) WebSocketMockServer.Reactions.Reaction  Reaction for "{
+  \"Response\": \"A\"
+}" created.
+2023-12-22T17:10:42.3482055+01:00 [Information] (/LAPTOP-LTTNFMSP/9) WebSocketMockServer.Loader.FileLoader  Reading notification from "Reaction2.json" with delay 00:00:05
+2023-12-22T17:10:42.3501341+01:00 [Debug] (/LAPTOP-LTTNFMSP/9) WebSocketMockServer.IO.FileUtility  Loading file "D:\Git\WebSocketMockServer\src\WebSocketMockServer\Files\Reaction2.json"
+2023-12-22T17:10:42.3573348+01:00 [Debug] (/LAPTOP-LTTNFMSP/10) WebSocketMockServer.IO.FileUtility  File loaded "D:\Git\WebSocketMockServer\src\WebSocketMockServer\Files\Reaction2.json" - "{
+  \"Notification\": \"B\"
+}
+".
+2023-12-22T17:10:42.3609161+01:00 [Debug] (/LAPTOP-LTTNFMSP/10) WebSocketMockServer.Reactions.Reaction  Reaction for "{
+  \"Notification\": \"B\"
+}" created.
+2023-12-22T17:10:42.6134922+01:00 [Information] (/LAPTOP-LTTNFMSP/10) Microsoft.Hosting.Lifetime  Now listening on: "https://localhost:5001"
+2023-12-22T17:10:42.6154361+01:00 [Information] (/LAPTOP-LTTNFMSP/10) Microsoft.Hosting.Lifetime  Now listening on: "http://localhost:5000"
+2023-12-22T17:10:42.6179039+01:00 [Information] (/LAPTOP-LTTNFMSP/10) Microsoft.Hosting.Lifetime  Application started. Press Ctrl+C to shut down.
+2023-12-22T17:10:42.6196879+01:00 [Information] (/LAPTOP-LTTNFMSP/10) Microsoft.Hosting.Lifetime  Hosting environment: "Development"
+2023-12-22T17:10:42.6214283+01:00 [Information] (/LAPTOP-LTTNFMSP/10) Microsoft.Hosting.Lifetime  Content root path: "D:\Git\WebSocketMockServer\src\WebSocketMockServer"
+2023-12-22T17:11:04.3029174+01:00 [Information] (/LAPTOP-LTTNFMSP/12) WebSocketMockServer.WebSockets.WebSocketHandler  Get from client - "{
+  \"Request\": \"A\"
+}"
+2023-12-22T17:11:04.3127970+01:00 [Debug] (/LAPTOP-LTTNFMSP/12) WebSocketMockServer.Storage.MockTemplateStorage  Getting template key "{
+  \"Request\": \"A\"
+}" - value "WebSocketMockServer.Storage.MockTemplate"
+2023-12-22T17:11:04.3196090+01:00 [Debug] (/LAPTOP-LTTNFMSP/12) WebSocketMockServer.Reactions.Reaction ["Response {
+  \"Response\": \"A\"
+}"] Sending...
+2023-12-22T17:11:04.3234275+01:00 [Information] (/LAPTOP-LTTNFMSP/12) WebSocketMockServer.WebSockets.WebSocketProxy ["Response {
+  \"Response\": \"A\"
+}"] 12/22/2023 16:11:04 Send to client - "{
+  \"Response\": \"A\"
+}"
+2023-12-22T17:11:04.3306510+01:00 [Debug] (/LAPTOP-LTTNFMSP/12) WebSocketMockServer.Reactions.Reaction ["Response {
+  \"Response\": \"A\"
+}"] Has beed sended
+2023-12-22T17:11:04.3346973+01:00 [Debug] (/LAPTOP-LTTNFMSP/9) WebSocketMockServer.Reactions.Reaction ["Response {
+  \"Notification\": \"B\"
+}"] Prepare for sending in 00:00:05 seconds...
+2023-12-22T17:11:09.3399279+01:00 [Debug] (/LAPTOP-LTTNFMSP/9) WebSocketMockServer.Reactions.Reaction ["Response {
+  \"Notification\": \"B\"
+}"] Sending...
+2023-12-22T17:11:09.3439529+01:00 [Information] (/LAPTOP-LTTNFMSP/9) WebSocketMockServer.WebSockets.WebSocketProxy ["Response {
+  \"Notification\": \"B\"
+}"] 12/22/2023 16:11:09 Send to client - "{
+  \"Notification\": \"B\"
+}"
+2023-12-22T17:11:09.3492005+01:00 [Debug] (/LAPTOP-LTTNFMSP/9) WebSocketMockServer.Reactions.Reaction ["Response {
+  \"Notification\": \"B\"
+}"] Has beed sended...

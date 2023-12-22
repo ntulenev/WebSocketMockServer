@@ -7,7 +7,7 @@ namespace WebSocketMockServer.Configuration.Validation;
 /// <summary>
 /// Validator for <see cref="FileLoaderConfiguration"/>.
 /// </summary>
-public class FileLoaderConfigurationValidator :
+public sealed class FileLoaderConfigurationValidator :
              IValidateOptions<FileLoaderConfiguration>
 {
     /// <summary>

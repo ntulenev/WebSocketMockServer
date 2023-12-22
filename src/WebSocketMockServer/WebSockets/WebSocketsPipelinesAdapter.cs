@@ -9,7 +9,7 @@ namespace WebSocketMockServer.WebSockets;
 /// <summary>
 /// Pipelines adapter for web sockets
 /// </summary>
-public class WebSocketsPipelinesAdapter
+public sealed class WebSocketsPipelinesAdapter
 {
 
     /// <summary>

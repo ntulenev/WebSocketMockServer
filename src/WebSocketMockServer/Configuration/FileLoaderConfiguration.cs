@@ -3,7 +3,7 @@ namespace WebSocketMockServer.Configuration;
 /// <summary>
 /// Service configuration that is expected by <see cref="Loader.FileLoader"/>.
 /// </summary>
-public class FileLoaderConfiguration
+public sealed class FileLoaderConfiguration
 {
     /// <summary>
     /// Request/Reactions data.

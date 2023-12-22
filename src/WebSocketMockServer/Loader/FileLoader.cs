@@ -13,7 +13,7 @@ namespace WebSocketMockServer.Loader;
 /// <summary>
 /// Implementation of <see cref="ILoader"/> that loads files from disk.
 /// </summary>
-public class FileLoader : ILoader
+public sealed class FileLoader : ILoader
 {
     /// <summary>
     /// Creates <see cref="FileLoader"/>.

@@ -14,7 +14,7 @@ namespace WebSocketMockServer.WebSockets;
 /// <remarks>
 /// Creates <see cref="WebSocketHandler"/>.
 /// </remarks>
-public class WebSocketHandler(
+public sealed class WebSocketHandler(
                            ILogger<WebSocketHandler> logger,
                            IMockTemplateStorage storage) : IWebSocketHandler
 {

@@ -6,7 +6,7 @@ namespace WebSocketMockServer.Reactions;
 /// <summary>
 /// Response with delay
 /// </summary>
-public class Notification : Reaction
+public sealed class Notification : Reaction
 {
     /// <summary>
     /// Response delay in ms.

@@ -5,7 +5,7 @@ namespace WebSocketMockServer.Storage;
 /// <summary>
 /// Mock template model.
 /// </summary>
-public class MockTemplate
+public sealed class MockTemplate
 {
     /// <summary>
     /// Request text.

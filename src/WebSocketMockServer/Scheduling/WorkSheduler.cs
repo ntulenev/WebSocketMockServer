@@ -5,7 +5,7 @@ namespace WebSocketMockServer.Scheduling;
 /// </summary>
 /// <param name="logger">logger.</param>
 /// <exception cref="ArgumentNullException">Throws is logger is null.</exception>
-public class WorkSheduler(ILogger<WorkSheduler> logger) : IWorkSheduler
+public sealed class WorkSheduler(ILogger<WorkSheduler> logger) : IWorkSheduler
 {
     ///<inheritdoc/>
     ///<exception cref="ArgumentNullException">If work is null.</exception>

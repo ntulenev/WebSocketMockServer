@@ -9,7 +9,7 @@ namespace WebSocketMockServer.IO;
 /// <param name="hostingEnvironment">Hosting environment.</param>
 /// <param name="logger">Logger.</param>
 /// <exception cref="ArgumentNullException">If one of params is null.</exception>
-public class FileUtility(
+public sealed class FileUtility(
                    IWebHostEnvironment hostingEnvironment,
                    ILogger<FileUtility> logger) : IFileUtility
 {
