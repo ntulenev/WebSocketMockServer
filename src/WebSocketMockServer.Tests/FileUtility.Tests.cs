@@ -37,7 +37,7 @@ public class FileUtilityTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
     }
 
-    [Fact(DisplayName = "FileUtility can be certed.")]
+    [Fact(DisplayName = "FileUtility can be created.")]
     [Trait("Category", "Unit")]
     public void CanCreateFileUtility()
     {

@@ -9,7 +9,7 @@ namespace WebSocketMockServer.Helpers;
 public static class StringHelpers
 {
     /// <summary>
-    /// Helper method that gets string and convert to JSON Indented-formatted srting. 
+    /// Helper method that gets string and convert to JSON Indented-formatted string. 
     /// </summary>
     /// <param name="str">input json string.</param>
     /// <exception cref="ArgumentNullException">Throws if string is null or empty.</exception>

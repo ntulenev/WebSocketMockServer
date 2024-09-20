@@ -81,15 +81,15 @@ public class MockTemplateTests
     {
         //Arrange
         var request = "aaa";
-        IEnumerable<Reaction> resps = new Reaction[]
-        {
+        IEnumerable<Reaction> resps =
+        [
             new Response("A",Mock.Of<ILogger<Reaction>>()),
             new Notification(
                              "B",
                              TimeSpan.FromMilliseconds(1000),
-                             Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                             Mock.Of<IWorkScheduler>(MockBehavior.Strict),
                              Mock.Of<ILogger<Reaction>>())
-        };
+        ];
 
         // Act
         var exception = Record.Exception(

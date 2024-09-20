@@ -16,11 +16,11 @@ using WebSocketMockServer.WebSockets;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHealthChecks();
-builder.Services.AddSingleton<IWorkSheduler, WorkSheduler>();
+builder.Services.AddSingleton<IWorkScheduler, WorkScheduler>();
 builder.Services.AddSingleton<IMockTemplateStorage, MockTemplateStorage>();
 builder.Services.AddSingleton<IReactionFactory>(sp =>
     new ReactionFactory(
-    (data) => ActivatorUtilities.CreateInstance<Response>(sp, new[] { data }),
+    (data) => ActivatorUtilities.CreateInstance<Response>(sp, [data]),
     (data, delay) => ActivatorUtilities.CreateInstance<Notification>(sp, [data, delay])
     ));
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();

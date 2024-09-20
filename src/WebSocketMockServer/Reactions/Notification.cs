@@ -25,7 +25,7 @@ public sealed class Notification : Reaction
     /// delay is incorrect.</exception>
     public Notification(string result,
                         TimeSpan delay,
-                        IWorkSheduler sheduler,
+                        IWorkScheduler scheduler,
                         ILogger<Reaction> logger) :
         base(result, logger)
     {
@@ -34,7 +34,7 @@ public sealed class Notification : Reaction
             throw new ArgumentException("Delay should be positive", nameof(delay));
         }
 
-        _sheduler = sheduler ?? throw new ArgumentNullException(nameof(sheduler));
+        _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
 
         Delay = delay;
     }
@@ -46,7 +46,7 @@ public sealed class Notification : Reaction
         ArgumentNullException.ThrowIfNull(webSocket);
         ct.ThrowIfCancellationRequested();
 
-        _sheduler.Schedule(async () =>
+        _scheduler.Schedule(async () =>
         {
             using var _ = _logger.BeginScope("Response {Response}", Result);
 
@@ -60,7 +60,7 @@ public sealed class Notification : Reaction
             {
                 await webSocket.SendMessageAsync(Result, ct).ConfigureAwait(false);
 
-                _logger.LogDebug("Has beed sended...");
+                _logger.LogDebug("Has been sent...");
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
@@ -73,5 +73,5 @@ public sealed class Notification : Reaction
         return Task.CompletedTask;
     }
 
-    private readonly IWorkSheduler _sheduler;
+    private readonly IWorkScheduler _scheduler;
 }

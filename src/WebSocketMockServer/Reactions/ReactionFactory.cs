@@ -7,9 +7,10 @@ namespace WebSocketMockServer.Reactions;
 /// Creates <see cref="ReactionFactory"/>.
 /// </remarks>
 /// <param name="responseFactory">Factory delegate for <see cref="Response"/>.</param>
-/// <param name="notificationFactory">Factory deletega for <see cref="Notification"/>.</param>
+/// <param name="notificationFactory">Factory delegate for <see cref="Notification"/>.</param>
 /// <exception cref="ArgumentNullException">Throws is factory delegates are null.</exception>
-public sealed class ReactionFactory(Func<string, Response> responseFactory,
+public sealed class ReactionFactory(
+                       Func<string, Response> responseFactory,
                        Func<string, TimeSpan, Notification> notificationFactory)
             : IReactionFactory
 {

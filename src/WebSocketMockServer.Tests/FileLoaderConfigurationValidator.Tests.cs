@@ -18,21 +18,21 @@ public class FileLoaderConfigurationValidatorTests
         var config = new FileLoaderConfiguration
         {
             Folder = "A",
-            Mapping = new[]
-              {
+            Mapping =
+              [
                   new RequestMappingTemplate
                   {
                        File = "B",
-                        Reactions = new[]
-                        {
+                        Reactions =
+                        [
                             new ReactionMappingTemplate
                             {
                                  Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
-                        }
+                        ]
                   }
-              }
+              ]
         };
         var validator = new FileLoaderConfigurationValidator();
 
@@ -51,21 +51,21 @@ public class FileLoaderConfigurationValidatorTests
         var config = new FileLoaderConfiguration
         {
             Folder = string.Empty,
-            Mapping = new[]
-              {
+            Mapping =
+              [
                   new RequestMappingTemplate
                   {
                         File = "B",
-                        Reactions = new[]
-                        {
+                        Reactions =
+                        [
                             new ReactionMappingTemplate
                             {
                                  Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
-                        }
+                        ]
                   }
-              }
+              ]
         };
         var validator = new FileLoaderConfigurationValidator();
 
@@ -106,7 +106,7 @@ public class FileLoaderConfigurationValidatorTests
         var config = new FileLoaderConfiguration
         {
             Folder = name!,
-            Mapping = Enumerable.Empty<RequestMappingTemplate>()
+            Mapping = []
         };
         var validator = new FileLoaderConfigurationValidator();
 
@@ -128,21 +128,21 @@ public class FileLoaderConfigurationValidatorTests
         var config = new FileLoaderConfiguration
         {
             Folder = "A",
-            Mapping = new[]
-              {
+            Mapping =
+              [
                   new RequestMappingTemplate
                   {
                         File = name!,
-                        Reactions = new[]
-                        {
+                        Reactions =
+                        [
                             new ReactionMappingTemplate
                             {
                                  Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
-                        }
+                        ]
                   }
-              }
+              ]
         };
         var validator = new FileLoaderConfigurationValidator();
 
@@ -161,14 +161,14 @@ public class FileLoaderConfigurationValidatorTests
         var config = new FileLoaderConfiguration
         {
             Folder = "A",
-            Mapping = new[]
-              {
+            Mapping =
+              [
                   new RequestMappingTemplate
                   {
                         File = "B",
                         Reactions = null!
                   }
-              }
+              ]
         };
         var validator = new FileLoaderConfigurationValidator();
 
@@ -187,14 +187,14 @@ public class FileLoaderConfigurationValidatorTests
         var config = new FileLoaderConfiguration
         {
             Folder = "A",
-            Mapping = new[]
-              {
+            Mapping =
+              [
                   new RequestMappingTemplate
                   {
                         File = "B",
-                        Reactions = Enumerable.Empty<ReactionMappingTemplate>()
+                        Reactions = []
                   }
-              }
+              ]
         };
         var validator = new FileLoaderConfigurationValidator();
 
@@ -217,21 +217,21 @@ public class FileLoaderConfigurationValidatorTests
         var config = new FileLoaderConfiguration
         {
             Folder = "A",
-            Mapping = new[]
-              {
+            Mapping =
+              [
                   new RequestMappingTemplate
                   {
                         File = name!,
-                        Reactions = new[]
-                        {
+                        Reactions =
+                        [
                             new ReactionMappingTemplate
                             {
                                  Delay = TimeSpan.FromSeconds(1),
                                  File = string.Empty
                             }
-                        }
+                        ]
                   }
-              }
+              ]
         };
         var validator = new FileLoaderConfigurationValidator();
 

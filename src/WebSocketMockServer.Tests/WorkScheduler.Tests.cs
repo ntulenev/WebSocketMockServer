@@ -10,39 +10,39 @@ using Xunit;
 
 namespace WebSocketMockServer.Tests;
 
-public class WorkShedulerTests
+public class WorkSchedulerTests
 {
-    [Fact(DisplayName = $"Unable to create {nameof(WorkSheduler)} with null logger.")]
+    [Fact(DisplayName = $"Unable to create {nameof(WorkScheduler)} with null logger.")]
     [Trait("Category", "Unit")]
-    public void CantCreateWorkShedulerWithNullLogger()
+    public void CantCreateWorkSchedulerWithNullLogger()
     {
         // Act
         var exception = Record.Exception(
-            () => new WorkSheduler(null!));
+            () => new WorkScheduler(null!));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
     }
 
-    [Fact(DisplayName = $"{nameof(WorkSheduler)} could be created.")]
+    [Fact(DisplayName = $"{nameof(WorkScheduler)} could be created.")]
     [Trait("Category", "Unit")]
-    public void WorkShedulerCanBeCreated()
+    public void WorkSchedulerCanBeCreated()
     {
         // Act
         var exception = Record.Exception(
-            () => new WorkSheduler(Mock.Of<ILogger<WorkSheduler>>()));
+            () => new WorkScheduler(Mock.Of<ILogger<WorkScheduler>>()));
 
         // Assert
         exception.Should().BeNull();
     }
 
-    [Fact(DisplayName = $"{nameof(WorkSheduler)} can't shedule null work.")]
+    [Fact(DisplayName = $"{nameof(WorkScheduler)} can't schedule null work.")]
     [Trait("Category", "Unit")]
-    public void WorkShedulerCantSheduleNull()
+    public void WorkSchedulerCantScheduleNull()
     {
         // Arrange
         using var cts = new CancellationTokenSource();
-        var scheduler = new WorkSheduler(Mock.Of<ILogger<WorkSheduler>>());
+        var scheduler = new WorkScheduler(Mock.Of<ILogger<WorkScheduler>>());
 
         // Act
         var exception = Record.Exception(
@@ -52,14 +52,14 @@ public class WorkShedulerTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
     }
 
-    [Fact(DisplayName = $"{nameof(WorkSheduler)} can't shedule if cancel.")]
+    [Fact(DisplayName = $"{nameof(WorkScheduler)} can't schedule if cancel.")]
     [Trait("Category", "Unit")]
-    public void WorkShedulerCantSheduleIfCancel()
+    public void WorkSchedulerCantScheduleIfCancel()
     {
         // Arrange
         using var cts = new CancellationTokenSource();
         cts.Cancel();
-        var scheduler = new WorkSheduler(Mock.Of<ILogger<WorkSheduler>>());
+        var scheduler = new WorkScheduler(Mock.Of<ILogger<WorkScheduler>>());
 
         // Act
         var exception = Record.Exception(
@@ -69,16 +69,16 @@ public class WorkShedulerTests
         exception.Should().NotBeNull().And.BeOfType<OperationCanceledException>();
     }
 
-    [Fact(DisplayName = $"{nameof(WorkSheduler)} can shedule work.")]
+    [Fact(DisplayName = $"{nameof(WorkScheduler)} can schedule work.")]
     [Trait("Category", "Unit")]
-    public async Task WorkShedulerCanSheduleWorkAsync()
+    public async Task WorkSchedulerCanScheduleWorkAsync()
     {
         // Arrange
         using var cts = new CancellationTokenSource();
 
         var tcs = new TaskCompletionSource();
 
-        var scheduler = new WorkSheduler(Mock.Of<ILogger<WorkSheduler>>());
+        var scheduler = new WorkScheduler(Mock.Of<ILogger<WorkScheduler>>());
 
         // Act
         scheduler.Schedule(() =>
@@ -91,16 +91,16 @@ public class WorkShedulerTests
         await tcs.Task;
     }
 
-    [Fact(DisplayName = $"{nameof(WorkSheduler)} can shedule work with error.")]
+    [Fact(DisplayName = $"{nameof(WorkScheduler)} can schedule work with error.")]
     [Trait("Category", "Unit")]
-    public async Task WorkShedulerCanSheduleWorkWithErrorAsync()
+    public async Task WorkSchedulerCanScheduleWorkWithErrorAsync()
     {
         // Arrange
         using var cts = new CancellationTokenSource();
 
         var tcs = new TaskCompletionSource();
 
-        var scheduler = new WorkSheduler(Mock.Of<ILogger<WorkSheduler>>());
+        var scheduler = new WorkScheduler(Mock.Of<ILogger<WorkScheduler>>());
 
         // Act
         scheduler.Schedule(() =>

@@ -28,21 +28,21 @@ public class FileLoaderTests
         configMock.Setup(x => x.Value).Returns(new FileLoaderConfiguration
         {
             Folder = "A",
-            Mapping = new[]
-              {
+            Mapping =
+              [
                   new RequestMappingTemplate
                   {
                         File = "B",
-                        Reactions = new[]
-                        {
+                        Reactions =
+                        [
                             new ReactionMappingTemplate
                             {
                                  Delay = TimeSpan.FromSeconds(1),
                                  File = "C"
                             }
-                        }
+                        ]
                   }
-              }
+              ]
         });
 
 

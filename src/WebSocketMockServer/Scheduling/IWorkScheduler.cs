@@ -3,7 +3,7 @@ namespace WebSocketMockServer.Scheduling;
 /// <summary>
 /// Defines logic for scheduling some async logic to be done in future.
 /// </summary>
-public interface IWorkSheduler
+public interface IWorkScheduler
 {
     /// <summary>
     /// Schedules work.

@@ -13,8 +13,8 @@ public sealed class MockTemplateStorage : IMockTemplateStorage
     /// <summary>
     /// Creates <see cref="MockTemplateStorage"/>
     /// </summary>
-    /// <exception cref="ArgumentNullException">Thows if loader is not set.</exception>
-    /// <exception cref="InvalidOperationException">Thows if loader has no templates.</exception>
+    /// <exception cref="ArgumentNullException">Throws if loader is not set.</exception>
+    /// <exception cref="InvalidOperationException">Throws if loader has no templates.</exception>
     public MockTemplateStorage(ILoader loader, ILogger<MockTemplateStorage> logger)
     {
         ArgumentNullException.ThrowIfNull(loader);

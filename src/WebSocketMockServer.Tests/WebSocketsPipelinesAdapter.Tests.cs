@@ -23,7 +23,7 @@ public class WebSocketsPipelinesAdapterTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
     }
 
-    [Theory(DisplayName = "Unable to create WebSocketsPipelinesAdapter with negatibe or zero buffer size.")]
+    [Theory(DisplayName = "Unable to create WebSocketsPipelinesAdapter with negative or zero buffer size.")]
     [InlineData(-1)]
     [InlineData(0)]
     [Trait("Category", "Unit")]

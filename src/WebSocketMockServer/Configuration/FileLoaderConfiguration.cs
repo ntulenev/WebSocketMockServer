@@ -11,7 +11,7 @@ public sealed class FileLoaderConfiguration
     public required IEnumerable<RequestMappingTemplate> Mapping { get; init; }
 
     /// <summary>
-    /// Root folder for tempalte files.
+    /// Root folder for template files.
     /// </summary>
     public required string Folder { get; init; }
 }

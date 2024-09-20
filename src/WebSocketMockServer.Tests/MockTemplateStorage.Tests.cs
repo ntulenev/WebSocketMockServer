@@ -29,7 +29,7 @@ public class MockTemplateStorageTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
     }
 
-    [Fact(DisplayName = "MockTemplateStorage creates empty storate on loader exception.")]
+    [Fact(DisplayName = "MockTemplateStorage creates empty storage on loader exception.")]
     [Trait("Category", "Unit")]
     public void MockTemplateCreatesEmptyStorageOnLoaderException()
     {
@@ -45,7 +45,7 @@ public class MockTemplateStorageTests
         exception.Should().BeNull();
     }
 
-    [Fact(DisplayName = "MockTemplateStorage creates storate for correct loader.")]
+    [Fact(DisplayName = "MockTemplateStorage creates storage for correct loader.")]
     [Trait("Category", "Unit")]
     public void MockTemplateCreatesStorageOnLoader()
     {
@@ -53,7 +53,7 @@ public class MockTemplateStorageTests
         var loader = new Mock<ILoader>(MockBehavior.Strict);
 
         var testDictionary = new Dictionary<string, MockTemplate>();
-        var template = new MockTemplate("aaa", new[] { new Response("bbb", Mock.Of<ILogger<Reaction>>()) });
+        var template = new MockTemplate("aaa", [new Response("bbb", Mock.Of<ILogger<Reaction>>())]);
         testDictionary.Add(template.Request, template);
 
         loader.Setup(x => x.GetLoadedData()).Returns(testDictionary);

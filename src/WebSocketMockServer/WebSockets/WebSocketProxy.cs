@@ -54,7 +54,7 @@ public sealed class WebSocketProxy : IWebSocketProxy
                     {
                         await _webSocket.CloseAsync(
                             WebSocketCloseStatus.NormalClosure,
-                            "No predefiened response",
+                            "No predefined response",
                             ct).ConfigureAwait(false);
                     }
                 }

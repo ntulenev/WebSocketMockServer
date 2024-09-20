@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace WebSocketMockServer.Storage;
 
 /// <summary>
-/// Interface that provide logic to find teplates by key
+/// Interface that provide logic to find templates by key
 /// </summary>
 public interface IMockTemplateStorage
 {

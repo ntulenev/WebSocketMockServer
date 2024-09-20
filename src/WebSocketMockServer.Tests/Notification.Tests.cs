@@ -15,7 +15,7 @@ public class NotificationTests
 {
     [Fact(DisplayName = "Notification can not be created with null message.")]
     [Trait("Category", "Unit")]
-    public void CantCreatResponseWithNullMessage()
+    public void CantCreateResponseWithNullMessage()
     {
         //Arrange
         string msg = null!;
@@ -26,7 +26,7 @@ public class NotificationTests
             () => new Notification(
                                   msg,
                                   TimeSpan.FromMilliseconds(delay),
-                                  Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                  Mock.Of<IWorkScheduler>(MockBehavior.Strict),
                                   Mock.Of<ILogger<Reaction>>()));
 
         // Assert
@@ -37,7 +37,7 @@ public class NotificationTests
     [InlineData("")]
     [InlineData("     ")]
     [Trait("Category", "Unit")]
-    public void CantCreatResponseWithEmptyMessage(string msg)
+    public void CantCreateResponseWithEmptyMessage(string msg)
     {
         //Arrange
         var delay = 1;
@@ -47,7 +47,7 @@ public class NotificationTests
             () => new Notification(
                                     msg,
                                     TimeSpan.FromMilliseconds(delay),
-                                    Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                    Mock.Of<IWorkScheduler>(MockBehavior.Strict),
                                     Mock.Of<ILogger<Reaction>>()));
 
         // Assert
@@ -56,7 +56,7 @@ public class NotificationTests
 
     [Fact(DisplayName = "Notification can not be created with incorrect delay.")]
     [Trait("Category", "Unit")]
-    public void CantCreatResponseWithBadDelay()
+    public void CantCreateResponseWithBadDelay()
     {
         //Arrange
         var msg = "aaa";
@@ -67,7 +67,7 @@ public class NotificationTests
             () => new Notification(
                                 msg,
                                 TimeSpan.FromMilliseconds(delay),
-                                Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                Mock.Of<IWorkScheduler>(MockBehavior.Strict),
                                 Mock.Of<ILogger<Reaction>>()));
 
         // Assert
@@ -87,7 +87,7 @@ public class NotificationTests
             () => new Notification(
                                 msg,
                                 TimeSpan.FromMilliseconds(delay),
-                                Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                Mock.Of<IWorkScheduler>(MockBehavior.Strict),
                                 Mock.Of<ILogger<Reaction>>()));
 
         // Assert
@@ -95,7 +95,7 @@ public class NotificationTests
     }
 
 
-    [Fact(DisplayName = "Notofication can not be sended with empty socket.")]
+    [Fact(DisplayName = "Notification can not be sent with empty socket.")]
     [Trait("Category", "Unit")]
     public async Task CantSendWithEmptyProxyAsync()
     {
@@ -106,7 +106,7 @@ public class NotificationTests
         var reaction = new Notification(
                                     msg,
                                     TimeSpan.FromMilliseconds(delay),
-                                    Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                    Mock.Of<IWorkScheduler>(MockBehavior.Strict),
                                     Mock.Of<ILogger<Reaction>>());
         var proxy = (IWebSocketProxy)null!;
 
@@ -118,7 +118,7 @@ public class NotificationTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
     }
 
-    [Fact(DisplayName = "Notification could be sended.")]
+    [Fact(DisplayName = "Notification could be sent.")]
     [Trait("Category", "Unit")]
     public void CouldSendNotification()
     {
@@ -126,7 +126,7 @@ public class NotificationTests
         using var cts = new CancellationTokenSource();
         var msg = "Test";
         var delay = 1000;
-        var scheduler = new Mock<IWorkSheduler>();
+        var scheduler = new Mock<IWorkScheduler>();
         var reaction = new Notification(
                                      msg,
                                      TimeSpan.FromMilliseconds(delay),
@@ -145,7 +145,7 @@ public class NotificationTests
                                 Times.Once);
     }
 
-    [Fact(DisplayName = "Notification cant be sended on cancelled token.")]
+    [Fact(DisplayName = "Notification cant be sent on cancelled token.")]
     [Trait("Category", "Unit")]
     public async Task CantSendNotificationOnCanceledTokenAsync()
     {
@@ -154,7 +154,7 @@ public class NotificationTests
         cts.Cancel();
         var msg = "Test";
         var delay = 1000;
-        var scheduler = new Mock<IWorkSheduler>();
+        var scheduler = new Mock<IWorkScheduler>();
         var reaction = new Notification(
                                     msg,
                                     TimeSpan.FromMilliseconds(delay),

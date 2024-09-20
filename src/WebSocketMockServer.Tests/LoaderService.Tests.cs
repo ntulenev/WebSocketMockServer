@@ -123,7 +123,7 @@ public class LoaderServiceTests
 
     [Fact(DisplayName = "LoaderService skips app on cancellation.")]
     [Trait("Category", "Unit")]
-    public async Task LoaderServiceDontStopsAppOnCancelAsync()
+    public async Task LoaderServiceDoNotStopsAppOnCancelAsync()
     {
         //Arrange
         using var cts = new CancellationTokenSource();

@@ -43,7 +43,7 @@ public sealed class WebSocketHandler(
                     }
                     else
                     {
-                        _logger.LogWarning("No predefiened response - closing socket");
+                        _logger.LogWarning("No predefined response - closing socket");
                         await wsProxy.CloseAsync(ct).ConfigureAwait(false);
                     }
                 }

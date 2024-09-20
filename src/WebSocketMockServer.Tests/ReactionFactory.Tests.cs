@@ -130,7 +130,7 @@ public class ReactionFactoryTests
         var notification = new Notification(
                                 data,
                                 TimeSpan.FromMilliseconds(delay),
-                                Mock.Of<IWorkSheduler>(MockBehavior.Strict),
+                                Mock.Of<IWorkScheduler>(MockBehavior.Strict),
                                 new NullLogger<Reaction>());
         string checkData = null!;
         var checkDelay = TimeSpan.FromMilliseconds(5000);

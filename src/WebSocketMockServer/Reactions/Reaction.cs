@@ -17,7 +17,7 @@ public abstract class Reaction
     /// Sends message to WebSocket.
     /// </summary>
     /// <param name="ws">web socket for sending.</param>
-    /// <param name="ct">Cancellatin token.</param>
+    /// <param name="ct">Cancellation token.</param>
     /// <returns></returns>
     public abstract Task SendMessageAsync(IWebSocketProxy ws, CancellationToken ct);
 

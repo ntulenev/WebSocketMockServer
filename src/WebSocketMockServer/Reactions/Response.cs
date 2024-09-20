@@ -25,6 +25,6 @@ public sealed class Response(string result, ILogger<Reaction> logger) : Reaction
 
         await webSocket.SendMessageAsync(Result, ct).ConfigureAwait(false);
 
-        _logger.LogDebug("Has beed sended");
+        _logger.LogDebug("Has been sent");
     }
 }
