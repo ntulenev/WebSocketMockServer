@@ -11,6 +11,10 @@
     <Platforms>x64</Platforms>
 	<ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+	<NuGetAudit>true</NuGetAudit>
+	<NuGetAuditMode>all</NuGetAuditMode>
+	<NuGetAuditLevel>low</NuGetAuditLevel>
   </PropertyGroup>
 
   <ItemGroup>
