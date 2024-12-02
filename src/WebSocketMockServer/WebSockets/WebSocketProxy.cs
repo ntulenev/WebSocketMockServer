@@ -153,6 +153,6 @@ public sealed class WebSocketProxy : IWebSocketProxy
     private readonly AsyncLock _socketWriteGuard = new();
     private readonly AsyncLock _socketReadGuard = new();
     private readonly CancellationTokenSource _socketClosingToken = new();
-    private readonly ILogger<WebSocketProxy> _logger;
+    private readonly ILogger _logger;
     private bool _isDisposed;
 }

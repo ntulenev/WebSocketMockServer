@@ -65,7 +65,7 @@ public sealed class CustomWebSocketMiddleware
     private readonly RequestDelegate _next;
     private readonly IWebSocketHandler _handler;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
-    private readonly ILogger<CustomWebSocketMiddleware> _logger;
+    private readonly ILogger _logger;
     private readonly ILoggerFactory _loggerFactory;
     private const string DEFAULT_PATH = "/ws";
 }

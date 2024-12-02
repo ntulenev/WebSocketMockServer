@@ -50,5 +50,5 @@ public sealed class MockTemplateStorage : IMockTemplateStorage
     }
 
     private readonly IReadOnlyDictionary<string, MockTemplate> _templates;
-    private readonly ILogger<MockTemplateStorage> _logger;
+    private readonly ILogger _logger;
 }

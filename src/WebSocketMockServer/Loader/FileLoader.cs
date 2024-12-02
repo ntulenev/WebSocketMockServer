@@ -107,7 +107,7 @@ public sealed class FileLoader : ILoader
     }
 
     private readonly FileLoaderConfiguration _config;
-    private readonly ILogger<FileLoader> _logger;
+    private readonly ILogger _logger;
     private readonly IFileUtility _fileUtility;
     private readonly IReactionFactory _reactionFactory;
 

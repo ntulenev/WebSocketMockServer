@@ -36,6 +36,6 @@ public sealed class FileUtility(
 
     private readonly IWebHostEnvironment _hostingEnvironment = hostingEnvironment
                                             ?? throw new ArgumentNullException(nameof(hostingEnvironment));
-    private readonly ILogger<FileUtility> _logger = logger
+    private readonly ILogger _logger = logger
                                             ?? throw new ArgumentNullException(nameof(logger));
 }

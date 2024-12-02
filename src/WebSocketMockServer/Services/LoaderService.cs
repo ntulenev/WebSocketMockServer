@@ -40,7 +40,7 @@ public sealed class LoaderService(
     /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-    private readonly ILogger<LoaderService> _logger = logger
+    private readonly ILogger _logger = logger
                                             ?? throw new ArgumentNullException(nameof(logger));
     private readonly IHostApplicationLifetime _hostApplicationLifetime = hostApplicationLifetime
                                             ?? throw new ArgumentNullException(nameof(hostApplicationLifetime));

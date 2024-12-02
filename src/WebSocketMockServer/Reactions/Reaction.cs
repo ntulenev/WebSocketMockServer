@@ -45,5 +45,5 @@ public abstract class Reaction
         _logger.LogDebug("Reaction for {Result} created.", result);
     }
 
-    protected readonly ILogger<Reaction> _logger;
+    protected readonly ILogger _logger;
 }

@@ -89,6 +89,6 @@ public sealed class WebSocketHandler(
 
     private readonly IMockTemplateStorage _storage = storage
                                           ?? throw new ArgumentNullException(nameof(storage));
-    private readonly ILogger<WebSocketHandler> _logger = logger
+    private readonly ILogger _logger = logger
                                           ?? throw new ArgumentNullException(nameof(logger));
 }
